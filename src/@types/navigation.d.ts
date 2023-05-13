@@ -1,4 +1,5 @@
 import { FormEmail } from '../screens/Email'
+import { FormSignUp } from '../screens/SignUp'
 
 export declare global {
   namespace ReactNavigation {
@@ -7,6 +8,7 @@ export declare global {
       Email: undefined
       SignIn: FormEmail
       SignUp: FormEmail
+      Register: FormSignUp
       Group: undefined
     }
   }

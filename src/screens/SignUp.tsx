@@ -1,58 +1,32 @@
 import React from 'react'
-import { Alert } from 'react-native'
-import { Box, Center, Pressable, Text, VStack } from 'native-base'
+import { Box, Pressable, Text, VStack } from 'native-base'
 import BackButton from '../components/BackButton'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import TextField from '../components/TextField'
-import { publicApi } from '../lib/axios'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { FormEmail } from './Email'
 import { Eye, EyeClosed } from 'phosphor-react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useAuth } from '../hooks/useAuth'
 import SubmitButton from '../components/SubmitButton'
 
-export interface FormSignIn extends FormEmail {
+export interface FormSignUp extends FormEmail {
   password: string
+  confirmPassword: string
 }
 
-export default function SignIn() {
+export default function SignUp() {
   const { navigate } = useNavigation()
   const route = useRoute()
   const { email } = route.params as FormEmail
   const [show, setShow] = React.useState(false)
-  const { setUser } = useAuth()
 
-  async function submit(
-    values: FormSignIn,
+  function submit(
+    values: FormSignUp,
     setSubmitting: (isSubmitting: boolean) => void
   ) {
     try {
       setSubmitting(true)
-      const response = await publicApi.post('/sign-in', values)
-      if (response.data.status && response.data.token) {
-        await AsyncStorage.setItem('accessToken', response.data.token)
-        await AsyncStorage.setItem('user', JSON.stringify(response.data.user))
-        setUser(response.data.user)
-        navigate('Group')
-      } else if (response.data.hasOwnProperty('error')) {
-        switch (response.data.error) {
-          case 'INVALID_PASSWORD':
-            Alert.alert(
-              'Ops!',
-              'Senha inválida! Tente novamente ou redefina sua senha.'
-            )
-            break
-          case 'USER_DOES_NOT_EXIST':
-            Alert.alert('Ops!', 'Usuário não cadastrado!')
-            navigate('SignUp', { email })
-            break
-          default:
-            Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
-            break
-        }
-      } else Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
+      navigate('Register', values)
     } catch (error) {
       console.log(error)
     } finally {
@@ -65,14 +39,20 @@ export default function SignIn() {
       initialValues={
         {
           email,
-          password: ''
-        } as FormSignIn
+          password: '',
+          confirmPassword: ''
+        } as FormSignUp
       }
       validationSchema={Yup.object({
         email: Yup.string()
           .email('Formato de e-mail inválido.')
           .required('O e-mail é obrigatório.'),
-        password: Yup.string().required('Digite a senha.')
+        password: Yup.string()
+          .required('Digite a senha.')
+          .min(6, 'Digite no mínimo 6 caracteres.'),
+        confirmPassword: Yup.string()
+          .required('Confirme a senha.')
+          .oneOf([Yup.ref('password')], 'As senhas não coincidem.')
       })}
       onSubmit={(values, { setSubmitting }) => submit(values, setSubmitting)}
     >
@@ -82,6 +62,7 @@ export default function SignIn() {
         handleSubmit,
         values,
         errors,
+        touched,
         isSubmitting
       }) => (
         <VStack flex={1} space={2} px={4} py={8} justifyContent="space-between">
@@ -90,29 +71,43 @@ export default function SignIn() {
               <BackButton />
             </Box>
             <Text my={4} fontSize={28} color="white">
-              Agora sua senha
+              Agora crie sua senha
             </Text>
-            <VStack space={8}>
+            <VStack space={2}>
               <TextField
                 type={show ? 'text' : 'password'}
-                error={errors.password}
+                error={
+                  touched.password && errors.password
+                    ? errors.password
+                    : undefined
+                }
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
                 value={values.password || ''}
-                placeholder="Digite sua senha..."
+                placeholder="Digite sua nova senha..."
                 InputRightElement={
                   <Pressable p={2} onPress={() => setShow(!show)}>
                     {show ? <EyeClosed color="white" /> : <Eye color="white" />}
                   </Pressable>
                 }
               />
-              <Center>
-                <Pressable>
-                  <Text color="white" underline fontSize="md">
-                    Esqueci minha senha
-                  </Text>
-                </Pressable>
-              </Center>
+              <TextField
+                type={show ? 'text' : 'password'}
+                error={
+                  touched.confirmPassword && errors.confirmPassword
+                    ? errors.confirmPassword
+                    : undefined
+                }
+                onChangeText={handleChange('confirmPassword')}
+                onBlur={handleBlur('confirmPassword')}
+                value={values.confirmPassword || ''}
+                placeholder="Confirme sua senha..."
+                InputRightElement={
+                  <Pressable p={2} onPress={() => setShow(!show)}>
+                    {show ? <EyeClosed color="white" /> : <Eye color="white" />}
+                  </Pressable>
+                }
+              />
             </VStack>
           </VStack>
           <SubmitButton

@@ -1,14 +1,5 @@
 import React from 'react'
-import {
-  Box,
-  Button,
-  Center,
-  HStack,
-  Image,
-  Text,
-  VStack,
-  View
-} from 'native-base'
+import { Box, Button, Center, HStack, Image, Text, VStack } from 'native-base'
 import { EnvelopeSimple, GoogleLogo } from 'phosphor-react-native'
 import { useNavigation } from '@react-navigation/native'
 

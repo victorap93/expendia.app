@@ -1,12 +1,13 @@
 import React from 'react'
 import { Alert } from 'react-native'
-import { Box, Button, Text, VStack } from 'native-base'
+import { Box, Text, VStack } from 'native-base'
 import BackButton from '../components/BackButton'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import TextField from '../components/TextField'
 import { publicApi } from '../lib/axios'
 import { useNavigation } from '@react-navigation/native'
+import SubmitButton from '../components/SubmitButton'
 
 export interface FormEmail {
   email: string
@@ -81,18 +82,10 @@ export default function Email() {
               />
             </VStack>
           </VStack>
-          <Button
-            isLoading={isSubmitting}
-            onPress={() => handleSubmit()}
-            bg="violet.600"
-            _pressed={{
-              bg: 'violet.700'
-            }}
-          >
-            <Text fontSize="lg" color="white">
-              Continuar
-            </Text>
-          </Button>
+          <SubmitButton
+            isSubmitting={isSubmitting}
+            handleSubmit={handleSubmit}
+          />
         </VStack>
       )}
     </Formik>

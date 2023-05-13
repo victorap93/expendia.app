@@ -7,51 +7,38 @@ import * as Yup from 'yup'
 import TextField from '../components/TextField'
 import { publicApi } from '../lib/axios'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { FormEmail } from './Email'
-import { Eye, EyeClosed } from 'phosphor-react-native'
+
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useAuth } from '../hooks/useAuth'
+import { FormSignUp } from './SignUp'
 import SubmitButton from '../components/SubmitButton'
 
-export interface FormSignIn extends FormEmail {
-  password: string
+export interface FormProfile {
+  firstname: string
+  lastname: string
+  avatarUrl?: string
 }
 
-export default function SignIn() {
+interface FormRegister extends FormProfile, FormSignUp {}
+
+export default function Register() {
   const { navigate } = useNavigation()
   const route = useRoute()
-  const { email } = route.params as FormEmail
-  const [show, setShow] = React.useState(false)
+  const { email, password, confirmPassword } = route.params as FormSignUp
   const { setUser } = useAuth()
 
   async function submit(
-    values: FormSignIn,
+    values: FormRegister,
     setSubmitting: (isSubmitting: boolean) => void
   ) {
     try {
       setSubmitting(true)
-      const response = await publicApi.post('/sign-in', values)
+      const response = await publicApi.post('/sign-up', values)
       if (response.data.status && response.data.token) {
         await AsyncStorage.setItem('accessToken', response.data.token)
-        await AsyncStorage.setItem('user', JSON.stringify(response.data.user))
-        setUser(response.data.user)
+        await AsyncStorage.setItem('user', JSON.stringify(values))
+        setUser(values)
         navigate('Group')
-      } else if (response.data.hasOwnProperty('error')) {
-        switch (response.data.error) {
-          case 'INVALID_PASSWORD':
-            Alert.alert(
-              'Ops!',
-              'Senha inválida! Tente novamente ou redefina sua senha.'
-            )
-            break
-          case 'USER_DOES_NOT_EXIST':
-            Alert.alert('Ops!', 'Usuário não cadastrado!')
-            navigate('SignUp', { email })
-            break
-          default:
-            Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
-            break
-        }
       } else Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
     } catch (error) {
       console.log(error)
@@ -65,14 +52,18 @@ export default function SignIn() {
       initialValues={
         {
           email,
-          password: ''
-        } as FormSignIn
+          password,
+          confirmPassword,
+          firstname: '',
+          lastname: ''
+        } as FormRegister
       }
       validationSchema={Yup.object({
-        email: Yup.string()
-          .email('Formato de e-mail inválido.')
-          .required('O e-mail é obrigatório.'),
-        password: Yup.string().required('Digite a senha.')
+        email: Yup.string().required(),
+        password: Yup.string().required(),
+        confirmPassword: Yup.string().required(),
+        firstname: Yup.string().required('Digite seu primeiro nome.'),
+        lastname: Yup.string().required('Digite seu sobrenome.')
       })}
       onSubmit={(values, { setSubmitting }) => submit(values, setSubmitting)}
     >
@@ -90,26 +81,32 @@ export default function SignIn() {
               <BackButton />
             </Box>
             <Text my={4} fontSize={28} color="white">
-              Agora sua senha
+              Como podemos te chamar?
             </Text>
-            <VStack space={8}>
+            <VStack space={2}>
               <TextField
-                type={show ? 'text' : 'password'}
-                error={errors.password}
-                onChangeText={handleChange('password')}
-                onBlur={handleBlur('password')}
-                value={values.password || ''}
-                placeholder="Digite sua senha..."
-                InputRightElement={
-                  <Pressable p={2} onPress={() => setShow(!show)}>
-                    {show ? <EyeClosed color="white" /> : <Eye color="white" />}
-                  </Pressable>
-                }
+                error={errors.firstname}
+                onChangeText={handleChange('firstname')}
+                onBlur={handleBlur('firstname')}
+                value={values.firstname || ''}
+                placeholder="Digite seu primeiro nome..."
+              />
+              <TextField
+                error={errors.lastname}
+                onChangeText={handleChange('lastname')}
+                onBlur={handleBlur('lastname')}
+                value={values.lastname || ''}
+                placeholder="Digite seu sobrenome..."
               />
               <Center>
                 <Pressable>
-                  <Text color="white" underline fontSize="md">
-                    Esqueci minha senha
+                  <Text color="white" fontSize="md">
+                    Protegemos e respeitamos seus dados de acordo com a lei
+                    geral de proteção de dados e com nossa{' '}
+                    <Text color="white" bold underline fontSize="md">
+                      política de privacidade
+                    </Text>
+                    .
                   </Text>
                 </Pressable>
               </Center>
