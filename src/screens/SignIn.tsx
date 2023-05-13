@@ -1,0 +1,133 @@
+import React from 'react'
+import { Alert } from 'react-native'
+import { Box, Button, Center, Pressable, Text, VStack } from 'native-base'
+import BackButton from '../components/BackButton'
+import { Formik } from 'formik'
+import * as Yup from 'yup'
+import TextField from '../components/TextField'
+import { publicApi } from '../lib/axios'
+import { useNavigation, useRoute } from '@react-navigation/native'
+import { FormEmail } from './Email'
+import { Eye, EyeClosed } from 'phosphor-react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useAuth } from '../hooks/useAuth'
+
+export interface FormSignIn extends FormEmail {
+  password: string
+}
+
+export default function SignIn() {
+  const { navigate } = useNavigation()
+  const route = useRoute()
+  const { email } = route.params as FormEmail
+  const [show, setShow] = React.useState(false)
+  const { setUser } = useAuth()
+
+  async function submit(
+    values: FormSignIn,
+    setSubmitting: (isSubmitting: boolean) => void
+  ) {
+    try {
+      setSubmitting(true)
+      const response = await publicApi.post('/sign-in', values)
+      if (response.data.status && response.data.token) {
+        await AsyncStorage.setItem('accessToken', response.data.token)
+        await AsyncStorage.setItem('user', JSON.stringify(response.data.user))
+        setUser(response.data.user)
+        navigate('Group')
+      } else if (response.data.hasOwnProperty('error')) {
+        switch (response.data.error) {
+          case 'INVALID_PASSWORD':
+            Alert.alert(
+              'Ops!',
+              'Senha inválida! Tente novamente ou redefina sua senha.'
+            )
+            break
+          case 'USER_DOES_NOT_EXIST':
+            Alert.alert('Ops!', 'Usuário não cadastrado!')
+            navigate('SignUp', { email })
+            break
+          default:
+            Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
+            break
+        }
+      } else Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  return (
+    <Formik
+      initialValues={
+        {
+          email,
+          password: ''
+        } as FormSignIn
+      }
+      validationSchema={Yup.object({
+        email: Yup.string()
+          .email('Formato de e-mail inválido.')
+          .required('O e-mail é obrigatório.'),
+        password: Yup.string().required('Digite a senha.')
+      })}
+      onSubmit={(values, { setSubmitting }) => submit(values, setSubmitting)}
+    >
+      {({
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        values,
+        errors,
+        isSubmitting
+      }) => (
+        <VStack flex={1} space={2} px={4} py={8} justifyContent="space-between">
+          <VStack>
+            <Box my={3}>
+              <BackButton />
+            </Box>
+            <Text my={4} fontSize={28} color="white">
+              Agora sua senha
+            </Text>
+            <VStack space={8}>
+              <TextField
+                type={show ? 'text' : 'password'}
+                error={errors.password}
+                onChangeText={handleChange('password')}
+                onBlur={handleBlur('password')}
+                value={values.password || ''}
+                placeholder="Digite sua senha..."
+                InputRightElement={
+                  <Pressable p={2} onPress={() => setShow(!show)}>
+                    {show ? <EyeClosed color="white" /> : <Eye color="white" />}
+                  </Pressable>
+                }
+              />
+              <Center>
+                <Pressable>
+                  <Text color="white" underline fontSize="md">
+                    Esqueci minha senha
+                  </Text>
+                </Pressable>
+              </Center>
+            </VStack>
+          </VStack>
+          <Button
+            isLoading={isSubmitting}
+            onPress={() => handleSubmit()}
+            bg="violet.600"
+            _pressed={{
+              bg: 'violet.700'
+            }}
+          >
+            <Text fontSize="lg" color="white">
+              Entrar
+            </Text>
+          </Button>
+        </VStack>
+      )}
+    </Formik>
+  )
+}
