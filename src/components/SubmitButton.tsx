@@ -16,10 +16,6 @@ export default function SubmitButton({ handleSubmit, isSubmitting }: Props) {
         bg: 'violet.700'
       }}
       height="12"
-      _spinner={{
-        fontSize: 'lg',
-        width: 'lg'
-      }}
     >
       <Text fontSize="lg" color="white">
         Continuar

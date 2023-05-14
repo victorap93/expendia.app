@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box, Button, Center, HStack, Image, Text, VStack } from 'native-base'
-import { EnvelopeSimple, GoogleLogo } from 'phosphor-react-native'
+import { EnvelopeSimple } from 'phosphor-react-native'
 import { useNavigation } from '@react-navigation/native'
+import { useAuth } from '../hooks/useAuth'
 
 const Home = () => {
   const { navigate } = useNavigation()
+  const { continueWithGoogle, isOAuthLoading, user } = useAuth()
+
+  useEffect(() => {
+    if (user.email) navigate('Group')
+  }, [user])
 
   return (
     <VStack flex={1} justifyContent="flex-end" space={2} p={4}>
@@ -34,7 +40,7 @@ const Home = () => {
         >
           <HStack space={4} alignItems="center">
             <EnvelopeSimple size={28} color="white" />
-            <Text fontSize={20} color="white" fontWeight="bold">
+            <Text fontSize="lg" color="white" fontWeight="bold">
               Continuar com email
             </Text>
           </HStack>
@@ -42,12 +48,15 @@ const Home = () => {
       </Box>
       <Box my={1.5} px={4}>
         <Button
+          onPress={continueWithGoogle}
+          isLoading={isOAuthLoading}
           _pressed={{
             bg: 'amber.100'
           }}
           bg="white"
           borderColor="red.600"
           borderWidth={1}
+          height="12"
         >
           <HStack space={4} alignItems="center">
             <Image
@@ -55,7 +64,7 @@ const Home = () => {
               source={require('../assets/google.png')}
               alt="Continuar com Google"
             />
-            <Text fontSize={20} color="black" fontWeight="bold">
+            <Text fontSize="lg" color="black" fontWeight="bold">
               Continuar com Google
             </Text>
           </HStack>
