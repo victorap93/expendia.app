@@ -8,6 +8,8 @@ import { useAuth } from '../hooks/useAuth'
 import Loading from '../components/Loading'
 import SignUp from '../screens/SignUp'
 import Register from '../screens/Register'
+import PasswordRecovery from '../screens/PasswordRecovery'
+import ValidateCode from '../screens/ValidateCode'
 
 export default function Routes() {
   const { Navigator, Screen } = createNativeStackNavigator()
@@ -31,6 +33,8 @@ export default function Routes() {
         <Screen name="SignIn" component={SignIn} />
         <Screen name="SignUp" component={SignUp} />
         <Screen name="Register" component={Register} />
+        <Screen name="PasswordRecovery" component={PasswordRecovery} />
+        <Screen name="ValidateCode" component={ValidateCode} />
         <Screen name="Group" component={Group} />
       </Navigator>
     </NavigationContainer>

@@ -107,7 +107,9 @@ export default function SignIn() {
                 }
               />
               <Center>
-                <Pressable>
+                <Pressable
+                  onPress={() => navigate('PasswordRecovery', { email })}
+                >
                   <Text color="white" underline fontSize="md">
                     Esqueci minha senha
                   </Text>
@@ -116,6 +118,7 @@ export default function SignIn() {
             </VStack>
           </VStack>
           <SubmitButton
+            title="Entrar"
             isSubmitting={isSubmitting}
             handleSubmit={handleSubmit}
           />

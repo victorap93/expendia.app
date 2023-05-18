@@ -9,6 +9,8 @@ export declare global {
       SignIn: FormEmail
       SignUp: FormEmail
       Register: FormSignUp
+      PasswordRecovery: FormEmail
+      ValidateCode: FormEmail
       Group: undefined
     }
   }

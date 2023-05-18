@@ -113,6 +113,7 @@ export default function Register() {
             </VStack>
           </VStack>
           <SubmitButton
+            title="Criar conta"
             isSubmitting={isSubmitting}
             handleSubmit={handleSubmit}
           />

@@ -4,14 +4,16 @@ import { HStack, Text, VStack } from 'native-base'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
 import { useAuth } from '../hooks/useAuth'
+import { UserProps } from '../context/AuthContext'
 
 export default function Group() {
   const { navigate } = useNavigation()
-  const { user } = useAuth()
+  const { user, setUser } = useAuth()
 
   async function logout() {
     await AsyncStorage.removeItem('user')
     await AsyncStorage.removeItem('accessToken')
+    setUser({} as UserProps)
     navigate('Home')
   }
 

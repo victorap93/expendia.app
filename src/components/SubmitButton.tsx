@@ -4,9 +4,14 @@ import { Button, Text } from 'native-base'
 interface Props {
   handleSubmit: () => void
   isSubmitting?: boolean
+  title?: string
 }
 
-export default function SubmitButton({ handleSubmit, isSubmitting }: Props) {
+export default function SubmitButton({
+  handleSubmit,
+  isSubmitting,
+  title = 'Continuar'
+}: Props) {
   return (
     <Button
       isLoading={isSubmitting}
@@ -18,7 +23,7 @@ export default function SubmitButton({ handleSubmit, isSubmitting }: Props) {
       height="12"
     >
       <Text fontSize="lg" color="white">
-        Continuar
+        {title}
       </Text>
     </Button>
   )
