@@ -5,7 +5,7 @@ import BackButton from '../components/BackButton'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import TextField from '../components/TextField'
-import { publicApi } from '../lib/axios'
+import { api } from '../lib/axios'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { FormEmail } from './Email'
 import SubmitButton from '../components/SubmitButton'
@@ -21,7 +21,7 @@ export default function PasswordRecovery() {
   ) {
     try {
       setSubmitting(true)
-      const response = await publicApi.post('/password-recovery', values)
+      const response = await api.post('/password-recovery', values)
       if (response.data.status) navigate('ValidateCode', values)
       else Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
     } catch (error) {
@@ -79,7 +79,7 @@ export default function PasswordRecovery() {
             </Center>
           </VStack>
           <SubmitButton
-            title="Confirmar"
+            title="Confirmar e-mail"
             isSubmitting={isSubmitting}
             handleSubmit={handleSubmit}
           />

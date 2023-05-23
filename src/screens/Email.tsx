@@ -5,7 +5,7 @@ import BackButton from '../components/BackButton'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import TextField from '../components/TextField'
-import { publicApi } from '../lib/axios'
+import { api } from '../lib/axios'
 import { useNavigation } from '@react-navigation/native'
 import SubmitButton from '../components/SubmitButton'
 
@@ -22,7 +22,7 @@ export default function Email() {
   ) {
     try {
       setSubmitting(true)
-      const response = await publicApi.post('/sign-in', {
+      const response = await api.post('/sign-in', {
         ...values,
         password: ''
       })

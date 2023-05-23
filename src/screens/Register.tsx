@@ -1,12 +1,12 @@
 import React from 'react'
 import { Alert } from 'react-native'
-import { Box, Center, Pressable, Text, VStack } from 'native-base'
+import { Box, Center, Pressable, Text, VStack, useToast } from 'native-base'
 import BackButton from '../components/BackButton'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import TextField from '../components/TextField'
-import { publicApi } from '../lib/axios'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { api } from '../lib/axios'
+import { useRoute } from '@react-navigation/native'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useAuth } from '../hooks/useAuth'
@@ -22,10 +22,10 @@ export interface FormProfile {
 interface FormRegister extends FormProfile, FormSignUp {}
 
 export default function Register() {
-  const { navigate } = useNavigation()
   const route = useRoute()
   const { email, password, confirmPassword } = route.params as FormSignUp
   const { setUser } = useAuth()
+  const toast = useToast()
 
   async function submit(
     values: FormRegister,
@@ -33,12 +33,14 @@ export default function Register() {
   ) {
     try {
       setSubmitting(true)
-      const response = await publicApi.post('/sign-up', values)
+      const response = await api.post('/sign-up', values)
       if (response.data.status && response.data.token) {
         await AsyncStorage.setItem('accessToken', response.data.token)
         await AsyncStorage.setItem('user', JSON.stringify(values))
         setUser(values)
-        navigate('Group')
+        toast.show({
+          title: 'Conta criada com sucesso!'
+        })
       } else Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
     } catch (error) {
       console.log(error)

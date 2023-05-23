@@ -1,4 +1,4 @@
-import { NativeBaseProvider, Box } from 'native-base'
+import { NativeBaseProvider } from 'native-base'
 import { StatusBar } from 'react-native'
 import {
   useFonts,

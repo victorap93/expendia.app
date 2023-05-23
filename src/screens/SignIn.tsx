@@ -5,7 +5,7 @@ import BackButton from '../components/BackButton'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import TextField from '../components/TextField'
-import { publicApi } from '../lib/axios'
+import { api } from '../lib/axios'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { FormEmail } from './Email'
 import { Eye, EyeClosed } from 'phosphor-react-native'
@@ -30,11 +30,14 @@ export default function SignIn() {
   ) {
     try {
       setSubmitting(true)
-      const response = await publicApi.post('/sign-in', values)
+      const response = await api.post('/sign-in', values)
       if (response.data.status && response.data.token) {
         await AsyncStorage.setItem('accessToken', response.data.token)
         await AsyncStorage.setItem('user', JSON.stringify(response.data.user))
-        setUser(response.data.user)
+        setUser({
+          ...response.data.user,
+          noRedirect: true
+        })
         navigate('Group')
       } else if (response.data.hasOwnProperty('error')) {
         switch (response.data.error) {

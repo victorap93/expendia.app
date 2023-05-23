@@ -2,13 +2,14 @@ import { createContext, ReactNode, useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Google from 'expo-auth-session/providers/google'
 import { CLIENT_ID } from '@env'
-import { publicApi } from '../lib/axios'
+import { api } from '../lib/axios'
 
 export interface UserProps {
   firstname: string
   lastname: string
   email: string
   avatarUrl?: string
+  noRedirect?: boolean
 }
 
 export interface AuthContextDataProps {
@@ -66,7 +67,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
   const signInWithGoogle = async (accessToken: string) => {
     try {
       setIsOAuthLoading(true)
-      const response = await publicApi.post('/google-auth', { accessToken })
+      const response = await api.post('/google-auth', { accessToken })
       if (response.data.status && response.data.token) {
         await AsyncStorage.setItem('accessToken', response.data.token)
         await AsyncStorage.setItem('user', JSON.stringify(response.data.user))

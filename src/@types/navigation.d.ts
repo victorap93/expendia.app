@@ -1,4 +1,5 @@
 import { FormEmail } from '../screens/Email'
+import { PasswordParams } from '../screens/Password'
 import { FormSignUp } from '../screens/SignUp'
 
 export declare global {
@@ -11,6 +12,7 @@ export declare global {
       Register: FormSignUp
       PasswordRecovery: FormEmail
       ValidateCode: FormEmail
+      Password: PasswordParams
       Group: undefined
     }
   }
