@@ -34,6 +34,12 @@ export default function Email() {
           case 'USER_DOES_NOT_EXIST':
             navigate('SignUp', values)
             break
+          case 'USER_AUTHENTICATED_WITH_GOOGLE':
+            Alert.alert(
+              'Ops! Conta Google Vinculada',
+              'Usuário autenticado com o Google, volte para a tela inicial e continue com o Google ou tente continuar com outro e-mail.'
+            )
+            break
           default:
             Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
             break
