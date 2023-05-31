@@ -5,8 +5,8 @@ import { CLIENT_ID } from '@env'
 import { api } from '../lib/axios'
 
 export interface UserProps {
-  firstname: string
-  lastname: string
+  firstname?: string
+  lastname?: string
   email: string
   avatarUrl?: string
   noRedirect?: boolean
