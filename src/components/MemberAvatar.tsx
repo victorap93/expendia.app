@@ -1,43 +1,37 @@
 import React from 'react'
-import { Avatar, Center } from 'native-base'
+import { Avatar } from 'native-base'
 import { UserProps } from '../context/AuthContext'
 
 interface AvatarGroupProps {
   members: UserProps[]
 }
 
-interface MemberAvatarProps {
-  member: UserProps
-}
-
-export function MemberAvatar({ member }: MemberAvatarProps) {
+export function AvatarGroup({ members = [] }: AvatarGroupProps) {
   return (
-    <Avatar
-      bg="gray.200"
-      source={{
-        uri: member.avatarUrl
+    <Avatar.Group
+      _avatar={{
+        size: 'md'
       }}
+      max={3}
     >
-      {member.firstname
-        ? member.firstname.substring(0, 1).toUpperCase()
-        : member.email.substring(0, 1).toUpperCase()}
-    </Avatar>
-  )
-}
-
-export function AvatarGroup({ members }: AvatarGroupProps) {
-  return (
-    <Center>
-      <Avatar.Group
-        _avatar={{
-          size: 'md'
-        }}
-        max={4}
-      >
-        {members.map(member => (
-          <MemberAvatar key={member.email} member={member} />
-        ))}
-      </Avatar.Group>
-    </Center>
+      {members.map(member => (
+        <Avatar
+          key={member.email}
+          bg="gray.200"
+          source={
+            member.avatarUrl
+              ? {
+                  uri: member.avatarUrl
+                }
+              : undefined
+          }
+        >
+          {member.firstname
+            ? member.firstname.substring(0, 1).toUpperCase() +
+              member.lastname!.substring(0, 1).toUpperCase()
+            : member.email.substring(0, 2).toUpperCase()}
+        </Avatar>
+      ))}
+    </Avatar.Group>
   )
 }

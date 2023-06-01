@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { Box, HStack, ScrollView, Text, VStack } from 'native-base'
+import { Box, HStack, Pressable, ScrollView, Text, VStack } from 'native-base'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { useAuth } from '../hooks/useAuth'
@@ -21,6 +21,7 @@ export default function Group() {
   const { navigate } = useNavigation()
   const { user, setUser } = useAuth()
   const [groups, setGroups] = useState<GroupProps[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   async function logout() {
     await AsyncStorage.removeItem('user')
@@ -31,6 +32,7 @@ export default function Group() {
 
   async function getGroups() {
     try {
+      setIsLoading(true)
       const response = await api.get('/groups')
       setGroups(response.data.groups || [])
     } catch (error) {
@@ -39,11 +41,14 @@ export default function Group() {
         'Ops!',
         'Não foi possível buscar os seus grupos, verifique a sua conexão com a internet e tente novamente mais tarde.'
       )
+    } finally {
+      setIsLoading(false)
     }
   }
 
   useFocusEffect(
     useCallback(() => {
+      setGroups([])
       getGroups()
     }, [])
   )
@@ -67,17 +72,17 @@ export default function Group() {
       </Box>
       <VStack px={4} py={8}>
         <VStack space={3}>
-          {groups.length > 0 ? (
-            groups.map(group => (
+          {!isLoading ? (
+            groups?.map(group => (
               <Box key={group.id} p={4} bg="dark.200" rounded="xl" width="full">
-                <Text color="white" fontSize="lg">
-                  {group.title}
-                </Text>
-                <AvatarGroup
-                  members={group.members.map(member => {
-                    return member.member
-                  })}
-                />
+                <Pressable onPress={() => console.log('group')}>
+                  <Text color="white" fontSize="2xl">
+                    {group.title}
+                  </Text>
+                  <AvatarGroup
+                    members={group.members.map(({ member }) => member)}
+                  />
+                </Pressable>
               </Box>
             ))
           ) : (
