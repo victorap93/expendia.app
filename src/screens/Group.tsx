@@ -1,12 +1,12 @@
 import React, { useCallback, useState } from 'react'
-import { Box, HStack, Pressable, ScrollView, Text, VStack } from 'native-base'
+import { Box, HStack, ScrollView, Text, VStack } from 'native-base'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { useAuth } from '../hooks/useAuth'
 import { UserProps } from '../context/AuthContext'
 import { api } from '../lib/axios'
 import { Alert } from 'react-native'
-import { AvatarGroup } from '../components/MemberAvatar'
+import CardGroup from '../components/CardGroup'
 
 export interface GroupProps {
   id: string
@@ -73,18 +73,7 @@ export default function Group() {
       <VStack px={4} py={8}>
         <VStack space={3}>
           {!isLoading ? (
-            groups?.map(group => (
-              <Box key={group.id} p={4} bg="dark.200" rounded="xl" width="full">
-                <Pressable onPress={() => console.log('group')}>
-                  <Text color="white" fontSize="2xl">
-                    {group.title}
-                  </Text>
-                  <AvatarGroup
-                    members={group.members.map(({ member }) => member)}
-                  />
-                </Pressable>
-              </Box>
-            ))
+            groups?.map(group => <CardGroup key={group.id} group={group} />)
           ) : (
             <Text color="white">Carregando....</Text>
           )}
