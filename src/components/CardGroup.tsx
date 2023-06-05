@@ -4,6 +4,8 @@ import { AvatarGroup } from './MemberAvatar'
 import { GroupProps } from '../screens/Group'
 import { api } from '../lib/axios'
 import { Alert } from 'react-native'
+import { UserProps } from '../context/AuthContext'
+import { useAuth } from '../hooks/useAuth'
 
 interface CardGroupProps {
   group: GroupProps
@@ -16,20 +18,22 @@ export interface ExpenseProps {
   dueDate: string
   createdAt: string
   updatedAt: string
+  Paying: PayingProps[]
 }
 
-export interface MemberExpenseProps {
-  expense_id: string
+export interface PayingProps {
+  user_id: string
   cost: string
   paid: boolean
   paidAt?: string
   createdAt: string
   updatedAt: string
-  expense: ExpenseProps
+  paying: UserProps
 }
 
 export default function CardGroup({ group }: CardGroupProps) {
-  const [expenses, setExpenses] = useState<MemberExpenseProps[]>([])
+  const { user } = useAuth()
+  const [expenses, setExpenses] = useState<ExpenseProps[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -39,8 +43,19 @@ export default function CardGroup({ group }: CardGroupProps) {
   const getExpenses = async () => {
     setIsLoading(true)
     try {
-      const response = await api.get(`/groups/${group.id}/expenses`)
-      setExpenses(response.data.expenses || [])
+      const date = new Date()
+      const month = date.getMonth() + 1
+      const year = date.getFullYear()
+      const query = `month=${month}&year=${year}`
+      console.log(query)
+      const response = await api.get(`/groups/${group.id}/expenses?${query}`)
+      const monthlyExpenses: ExpenseProps[] = response.data.expenses || []
+      const myExpenses = monthlyExpenses.filter(({ Paying }) => {
+        return Paying.find(
+          member => member.paid === false && member.paying.email === user.email
+        )
+      })
+      setExpenses(myExpenses)
     } catch (error) {
       Alert.alert(
         'Ops!',
@@ -60,13 +75,21 @@ export default function CardGroup({ group }: CardGroupProps) {
         </Text>
         <HStack justifyContent="space-between" alignItems="center">
           <HStack alignItems="center">
-            {isLoading && <Skeleton h={10} w={5} />}
-            <Text color="gray.200">
-              {!isLoading && expenses.length} despesa
-              {expenses.length > 1 && 's'}
-            </Text>
+            {isLoading ? (
+              <Skeleton h={4} w={'3/5'} />
+            ) : expenses.length > 0 ? (
+              <Text color="red.500">
+                {!isLoading && expenses.length} despesa
+                {expenses.length > 1 && 's'} não paga
+                {expenses.length > 1 && 's'}
+              </Text>
+            ) : (
+              <Text color="green.400">Sua parte está em dia! :)</Text>
+            )}
           </HStack>
-          <AvatarGroup members={group.members.map(({ member }) => member)} />
+          <AvatarGroup
+            members={group.members?.map(({ member }) => member) || []}
+          />
         </HStack>
       </Pressable>
     </Box>

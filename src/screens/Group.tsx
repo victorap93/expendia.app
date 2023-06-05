@@ -73,7 +73,9 @@ export default function Group() {
       <VStack px={4} py={8}>
         <VStack space={3}>
           {!isLoading ? (
-            groups?.map(group => <CardGroup key={group.id} group={group} />)
+            groups?.map(group => (
+              <CardGroup key={group.id} group={{ ...group }} />
+            ))
           ) : (
             <Text color="white">Carregando....</Text>
           )}
