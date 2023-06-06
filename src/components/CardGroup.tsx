@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Box, HStack, Pressable, Skeleton, Text } from 'native-base'
+import { Box, HStack, Skeleton, Text } from 'native-base'
 import { AvatarGroup } from './MemberAvatar'
 import { GroupProps } from '../screens/Group'
 import { api } from '../lib/axios'
 import { Alert } from 'react-native'
 import { UserProps } from '../context/AuthContext'
 import { useAuth } from '../hooks/useAuth'
+import { Pressable } from '@react-native-material/core'
 
 interface CardGroupProps {
   group: GroupProps
@@ -47,7 +48,6 @@ export default function CardGroup({ group }: CardGroupProps) {
       const month = date.getMonth() + 1
       const year = date.getFullYear()
       const query = `month=${month}&year=${year}`
-      console.log(query)
       const response = await api.get(`/groups/${group.id}/expenses?${query}`)
       const monthlyExpenses: ExpenseProps[] = response.data.expenses || []
       const myExpenses = monthlyExpenses.filter(({ Paying }) => {
@@ -68,8 +68,13 @@ export default function CardGroup({ group }: CardGroupProps) {
   }
 
   return (
-    <Box key={group.id} p={4} bg="dark.200" rounded="xl" width="full">
-      <Pressable onPress={() => console.log('group')}>
+    <Box key={group.id} bg="dark.200" rounded="xl" width="full">
+      <Pressable
+        style={{
+          padding: 16
+        }}
+        onPress={() => console.log('group')}
+      >
         <Text color="white" fontSize="2xl">
           {group.title}
         </Text>
