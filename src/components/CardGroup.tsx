@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box, HStack, Skeleton, Text } from 'native-base'
+import { Box, HStack, Skeleton, Text, VStack } from 'native-base'
 import { AvatarGroup } from './MemberAvatar'
 import { GroupProps } from '../screens/Group'
 import { api } from '../lib/axios'
@@ -7,6 +7,7 @@ import { Alert } from 'react-native'
 import { UserProps } from '../context/AuthContext'
 import { useAuth } from '../hooks/useAuth'
 import { Pressable } from '@react-native-material/core'
+import { InterfaceBoxProps } from 'native-base/lib/typescript/components/primitives/Box'
 
 interface CardGroupProps {
   group: GroupProps
@@ -32,7 +33,15 @@ export interface PayingProps {
   paying: UserProps
 }
 
-export default function CardGroup({ group }: CardGroupProps) {
+export function CardBox({ children, ...rest }: InterfaceBoxProps) {
+  return (
+    <Box bg="dark.200" rounded="xl" width="full" {...rest}>
+      {children}
+    </Box>
+  )
+}
+
+export function CardGroup({ group }: CardGroupProps) {
   const { user } = useAuth()
   const [expenses, setExpenses] = useState<ExpenseProps[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -68,7 +77,7 @@ export default function CardGroup({ group }: CardGroupProps) {
   }
 
   return (
-    <Box key={group.id} bg="dark.200" rounded="xl" width="full">
+    <CardBox key={group.id}>
       <Pressable
         style={{
           padding: 16
@@ -97,6 +106,24 @@ export default function CardGroup({ group }: CardGroupProps) {
           />
         </HStack>
       </Pressable>
-    </Box>
+    </CardBox>
+  )
+}
+
+export function CardSkeleton({}) {
+  return (
+    <CardBox p={4}>
+      <VStack space={4}>
+        <Skeleton h={4} w={'2/5'} />
+        <HStack justifyContent="space-between" alignItems="center">
+          <Skeleton h={4} w={'3/5'} />
+          <HStack alignItems="center" space={1}>
+            <Skeleton rounded="full" h={10} w={10} />
+            <Skeleton rounded="full" h={10} w={10} />
+            <Skeleton rounded="full" h={10} w={10} />
+          </HStack>
+        </HStack>
+      </VStack>
+    </CardBox>
   )
 }

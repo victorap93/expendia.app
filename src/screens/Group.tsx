@@ -6,7 +6,7 @@ import { useAuth } from '../hooks/useAuth'
 import { UserProps } from '../context/AuthContext'
 import { api } from '../lib/axios'
 import { Alert } from 'react-native'
-import CardGroup from '../components/CardGroup'
+import * as Item from '../components/CardGroup'
 
 export interface GroupProps {
   id: string
@@ -74,10 +74,14 @@ export default function Group() {
         <VStack space={3}>
           {!isLoading ? (
             groups?.map(group => (
-              <CardGroup key={group.id} group={{ ...group }} />
+              <Item.CardGroup key={group.id} group={{ ...group }} />
             ))
           ) : (
-            <Text color="white">Carregando....</Text>
+            <>
+              <Item.CardSkeleton />
+              <Item.CardSkeleton />
+              <Item.CardSkeleton />
+            </>
           )}
         </VStack>
       </VStack>
