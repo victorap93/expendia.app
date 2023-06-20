@@ -11,7 +11,7 @@ import * as Item from '../components/CardGroup'
 export interface GroupProps {
   id: string
   title: string
-  members: {
+  Member: {
     createdAt: string
     member: UserProps
   }[]

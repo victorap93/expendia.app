@@ -101,9 +101,7 @@ export function CardGroup({ group }: CardGroupProps) {
               <Text color="green.400">Sua parte está em dia! :)</Text>
             )}
           </HStack>
-          <AvatarGroup
-            members={group.members?.map(({ member }) => member) || []}
-          />
+          <AvatarGroup members={group.Member.map(({ member }) => member)} />
         </HStack>
       </Pressable>
     </CardBox>
