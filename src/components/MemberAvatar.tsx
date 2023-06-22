@@ -1,9 +1,13 @@
 import React from 'react'
-import { Avatar } from 'native-base'
+import { Avatar, IAvatarProps } from 'native-base'
 import { UserProps } from '../context/AuthContext'
 
 interface AvatarGroupProps {
   members: UserProps[]
+}
+
+interface MemberAvatarProps extends IAvatarProps {
+  member: UserProps
 }
 
 export function AvatarGroup({ members = [] }: AvatarGroupProps) {
@@ -33,5 +37,27 @@ export function AvatarGroup({ members = [] }: AvatarGroupProps) {
         </Avatar>
       ))}
     </Avatar.Group>
+  )
+}
+
+export function MemberAvatar({ member, ...rest }: MemberAvatarProps) {
+  return (
+    <Avatar
+      {...rest}
+      key={member.email}
+      bg="gray.200"
+      source={
+        member.avatarUrl
+          ? {
+              uri: member.avatarUrl
+            }
+          : undefined
+      }
+    >
+      {member.firstname
+        ? member.firstname.substring(0, 1).toUpperCase() +
+          member.lastname!.substring(0, 1).toUpperCase()
+        : member.email.substring(0, 2).toUpperCase()}
+    </Avatar>
   )
 }

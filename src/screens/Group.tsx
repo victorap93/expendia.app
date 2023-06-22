@@ -7,6 +7,7 @@ import { UserProps } from '../context/AuthContext'
 import { api } from '../lib/axios'
 import { Alert, RefreshControl } from 'react-native'
 import * as Item from '../components/CardGroup'
+import AppBar from '../components/AppBar'
 
 export interface GroupProps {
   id: string
@@ -18,18 +19,9 @@ export interface GroupProps {
 }
 
 export default function Group() {
-  const { navigate } = useNavigation()
-  const { user, setUser } = useAuth()
   const [groups, setGroups] = useState<GroupProps[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
-
-  async function logout() {
-    await AsyncStorage.removeItem('user')
-    await AsyncStorage.removeItem('accessToken')
-    setUser({} as UserProps)
-    navigate('Home')
-  }
 
   async function getGroups() {
     try {
@@ -66,21 +58,7 @@ export default function Group() {
         <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
       }
     >
-      <Box px={4} pb={1} pt={8} roundedBottom={24} bg="dark.200" width="full">
-        <VStack justifyContent="space-between">
-          <HStack justifyContent="space-between">
-            <Text color="white" onPress={logout}>
-              {user.firstname} {user.lastname}
-            </Text>
-            <Text color="white" onPress={logout}>
-              Sair
-            </Text>
-          </HStack>
-          <Text my={4} fontSize="2xl" color="white">
-            Meus grupos
-          </Text>
-        </VStack>
-      </Box>
+      <AppBar title="Meus grupos" left="menu" />
       <VStack px={4} py={8}>
         <VStack space={3}>
           {!isLoading ? (
