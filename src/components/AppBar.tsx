@@ -14,7 +14,7 @@ export default function AppBar({ title, left, right, bottom }: AppBarProps) {
   return (
     <Box px={4} pb={4} pt={12} roundedBottom={24} bg="dark.200" width="full">
       <VStack justifyContent="space-between">
-        <HStack justifyContent="space-between">
+        <HStack justifyContent="space-between" alignItems="center">
           <Box>
             {left ? left === 'back' ? <BackButton /> : <MenuButton /> : ''}
           </Box>
