@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { ScrollView, VStack } from 'native-base'
-import { useFocusEffect } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { UserProps } from '../context/AuthContext'
 import { api } from '../lib/axios'
 import { Alert, RefreshControl } from 'react-native'
@@ -20,6 +20,7 @@ export interface GroupProps {
 }
 
 export default function Group() {
+  const { navigate } = useNavigation()
   const [groups, setGroups] = useState<GroupProps[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
@@ -76,7 +77,11 @@ export default function Group() {
           <VStack space={3}>
             {!isLoading ? (
               groups.map(group => (
-                <Item.CardGroup key={group.id} group={group} />
+                <Item.CardGroup
+                  key={group.id}
+                  group={group}
+                  handlePress={item => navigate('Expenses', item)}
+                />
               ))
             ) : (
               <>

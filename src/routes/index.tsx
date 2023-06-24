@@ -11,6 +11,7 @@ import Register from '../screens/Register'
 import PasswordRecovery from '../screens/PasswordRecovery'
 import ValidateCode from '../screens/ValidateCode'
 import Password from '../screens/Password'
+import Expenses from '../screens/Expenses'
 
 export default function Routes() {
   const { Navigator, Screen } = createNativeStackNavigator()
@@ -38,6 +39,7 @@ export default function Routes() {
         <Screen name="ValidateCode" component={ValidateCode} />
         <Screen name="Password" component={Password} />
         <Screen name="Group" component={Group} />
+        <Screen name="Expenses" component={Expenses} />
       </Navigator>
     </NavigationContainer>
   )

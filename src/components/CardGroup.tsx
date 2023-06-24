@@ -11,6 +11,7 @@ import { InterfaceBoxProps } from 'native-base/lib/typescript/components/primiti
 
 interface CardGroupProps {
   group: GroupProps
+  handlePress?: (group: GroupProps) => void
 }
 
 export interface ExpenseProps {
@@ -41,7 +42,7 @@ export function CardBox({ children, ...rest }: InterfaceBoxProps) {
   )
 }
 
-export function CardGroup({ group }: CardGroupProps) {
+export function CardGroup({ group, handlePress }: CardGroupProps) {
   const { user } = useAuth()
   const [expenses, setExpenses] = useState<ExpenseProps[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -82,7 +83,7 @@ export function CardGroup({ group }: CardGroupProps) {
         style={{
           padding: 16
         }}
-        onPress={() => console.log('group')}
+        onPress={handlePress ? () => handlePress(group) : undefined}
       >
         <Text color="white" fontSize="2xl">
           {group.title}
