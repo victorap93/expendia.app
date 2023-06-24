@@ -8,6 +8,7 @@ import { UserProps } from '../context/AuthContext'
 import { useAuth } from '../hooks/useAuth'
 import { Pressable } from '@react-native-material/core'
 import { InterfaceBoxProps } from 'native-base/lib/typescript/components/primitives/Box'
+import { present } from './DateController'
 
 interface CardGroupProps {
   group: GroupProps
@@ -54,10 +55,8 @@ export function CardGroup({ group, handlePress }: CardGroupProps) {
   const getExpenses = async () => {
     setIsLoading(true)
     try {
-      const date = new Date()
-      const month = date.getMonth() + 1
-      const year = date.getFullYear()
-      const query = `month=${month}&year=${year}`
+      const date = present
+      const query = `month=${date.month + 1}&year=${date.year}`
       const response = await api.get(`/groups/${group.id}/expenses?${query}`)
       const monthlyExpenses: ExpenseProps[] = response.data.expenses || []
       const myExpenses = monthlyExpenses.filter(({ Paying }) => {

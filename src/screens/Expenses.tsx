@@ -9,7 +9,10 @@ import { IconButton } from '@react-native-material/core'
 import Icon from '@expo/vector-icons/MaterialCommunityIcons'
 import PlusFab from '../components/PlusFab'
 import { GroupProps } from './Group'
-import DateController, { MonthlyProps } from '../components/DateController'
+import DateController, {
+  MonthlyProps,
+  present
+} from '../components/DateController'
 
 export default function Expenses() {
   const date = new Date()
@@ -18,10 +21,7 @@ export default function Expenses() {
   const route = useRoute()
   const { title, id } = route.params as GroupProps
   const [expenses, setExpenses] = useState<ExpenseProps[]>([])
-  const [expensesDate, setExpensesDate] = useState<MonthlyProps>({
-    month: date.getMonth(),
-    year: date.getFullYear()
-  })
+  const [expensesDate, setExpensesDate] = useState<MonthlyProps>(present)
 
   const getExpenses = async () => {
     setIsLoading(true)

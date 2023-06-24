@@ -28,6 +28,12 @@ export const LABEL_MONTHS: string[] = [
   'Dezembro'
 ]
 
+const date = new Date()
+export const present: MonthlyProps = {
+  month: date.getMonth(),
+  year: date.getFullYear()
+}
+
 export default function DateController({
   date,
   onChange
@@ -60,19 +66,55 @@ export default function DateController({
     }
   }
 
+  const isPast = () => {
+    return (
+      (date.month < present.month && date.year <= present.year) ||
+      (date.month > present.month && date.year < present.year)
+    )
+  }
+
+  const isFuture = () => {
+    return (
+      (date.month > present.month && date.year >= present.year) ||
+      (date.month < present.month && date.year > present.year)
+    )
+  }
+
+  const goToPresent = () => onChange(present)
+
   return (
     <HStack w="full" justifyContent="space-between" alignItems="center">
-      <IconButton
-        icon={() => <Icon name="chevron-left" color="white" size={32} />}
-        onPress={handleBack}
-      />
+      <HStack space={1} alignItems="center">
+        <IconButton
+          icon={() => <Icon name="chevron-left" color="white" size={32} />}
+          onPress={handleBack}
+        />
+        {isPast() && (
+          <IconButton
+            icon={() => (
+              <Icon name="arrow-u-right-top" color="white" size={24} />
+            )}
+            onPress={goToPresent}
+          />
+        )}
+      </HStack>
       <Text color="white" fontSize="md" textTransform="uppercase">
         {LABEL_MONTHS[date.month]} {date.year}
       </Text>
-      <IconButton
-        icon={() => <Icon name="chevron-right" color="white" size={32} />}
-        onPress={handleNext}
-      />
+      <HStack space={1} alignItems="center">
+        {isFuture() && (
+          <IconButton
+            icon={() => (
+              <Icon name="arrow-u-left-top" color="white" size={24} />
+            )}
+            onPress={goToPresent}
+          />
+        )}
+        <IconButton
+          icon={() => <Icon name="chevron-right" color="white" size={32} />}
+          onPress={handleNext}
+        />
+      </HStack>
     </HStack>
   )
 }
