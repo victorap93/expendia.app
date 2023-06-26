@@ -1,7 +1,7 @@
 import React from 'react'
 import { IconButton } from '@react-native-material/core'
 import Icon from '@expo/vector-icons/MaterialCommunityIcons'
-import { HStack, Text } from 'native-base'
+import { Box, HStack, Text } from 'native-base'
 
 export interface MonthlyProps {
   month: number
@@ -83,8 +83,8 @@ export default function DateController({
   const goToPresent = () => onChange(present)
 
   return (
-    <HStack w="full" justifyContent="space-between" alignItems="center">
-      <HStack space={1} alignItems="center">
+    <HStack w="full" alignItems="center">
+      <HStack space={1} alignItems="center" w="1/4">
         <IconButton
           icon={() => <Icon name="chevron-left" color="white" size={32} />}
           onPress={handleBack}
@@ -98,10 +98,24 @@ export default function DateController({
           />
         )}
       </HStack>
-      <Text color="white" fontSize="md" textTransform="uppercase">
-        {LABEL_MONTHS[date.month]} {date.year}
-      </Text>
-      <HStack space={1} alignItems="center">
+      <HStack
+        w="1/2"
+        textAlign="center"
+        justifyContent="center"
+        // bgColor="cyan.200"
+      >
+        <Text color="white" fontSize="md" textTransform="uppercase">
+          {LABEL_MONTHS[date.month]} {date.year}
+        </Text>
+      </HStack>
+      <HStack
+        space={1}
+        alignItems="center"
+        w="1/4"
+        textAlign="right"
+        justifyContent="flex-end"
+        // bgColor="red.200"
+      >
         {isFuture() && (
           <IconButton
             icon={() => (
