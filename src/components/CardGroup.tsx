@@ -7,40 +7,13 @@ import { Alert } from 'react-native'
 import { UserProps } from '../context/AuthContext'
 import { useAuth } from '../hooks/useAuth'
 import { Pressable } from '@react-native-material/core'
-import { InterfaceBoxProps } from 'native-base/lib/typescript/components/primitives/Box'
 import { present } from './DateController'
+import CardBox from './CardBox'
+import { ExpenseProps } from '../screens/Expenses'
 
 interface CardGroupProps {
   group: GroupProps
   handlePress?: (group: GroupProps) => void
-}
-
-export interface ExpenseProps {
-  title: string
-  group_id: string
-  cost: string
-  dueDate: string
-  createdAt: string
-  updatedAt: string
-  Paying: PayingProps[]
-}
-
-export interface PayingProps {
-  user_id: string
-  cost: string
-  paid: boolean
-  paidAt?: string
-  createdAt: string
-  updatedAt: string
-  paying: UserProps
-}
-
-export function CardBox({ children, ...rest }: InterfaceBoxProps) {
-  return (
-    <Box bg="dark.200" rounded="xl" width="full" {...rest}>
-      {children}
-    </Box>
-  )
 }
 
 export function CardGroup({ group, handlePress }: CardGroupProps) {

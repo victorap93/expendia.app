@@ -1,9 +1,8 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { ScrollView, VStack } from 'native-base'
 import { useFocusEffect, useRoute } from '@react-navigation/native'
 import { api } from '../lib/axios'
 import { Alert, RefreshControl } from 'react-native'
-import { ExpenseProps } from '../components/CardGroup'
 import AppBar from '../components/AppBar'
 import { IconButton } from '@react-native-material/core'
 import Icon from '@expo/vector-icons/MaterialCommunityIcons'
@@ -13,6 +12,30 @@ import DateController, {
   MonthlyProps,
   present
 } from '../components/DateController'
+import { UserProps } from '../context/AuthContext'
+import { CardSkeleton } from '../components/CardGroup'
+import { CardExpense } from '../components/CardExpense'
+
+export interface ExpenseProps {
+  id: string
+  title: string
+  group_id: string
+  cost: string
+  dueDate: string
+  createdAt: string
+  updatedAt: string
+  Paying: PayingProps[]
+}
+
+export interface PayingProps {
+  user_id: string
+  cost: string
+  paid: boolean
+  paidAt?: string
+  createdAt: string
+  updatedAt: string
+  paying: UserProps
+}
 
 export default function Expenses() {
   const date = new Date()
@@ -50,7 +73,7 @@ export default function Expenses() {
     useCallback(() => {
       setExpenses([])
       getExpenses()
-    }, [])
+    }, [expensesDate])
   )
 
   return (
@@ -70,9 +93,21 @@ export default function Expenses() {
             />
           }
         />
-        <VStack px={4} py={8}>
+        <VStack px={4} py={4} space={5}>
           <DateController date={expensesDate} onChange={setExpensesDate} />
-          <VStack space={3}>{/** expenses */}</VStack>
+          <VStack space={3}>
+            {!isLoading ? (
+              expenses.map(expense => (
+                <CardExpense key={expense.id} expense={expense} />
+              ))
+            ) : (
+              <>
+                <CardSkeleton />
+                <CardSkeleton />
+                <CardSkeleton />
+              </>
+            )}
+          </VStack>
         </VStack>
       </ScrollView>
       <PlusFab />
