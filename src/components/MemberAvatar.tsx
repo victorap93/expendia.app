@@ -1,20 +1,22 @@
 import React from 'react'
 import { Avatar, IAvatarProps } from 'native-base'
 import { UserProps } from '../context/AuthContext'
+import { ThemeComponentSizeType } from 'native-base/lib/typescript/components/types'
 
 interface AvatarGroupProps {
   members: UserProps[]
+  size?: ThemeComponentSizeType<'Avatar'>
 }
 
 interface MemberAvatarProps extends IAvatarProps {
   member: UserProps
 }
 
-export function AvatarGroup({ members = [] }: AvatarGroupProps) {
+export function AvatarGroup({ members = [], size }: AvatarGroupProps) {
   return (
     <Avatar.Group
       _avatar={{
-        size: 'md'
+        size: size || 'md'
       }}
       max={3}
     >
