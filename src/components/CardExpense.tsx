@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import CardBox from './CardBox'
 import { ExpenseProps } from '../screens/Expenses'
 import { HStack, Pressable, Text, VStack } from 'native-base'
@@ -6,6 +6,9 @@ import { AvatarGroup } from './MemberAvatar'
 import dayjs from 'dayjs'
 import { getUserPart, isExpired, isPaid } from '../helpers/expenseHelper'
 import { useAuth } from '../hooks/useAuth'
+import ExpenseStatusMessage, {
+  ExpenseStatusMessageSetup
+} from './ExpenseStatusMessage'
 
 interface CardExpenseProps {
   expense: ExpenseProps
@@ -15,11 +18,17 @@ export function CardExpense({ expense, handlePress }: CardExpenseProps) {
   const { user } = useAuth()
 
   const userPart = getUserPart(expense.Paying, user.email)
-  const userPaid = isPaid(expense.Paying, user.email)
-  const expenseIsExpired = isExpired(expense)
+
+  const [statusMessage, setStatusMessage] = useState<ExpenseStatusMessageSetup>(
+    {
+      status: null,
+      color: '',
+      message: ''
+    }
+  )
 
   return (
-    <CardBox>
+    <CardBox borderLeftColor={statusMessage.color} borderLeftWidth={4}>
       <Pressable
         style={{
           padding: 16
@@ -39,6 +48,10 @@ export function CardExpense({ expense, handlePress }: CardExpenseProps) {
             <Text color="white" fontSize="lg">
               R$ {userPart}
             </Text>
+            <ExpenseStatusMessage
+              expense={expense}
+              getStatusMessage={setStatusMessage}
+            />
           </HStack>
           <HStack justifyContent="space-between" alignItems="center">
             <Text color="white" fontSize="md">
