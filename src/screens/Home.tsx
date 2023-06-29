@@ -9,7 +9,7 @@ const Home = () => {
   const { continueWithGoogle, isOAuthLoading, user } = useAuth()
 
   useEffect(() => {
-    if (user.email && user.noRedirect !== true) navigate('Group')
+    if (user.email && user.noRedirect !== true) navigate('Groups')
   }, [user])
 
   return (

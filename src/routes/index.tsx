@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Home from '../screens/Home'
 import Email from '../screens/Email'
 import SignIn from '../screens/SignIn'
-import Group from '../screens/Group'
+import Groups from '../screens/Groups'
 import { useAuth } from '../hooks/useAuth'
 import Loading from '../components/Loading'
 import SignUp from '../screens/SignUp'
@@ -22,7 +22,7 @@ export default function Routes() {
   ) : (
     <NavigationContainer>
       <Navigator
-        initialRouteName={user.email ? 'Group' : 'Home'}
+        initialRouteName={user.email ? 'Groups' : 'Home'}
         screenOptions={{
           headerShown: false,
           contentStyle: {
@@ -38,7 +38,7 @@ export default function Routes() {
         <Screen name="PasswordRecovery" component={PasswordRecovery} />
         <Screen name="ValidateCode" component={ValidateCode} />
         <Screen name="Password" component={Password} />
-        <Screen name="Group" component={Group} />
+        <Screen name="Groups" component={Groups} />
         <Screen name="Expenses" component={Expenses} />
       </Navigator>
     </NavigationContainer>

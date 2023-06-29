@@ -1,5 +1,5 @@
 import { FormEmail } from '../screens/Email'
-import { GroupProps } from '../screens/Group'
+import { GroupProps } from '../screens/Groups'
 import { PasswordParams } from '../screens/Password'
 import { FormSignUp } from '../screens/SignUp'
 
@@ -14,7 +14,7 @@ export declare global {
       PasswordRecovery: FormEmail
       ValidateCode: FormEmail
       Password: PasswordParams
-      Group: undefined
+      Groups: undefined
       Expenses: GroupProps
     }
   }

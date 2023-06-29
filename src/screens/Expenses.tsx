@@ -7,7 +7,7 @@ import AppBar from '../components/AppBar'
 import { IconButton } from '@react-native-material/core'
 import Icon from '@expo/vector-icons/MaterialCommunityIcons'
 import PlusFab from '../components/PlusFab'
-import { GroupProps } from './Group'
+import { GroupProps } from './Groups'
 import DateController, {
   MonthlyProps,
   present

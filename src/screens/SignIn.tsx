@@ -38,7 +38,7 @@ export default function SignIn() {
           ...response.data.user,
           noRedirect: true
         })
-        navigate('Group')
+        navigate('Groups')
       } else if (response.data.hasOwnProperty('error')) {
         switch (response.data.error) {
           case 'INVALID_PASSWORD':

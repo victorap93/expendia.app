@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { HStack, Skeleton, Text, VStack } from 'native-base'
 import { AvatarGroup } from './MemberAvatar'
-import { GroupProps } from '../screens/Group'
+import { GroupProps } from '../screens/Groups'
 import { api } from '../lib/axios'
 import { Alert } from 'react-native'
 import { useAuth } from '../hooks/useAuth'
