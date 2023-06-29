@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import CardBox from './CardBox'
 import { ExpenseProps } from '../screens/Expenses'
-import { HStack, Pressable, Skeleton, Text, VStack } from 'native-base'
+import { HStack, Skeleton, Text, VStack } from 'native-base'
+import { Pressable } from '@react-native-material/core'
 import { AvatarGroup } from './MemberAvatar'
 import dayjs from 'dayjs'
-import { getUserPart, isExpired, isPaid } from '../helpers/expenseHelper'
+import { getUserPart } from '../helpers/expenseHelper'
 import { useAuth } from '../hooks/useAuth'
 import ExpenseStatusMessage, {
   ExpenseStatusMessageSetup
