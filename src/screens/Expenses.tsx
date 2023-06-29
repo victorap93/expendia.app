@@ -13,8 +13,7 @@ import DateController, {
   present
 } from '../components/DateController'
 import { UserProps } from '../context/AuthContext'
-import { CardSkeleton } from '../components/CardGroup'
-import { CardExpense } from '../components/CardExpense'
+import { CardExpense, CardSkeleton } from '../components/CardExpense'
 
 export interface ExpenseProps {
   id: string

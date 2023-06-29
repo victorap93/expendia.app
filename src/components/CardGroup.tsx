@@ -81,7 +81,7 @@ export function CardGroup({ group, handlePress }: CardGroupProps) {
   )
 }
 
-export function CardSkeleton({}) {
+export function CardSkeleton() {
   return (
     <CardBox p={4}>
       <VStack space={4}>

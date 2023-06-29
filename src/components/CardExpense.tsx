@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import CardBox from './CardBox'
 import { ExpenseProps } from '../screens/Expenses'
-import { HStack, Pressable, Text, VStack } from 'native-base'
+import { HStack, Pressable, Skeleton, Text, VStack } from 'native-base'
 import { AvatarGroup } from './MemberAvatar'
 import dayjs from 'dayjs'
 import { getUserPart, isExpired, isPaid } from '../helpers/expenseHelper'
@@ -14,6 +14,7 @@ interface CardExpenseProps {
   expense: ExpenseProps
   handlePress?: (expense: ExpenseProps) => void
 }
+
 export function CardExpense({ expense, handlePress }: CardExpenseProps) {
   const { user } = useAuth()
 
@@ -64,6 +65,31 @@ export function CardExpense({ expense, handlePress }: CardExpenseProps) {
           </HStack>
         </VStack>
       </Pressable>
+    </CardBox>
+  )
+}
+
+export function CardSkeleton() {
+  return (
+    <CardBox p={4}>
+      <VStack space={4}>
+        <HStack justifyContent="space-between" alignItems="center">
+          <Skeleton h={4} w={'3/5'} />
+          <Skeleton h={4} w={'1/5'} />
+        </HStack>
+        <HStack justifyContent="space-between" alignItems="center">
+          <Skeleton h={4} w={'2/5'} />
+          <Skeleton h={4} w={'2/5'} />
+        </HStack>
+        <HStack justifyContent="space-between" alignItems="center">
+          <Skeleton h={4} w={'2/5'} />
+          <HStack alignItems="center" space={1}>
+            <Skeleton rounded="full" h={10} w={10} />
+            <Skeleton rounded="full" h={10} w={10} />
+            <Skeleton rounded="full" h={10} w={10} />
+          </HStack>
+        </HStack>
+      </VStack>
     </CardBox>
   )
 }
