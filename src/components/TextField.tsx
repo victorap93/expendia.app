@@ -23,7 +23,7 @@ export default function TextField({ error, ...rest }: TextFieldProps) {
         }}
         {...rest}
       />
-      <Text color="red.500">{error}</Text>
+      {error && <Text color="red.500">{error}</Text>}
     </VStack>
   )
 }

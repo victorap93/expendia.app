@@ -93,7 +93,7 @@ export default function Group() {
           </VStack>
         </VStack>
       </ScrollView>
-      <PlusFab />
+      <PlusFab onPress={() => navigate('GroupName')} />
     </>
   )
 }
