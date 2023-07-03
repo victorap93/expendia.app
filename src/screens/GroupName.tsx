@@ -39,7 +39,7 @@ export default function GroupName() {
       initialValues={{} as FormGroup}
       validationSchema={Yup.object({
         title: Yup.string()
-          .required('O e-mail é obrigatório.')
+          .required('Digite o nome do grupo.')
           .min(2, 'Digite no mínimo 2 caracteres.')
           .max(50, 'Digite no máximo 50 caracteres.')
       })}
