@@ -24,7 +24,7 @@ export default function GroupName() {
     try {
       setSubmitting(true)
       navigate('GroupMembers', {
-        ...values,
+        members: values.members || [],
         title: values.title.trim()
       })
     } catch (error) {

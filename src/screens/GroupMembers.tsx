@@ -10,14 +10,26 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import SubmitButton from '../components/SubmitButton'
 import { FormGroup } from './GroupName'
 import { Plus } from 'phosphor-react-native'
+import { ListItem } from '@react-native-material/core'
+import { setFieldValueType } from '../lib/formik'
+import { useAuth } from '../hooks/useAuth'
+
+interface FormGroupMembers extends FormGroup {
+  email: string
+}
+
+type ErrorsEmail = {
+  email?: string
+}
 
 export default function GroupMembers() {
+  const { user } = useAuth()
   const { navigate } = useNavigation()
   const route = useRoute()
   const { title, members } = route.params as FormGroup
 
   async function submit(
-    values: FormGroup,
+    values: FormGroupMembers,
     setSubmitting: (isSubmitting: boolean) => void
   ) {
     try {
@@ -29,16 +41,44 @@ export default function GroupMembers() {
     }
   }
 
+  const isDisabled = (errors: ErrorsEmail, values: FormGroupMembers) => {
+    return errors.email !== undefined || values.email.trim() === ''
+  }
+
+  const addMember = (
+    values: FormGroupMembers,
+    setFieldValue: setFieldValueType
+  ) => {
+    if (values.email === user.email) {
+      return Alert.alert(
+        'Ação incorreta!',
+        'Você já é automaticamente um membro do grupo.'
+      )
+    }
+
+    if (values.members.includes(values.email)) {
+      return Alert.alert(
+        'Membro já adicionado!',
+        'Este membro já foi adicionado ao grupo.'
+      )
+    }
+
+    setFieldValue('email', '')
+    setFieldValue('members', [...values.members, values.email])
+  }
+
   return (
     <Formik
       initialValues={{
         title,
-        members
+        members,
+        email: ''
       }}
       validationSchema={Yup.object({
         members: Yup.array(
-          Yup.string().email().required('Digite apenas e-mails válidos')
-        ).required('Erro: Array not defined.')
+          Yup.string().email('Digite apenas e-mails válidos')
+        ).required('Erro: Array not defined.'),
+        email: Yup.string().email('E-mail inválido.')
       })}
       onSubmit={(values, { setSubmitting }) => submit(values, setSubmitting)}
     >
@@ -48,33 +88,64 @@ export default function GroupMembers() {
         handleSubmit,
         values,
         errors,
-        isSubmitting
+        touched,
+        isSubmitting,
+        setFieldValue
       }) => (
         <VStack flex={1} space={2} px={4} py={8} justifyContent="space-between">
-          <VStack>
+          <VStack space={8}>
             <Box my={3}>
               <BackButton />
             </Box>
             <Text my={4} fontSize={28} color="white">
               Gostaria de já adicionar alguém no seu grupo?
             </Text>
-            <HStack space={2}>
-              <Box width="4/5">
-                <TextField placeholder="Adicione o e-mail no membro do grupo" />
-              </Box>
-              <Button
-                isLoading={isSubmitting}
-                onPress={() => handleSubmit()}
-                bg="violet.600"
-                _pressed={{
-                  bg: 'violet.700'
-                }}
-                height={'100%'}
-                width="1/5"
-              >
-                <Plus color="white" />
-              </Button>
-            </HStack>
+            <VStack>
+              <HStack space={2}>
+                <Box width="4/5">
+                  <TextField
+                    error={
+                      touched.email && errors.email ? errors.email : undefined
+                    }
+                    hideMessageError
+                    onChangeText={handleChange('email')}
+                    onBlur={handleBlur('email')}
+                    placeholder="E-mail do membro"
+                    value={values.email || ''}
+                  />
+                </Box>
+                <Button
+                  disabled={isDisabled(errors, values)}
+                  isLoading={isSubmitting}
+                  onPress={() =>
+                    isDisabled(errors, values)
+                      ? {}
+                      : addMember(values, setFieldValue)
+                  }
+                  bg={
+                    isDisabled(errors, values) ? 'trueGray.900' : 'violet.600'
+                  }
+                  _pressed={{
+                    bg: 'violet.700'
+                  }}
+                  height={'100%'}
+                  width="1/5"
+                >
+                  <Plus color={isDisabled(errors, values) ? 'gray' : 'white'} />
+                </Button>
+              </HStack>
+              {errors.email && <Text color="red.500">{errors.email}</Text>}
+            </VStack>
+            <VStack space={4}>
+              <VStack>
+                <Text color="white" fontSize="xl">
+                  Membros:
+                </Text>
+              </VStack>
+              {values.members?.map(member => (
+                <ListItem key={member} title={member} />
+              ))}
+            </VStack>
           </VStack>
           <SubmitButton
             isSubmitting={isSubmitting}

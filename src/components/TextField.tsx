@@ -7,9 +7,14 @@ import {
 
 interface TextFieldProps extends IInputProps {
   error?: string
+  hideMessageError?: boolean
 }
 
-export default function TextField({ error, ...rest }: TextFieldProps) {
+export default function TextField({
+  error,
+  hideMessageError,
+  ...rest
+}: TextFieldProps) {
   return (
     <VStack>
       <Input
@@ -23,7 +28,7 @@ export default function TextField({ error, ...rest }: TextFieldProps) {
         }}
         {...rest}
       />
-      {error && <Text color="red.500">{error}</Text>}
+      {error && !hideMessageError && <Text color="red.500">{error}</Text>}
     </VStack>
   )
 }
