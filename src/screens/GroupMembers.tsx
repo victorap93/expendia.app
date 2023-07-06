@@ -1,18 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Alert } from 'react-native'
-import { Box, Button, HStack, Text, VStack } from 'native-base'
+import { Badge, Box, Button, HStack, Text, VStack } from 'native-base'
 import BackButton from '../components/BackButton'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import TextField from '../components/TextField'
-import { api } from '../lib/axios'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import SubmitButton from '../components/SubmitButton'
 import { FormGroup } from './GroupName'
 import { Plus } from 'phosphor-react-native'
-import { ListItem } from '@react-native-material/core'
 import { setFieldValueType } from '../lib/formik'
 import { useAuth } from '../hooks/useAuth'
+import MembersList from '../components/MembersList'
 
 interface FormGroupMembers extends FormGroup {
   email: string
@@ -67,6 +66,10 @@ export default function GroupMembers() {
     setFieldValue('members', [...values.members, values.email])
   }
 
+  useEffect(() => {
+    console.log(members)
+  }, [members])
+
   return (
     <Formik
       initialValues={{
@@ -94,12 +97,14 @@ export default function GroupMembers() {
       }) => (
         <VStack flex={1} space={2} px={4} py={8} justifyContent="space-between">
           <VStack space={8}>
-            <Box my={3}>
-              <BackButton />
-            </Box>
-            <Text my={4} fontSize={28} color="white">
-              Gostaria de já adicionar alguém no seu grupo?
-            </Text>
+            <VStack>
+              <Box my={3}>
+                <BackButton />
+              </Box>
+              <Text fontSize={28} color="white">
+                Gostaria de já adicionar alguém no seu grupo?
+              </Text>
+            </VStack>
             <VStack>
               <HStack space={2}>
                 <Box width="4/5">
@@ -137,14 +142,19 @@ export default function GroupMembers() {
               {errors.email && <Text color="red.500">{errors.email}</Text>}
             </VStack>
             <VStack space={4}>
-              <VStack>
+              <HStack space={2} alignItems="center">
                 <Text color="white" fontSize="xl">
                   Membros:
                 </Text>
-              </VStack>
-              {values.members?.map(member => (
-                <ListItem key={member} title={member} />
-              ))}
+                <Badge rounded="2xl">{values.members.length + 1}</Badge>
+              </HStack>
+              <MembersList
+                members={values.members.map(email => {
+                  return { email }
+                })}
+                autoInclude
+                fetchUser
+              />
             </VStack>
           </VStack>
           <SubmitButton
