@@ -67,6 +67,7 @@ export default function Group() {
           left="menu"
           right={
             <IconButton
+              onPress={() => navigate('GroupName')}
               icon={({ size }) => (
                 <Icon name="plus" color="white" size={size} />
               )}

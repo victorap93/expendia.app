@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Alert } from 'react-native'
 import { Badge, Box, Button, HStack, Text, VStack } from 'native-base'
 import BackButton from '../components/BackButton'
@@ -65,10 +65,6 @@ export default function GroupMembers() {
     setFieldValue('email', '')
     setFieldValue('members', [...values.members, values.email])
   }
-
-  useEffect(() => {
-    console.log(members)
-  }, [members])
 
   return (
     <Formik
