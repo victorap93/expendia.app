@@ -13,6 +13,7 @@ import { setFieldValueType } from '../lib/formik'
 import { useAuth } from '../hooks/useAuth'
 import MembersList from '../components/MembersList'
 import { Icon, IconButton } from '@react-native-material/core'
+import { api } from '../lib/axios'
 
 interface FormGroupMembers extends FormGroup {
   email: string
@@ -34,6 +35,21 @@ export default function GroupMembers() {
   ) {
     try {
       setSubmitting(true)
+      const response = await api.post('/groups', values)
+      if (response.data.status && response.data.group_id) {
+        navigate('Expenses', {
+          ...values,
+          Member: values.members.map(email => {
+            return {
+              createdAt: '',
+              member: { email }
+            }
+          }),
+          id: response.data.group_id
+        })
+      } else {
+        Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
+      }
     } catch (error) {
       Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
     } finally {
