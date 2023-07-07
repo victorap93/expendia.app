@@ -64,7 +64,7 @@ export default function GroupMembers() {
     }
 
     setFieldValue('email', '')
-    setFieldValue('members', [...values.members, values.email])
+    setFieldValue('members', [...values.members, values.email.toLowerCase()])
   }
 
   return (
