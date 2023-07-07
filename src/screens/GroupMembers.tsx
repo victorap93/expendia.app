@@ -8,10 +8,11 @@ import TextField from '../components/TextField'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import SubmitButton from '../components/SubmitButton'
 import { FormGroup } from './GroupName'
-import { Plus } from 'phosphor-react-native'
+import { Plus, Trash, X } from 'phosphor-react-native'
 import { setFieldValueType } from '../lib/formik'
 import { useAuth } from '../hooks/useAuth'
 import MembersList from '../components/MembersList'
+import { Icon, IconButton } from '@react-native-material/core'
 
 interface FormGroupMembers extends FormGroup {
   email: string
@@ -146,7 +147,22 @@ export default function GroupMembers() {
               </HStack>
               <MembersList
                 members={values.members.map(email => {
-                  return { email }
+                  return {
+                    email,
+                    endComponent: (
+                      <IconButton
+                        onPress={() =>
+                          setFieldValue(
+                            'members',
+                            values.members.filter(
+                              memberEmail => memberEmail !== email
+                            )
+                          )
+                        }
+                        icon={({ size }) => <Trash color="white" size={size} />}
+                      />
+                    )
+                  }
                 })}
                 autoInclude
                 fetchUser

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import CardBox from './CardBox'
 import { HStack, Text, VStack } from 'native-base'
 import { UserProps } from '../context/AuthContext'
@@ -8,9 +8,14 @@ import { api } from '../lib/axios'
 interface CardMemberProps {
   member: UserProps
   fetchUser?: boolean
+  endComponent?: ReactElement<any, any>
 }
 
-export default function CardMember({ member, fetchUser }: CardMemberProps) {
+export default function CardMember({
+  member,
+  fetchUser,
+  endComponent
+}: CardMemberProps) {
   const [user, setUser] = useState<UserProps | undefined>()
 
   async function getUser() {
@@ -31,20 +36,23 @@ export default function CardMember({ member, fetchUser }: CardMemberProps) {
 
   return user ? (
     <CardBox p={3}>
-      <HStack alignItems="center" space={3}>
-        <MemberAvatar member={user} size="sm" />
-        <VStack>
-          <Text color="white" fontSize="md">
-            {user.firstname
-              ? `${user.firstname} ${user.lastname || ''}`
-              : user.email}
-          </Text>
-          {user.firstname && (
-            <Text color="gray.200" fontSize="sm">
-              {user.email}
+      <HStack alignItems="center" justifyContent="space-between">
+        <HStack alignItems="center" space={3}>
+          <MemberAvatar member={user} size="sm" />
+          <VStack>
+            <Text color="white" fontSize="md">
+              {user.firstname
+                ? `${user.firstname} ${user.lastname || ''}`
+                : user.email}
             </Text>
-          )}
-        </VStack>
+            {user.firstname && (
+              <Text color="gray.200" fontSize="sm">
+                {user.email}
+              </Text>
+            )}
+          </VStack>
+        </HStack>
+        {endComponent}
       </HStack>
     </CardBox>
   ) : (
