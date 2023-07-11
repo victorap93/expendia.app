@@ -114,7 +114,7 @@ export default function Expenses() {
           </VStack>
         </VStack>
       </ScrollView>
-      <PlusFab />
+      <PlusFab onPress={() => navigate('ExpenseName')} />
     </>
   )
 }

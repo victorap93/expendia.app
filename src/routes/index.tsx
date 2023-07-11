@@ -15,6 +15,7 @@ import Expenses from '../screens/Expenses'
 import GroupName from '../screens/GroupName'
 import GroupMembers from '../screens/GroupMembers'
 import RecentMembers from '../screens/RecentMembers'
+import ExpenseName from '../screens/ExpenseName'
 
 export default function Routes() {
   const { Navigator, Screen } = createNativeStackNavigator()
@@ -46,6 +47,7 @@ export default function Routes() {
         <Screen name="GroupMembers" component={GroupMembers} />
         <Screen name="RecentMembers" component={RecentMembers} />
         <Screen name="Expenses" component={Expenses} />
+        <Screen name="ExpenseName" component={ExpenseName} />
       </Navigator>
     </NavigationContainer>
   )

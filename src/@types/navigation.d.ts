@@ -21,6 +21,7 @@ export declare global {
       GroupMembers: GroupForm
       RecentMembers: HandleMembersProps
       Expenses: GroupProps
+      ExpenseName: undefined
     }
   }
 }
