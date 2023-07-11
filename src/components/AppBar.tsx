@@ -5,18 +5,33 @@ import MenuButton from './MenuButton'
 
 interface AppBarProps {
   title: string | ReactNode
+  onPress?: () => void
   left?: 'menu' | 'back'
   right?: ReactNode
   bottom?: ReactNode
 }
 
-export default function AppBar({ title, left, right, bottom }: AppBarProps) {
+export default function AppBar({
+  title,
+  onPress,
+  left,
+  right,
+  bottom
+}: AppBarProps) {
   return (
     <Box px={4} pb={4} pt={12} roundedBottom={24} bg="dark.200" width="full">
       <VStack justifyContent="space-between">
         <HStack justifyContent="space-between" alignItems="center">
           <Box>
-            {left ? left === 'back' ? <BackButton /> : <MenuButton /> : ''}
+            {left ? (
+              left === 'back' ? (
+                <BackButton onPress={onPress} />
+              ) : (
+                <MenuButton />
+              )
+            ) : (
+              ''
+            )}
           </Box>
           <Text fontSize="lg" color="white">
             {title}

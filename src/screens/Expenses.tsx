@@ -1,6 +1,10 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import { ScrollView, VStack } from 'native-base'
-import { useFocusEffect, useRoute } from '@react-navigation/native'
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute
+} from '@react-navigation/native'
 import { api } from '../lib/axios'
 import { Alert, RefreshControl } from 'react-native'
 import AppBar from '../components/AppBar'
@@ -37,7 +41,7 @@ export interface PayingProps {
 }
 
 export default function Expenses() {
-  const date = new Date()
+  const { navigate } = useNavigation()
   const [isLoading, setIsLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const route = useRoute()
@@ -85,6 +89,7 @@ export default function Expenses() {
       >
         <AppBar
           title={title}
+          onPress={() => navigate('Groups')}
           left="back"
           right={
             <IconButton
