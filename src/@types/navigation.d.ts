@@ -1,5 +1,5 @@
 import { FormEmail } from '../screens/Email'
-import { FormGroup } from '../screens/GroupName'
+import { GroupForm } from '../screens/GroupName'
 import { GroupProps } from '../screens/Groups'
 import { PasswordParams } from '../screens/Password'
 import { HandleMembersProps } from '../screens/RecentMembers'
@@ -18,7 +18,7 @@ export declare global {
       Password: PasswordParams
       Groups: undefined
       GroupName: undefined
-      GroupMembers: FormGroup
+      GroupMembers: GroupForm
       RecentMembers: HandleMembersProps
       Expenses: GroupProps
     }

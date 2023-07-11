@@ -14,7 +14,7 @@ import Icon from '@expo/vector-icons/MaterialCommunityIcons'
 import MembersList from '../components/MembersList'
 import { CheckCircle, Circle } from 'phosphor-react-native'
 import { CardSkeleton } from '../components/CardMember'
-import { FormGroup } from './GroupName'
+import { GroupForm } from './GroupName'
 
 export interface HandleMembersProps {
   members: string[]

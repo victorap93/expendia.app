@@ -16,7 +16,7 @@ import * as Yup from 'yup'
 import TextField from '../components/TextField'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import SubmitButton from '../components/SubmitButton'
-import { FormGroup } from './GroupName'
+import { GroupForm } from './GroupName'
 import { Plus, Trash } from 'phosphor-react-native'
 import { setFieldValueType } from '../lib/formik'
 import { useAuth } from '../hooks/useAuth'
@@ -24,7 +24,7 @@ import MembersList from '../components/MembersList'
 import { IconButton, Pressable } from '@react-native-material/core'
 import { api } from '../lib/axios'
 
-interface FormGroupMembers extends FormGroup {
+interface GroupMembersForm extends GroupForm {
   email: string
 }
 
@@ -36,10 +36,10 @@ export default function GroupMembers() {
   const { user } = useAuth()
   const { navigate } = useNavigation()
   const route = useRoute()
-  const { title, members } = route.params as FormGroup
+  const { title, members } = route.params as GroupForm
 
   async function submit(
-    values: FormGroupMembers,
+    values: GroupMembersForm,
     setSubmitting: (isSubmitting: boolean) => void
   ) {
     try {
@@ -66,12 +66,12 @@ export default function GroupMembers() {
     }
   }
 
-  const isDisabled = (errors: ErrorsEmail, values: FormGroupMembers) => {
+  const isDisabled = (errors: ErrorsEmail, values: GroupMembersForm) => {
     return errors.email !== undefined || values.email.trim() === ''
   }
 
   const addMember = (
-    values: FormGroupMembers,
+    values: GroupMembersForm,
     setFieldValue: setFieldValueType
   ) => {
     if (values.email === user.email) {

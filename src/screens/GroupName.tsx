@@ -9,7 +9,7 @@ import { api } from '../lib/axios'
 import { useNavigation } from '@react-navigation/native'
 import SubmitButton from '../components/SubmitButton'
 
-export interface FormGroup {
+export interface GroupForm {
   title: string
   members: string[]
 }
@@ -18,7 +18,7 @@ export default function GroupName() {
   const { navigate } = useNavigation()
 
   async function submit(
-    values: FormGroup,
+    values: GroupForm,
     setSubmitting: (isSubmitting: boolean) => void
   ) {
     try {
@@ -36,7 +36,7 @@ export default function GroupName() {
 
   return (
     <Formik
-      initialValues={{} as FormGroup}
+      initialValues={{} as GroupForm}
       validationSchema={Yup.object({
         title: Yup.string()
           .required('Digite o nome do grupo.')
