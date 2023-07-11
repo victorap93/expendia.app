@@ -2,6 +2,7 @@ import { FormEmail } from '../screens/Email'
 import { FormGroup } from '../screens/GroupName'
 import { GroupProps } from '../screens/Groups'
 import { PasswordParams } from '../screens/Password'
+import { HandleMembersProps } from '../screens/RecentMembers'
 import { FormSignUp } from '../screens/SignUp'
 
 export declare global {
@@ -18,6 +19,7 @@ export declare global {
       Groups: undefined
       GroupName: undefined
       GroupMembers: FormGroup
+      RecentMembers: HandleMembersProps
       Expenses: GroupProps
     }
   }

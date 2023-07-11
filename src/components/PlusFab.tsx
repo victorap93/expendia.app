@@ -10,12 +10,12 @@ export default function PlusFab({ ...rest }: IFabProps) {
       _pressed={{
         bgColor: 'violet.700'
       }}
-      renderInPortal={false}
-      shadow={2}
-      right={5}
-      bottom={60}
-      size={16}
-      icon={<Plus color="white" size={24} />}
+      renderInPortal={rest.renderInPortal || false}
+      shadow={rest.shadow || 2}
+      right={rest.right || 5}
+      bottom={rest.bottom || 60}
+      size={rest.size || 16}
+      icon={rest.icon || <Plus color="white" size={24} />}
     />
   )
 }

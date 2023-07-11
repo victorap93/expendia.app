@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react'
 import { UserProps } from '../context/AuthContext'
 import { VStack } from 'native-base'
 import { useAuth } from '../hooks/useAuth'
-import CardMember from './CardMember'
+import { CardMember } from './CardMember'
 
 interface CardMemberProps extends UserProps {
   endComponent?: ReactElement<any, any>
@@ -12,12 +12,14 @@ interface MembersListProps {
   members: CardMemberProps[]
   autoInclude?: boolean
   fetchUser?: boolean
+  onPress?: (member: UserProps) => void
 }
 
 export default function MembersList({
   members,
   autoInclude,
-  fetchUser
+  fetchUser,
+  onPress
 }: MembersListProps) {
   const { user } = useAuth()
 
@@ -30,6 +32,7 @@ export default function MembersList({
           member={member}
           fetchUser={fetchUser}
           endComponent={member.endComponent}
+          onPress={onPress ? () => onPress(member) : undefined}
         />
       ))}
     </VStack>

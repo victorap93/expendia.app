@@ -1,6 +1,15 @@
 import React from 'react'
 import { Alert } from 'react-native'
-import { Badge, Box, Button, HStack, Text, VStack } from 'native-base'
+import {
+  Badge,
+  Box,
+  Button,
+  ChevronRightIcon,
+  HStack,
+  ScrollView,
+  Text,
+  VStack
+} from 'native-base'
 import BackButton from '../components/BackButton'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
@@ -8,11 +17,11 @@ import TextField from '../components/TextField'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import SubmitButton from '../components/SubmitButton'
 import { FormGroup } from './GroupName'
-import { Plus, Trash, X } from 'phosphor-react-native'
+import { Plus, Trash } from 'phosphor-react-native'
 import { setFieldValueType } from '../lib/formik'
 import { useAuth } from '../hooks/useAuth'
 import MembersList from '../components/MembersList'
-import { Icon, IconButton } from '@react-native-material/core'
+import { IconButton, Pressable } from '@react-native-material/core'
 import { api } from '../lib/axios'
 
 interface FormGroupMembers extends FormGroup {
@@ -108,7 +117,14 @@ export default function GroupMembers() {
         isSubmitting,
         setFieldValue
       }) => (
-        <VStack flex={1} space={2} px={4} py={8} justifyContent="space-between">
+        <VStack
+          flex={1}
+          space={2}
+          minH="full"
+          px={4}
+          py={8}
+          justifyContent="space-between"
+        >
           <VStack space={8}>
             <VStack>
               <Box my={3}>
@@ -154,6 +170,28 @@ export default function GroupMembers() {
               </HStack>
               {errors.email && <Text color="red.500">{errors.email}</Text>}
             </VStack>
+            <VStack>
+              <Box>
+                <Pressable
+                  style={{
+                    padding: 4
+                  }}
+                  onPress={() =>
+                    navigate('RecentMembers', {
+                      members: values.members,
+                      setMembers: emails => setFieldValue('members', emails)
+                    })
+                  }
+                >
+                  <HStack justifyContent="space-between" alignItems="center">
+                    <Text color="white" textTransform="uppercase">
+                      Ver membros recentes
+                    </Text>
+                    <ChevronRightIcon color="white" />
+                  </HStack>
+                </Pressable>
+              </Box>
+            </VStack>
             <VStack space={4}>
               <HStack space={2} alignItems="center">
                 <Text color="white" fontSize="xl">
@@ -185,10 +223,12 @@ export default function GroupMembers() {
               />
             </VStack>
           </VStack>
-          <SubmitButton
-            isSubmitting={isSubmitting}
-            handleSubmit={handleSubmit}
-          />
+          <Box my={8}>
+            <SubmitButton
+              isSubmitting={isSubmitting}
+              handleSubmit={handleSubmit}
+            />
+          </Box>
         </VStack>
       )}
     </Formik>
