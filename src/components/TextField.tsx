@@ -5,7 +5,7 @@ import {
   IInputProps
 } from 'native-base/lib/typescript/components/primitives/Input/types'
 
-interface TextFieldProps extends IInputProps {
+export interface TextFieldProps extends IInputProps {
   error?: string
   hideMessageError?: boolean
 }
