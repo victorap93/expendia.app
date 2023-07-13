@@ -1,30 +1,18 @@
 import React from 'react'
 import { Alert } from 'react-native'
-import { Box, Text, VStack } from 'native-base'
+import { Box, Text, VStack, useTheme } from 'native-base'
 import BackButton from '../components/BackButton'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
-import TextField from '../components/TextField'
 import { useNavigation } from '@react-navigation/native'
 import SubmitButton from '../components/SubmitButton'
-import DateField from '../components/DateField'
-import dayjs from 'dayjs'
+import { ExpenseForm } from './ExpenseName'
+import { TextInputMask } from 'react-native-masked-text'
+import MoneyField from '../components/MoneyField'
 
-export interface PayerForm {
-  email: string
-  cost: number
-}
-
-export interface ExpenseForm {
-  title: string
-  cost: string
-  dueDate: string
-  payers: string[]
-}
-
-export default function ExpenseName() {
+export default function ExpenseCost() {
   const { navigate } = useNavigation()
-  const today = dayjs().format('YYYY-MM-DD')
+  const { colors } = useTheme()
 
   async function submit(
     values: ExpenseForm,
@@ -32,11 +20,6 @@ export default function ExpenseName() {
   ) {
     try {
       setSubmitting(true)
-      navigate('ExpenseCost', {
-        ...values,
-        title: values.title.trim(),
-        dueDate: dayjs(values.dueDate || today).format()
-      })
     } catch (error) {
       Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
     } finally {
@@ -48,7 +31,7 @@ export default function ExpenseName() {
     <Formik
       initialValues={{} as ExpenseForm}
       validationSchema={Yup.object({
-        title: Yup.string()
+        cost: Yup.string()
           .required('Digite o nome da despesa.')
           .min(2, 'Digite no mínimo 2 caracteres.')
           .max(50, 'Digite no máximo 50 caracteres.')
@@ -72,25 +55,12 @@ export default function ExpenseName() {
             <VStack space={2}>
               <Box>
                 <Text my={4} fontSize={28} color="white">
-                  Qual o nome da despesa?
+                  Qual é o valor total da despesa?
                 </Text>
-                <TextField
-                  error={
-                    touched.title && errors.title ? errors.title : undefined
-                  }
-                  onChangeText={handleChange('title')}
-                  onBlur={handleBlur('title')}
-                  value={values.title || ''}
-                  placeholder="Ex: Água, Energia, Ração..."
-                />
-              </Box>
-              <Box>
-                <Text my={4} fontSize={28} color="white">
-                  Data de vencimento
-                </Text>
-                <DateField
-                  onChangeText={handleChange('dueDate')}
-                  value={values.dueDate || today}
+                <MoneyField
+                  onChangeText={handleChange('cost')}
+                  value={values.cost || '0'}
+                  fontSize={40}
                 />
               </Box>
             </VStack>
