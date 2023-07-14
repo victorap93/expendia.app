@@ -1,18 +1,20 @@
 import React from 'react'
 import { Alert } from 'react-native'
-import { Box, Text, VStack, useTheme } from 'native-base'
+import { Box, Text, VStack } from 'native-base'
 import BackButton from '../components/BackButton'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import SubmitButton from '../components/SubmitButton'
 import { ExpenseForm } from './ExpenseName'
-import { TextInputMask } from 'react-native-masked-text'
 import MoneyField from '../components/MoneyField'
 
 export default function ExpenseCost() {
   const { navigate } = useNavigation()
-  const { colors } = useTheme()
+  const route = useRoute()
+  const expense = route.params as ExpenseForm
+
+  const currency = 'R$ '
 
   async function submit(
     values: ExpenseForm,
@@ -20,6 +22,10 @@ export default function ExpenseCost() {
   ) {
     try {
       setSubmitting(true)
+      navigate('ExpensePayers', {
+        ...values,
+        cost: values.cost.replace(currency, '')
+      })
     } catch (error) {
       Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
     } finally {
@@ -29,24 +35,18 @@ export default function ExpenseCost() {
 
   return (
     <Formik
-      initialValues={{} as ExpenseForm}
+      initialValues={expense}
       validationSchema={Yup.object({
         cost: Yup.string()
-          .required('Digite o nome da despesa.')
-          .min(2, 'Digite no mínimo 2 caracteres.')
-          .max(50, 'Digite no máximo 50 caracteres.')
+          .notOneOf(
+            [`${currency} 0,00`],
+            `O valor precisa ser maior que ${currency} 0,00.`
+          )
+          .required('Informe o valor total da despesa.')
       })}
       onSubmit={(values, { setSubmitting }) => submit(values, setSubmitting)}
     >
-      {({
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        values,
-        errors,
-        touched,
-        isSubmitting
-      }) => (
+      {({ handleChange, handleSubmit, values, errors, isSubmitting }) => (
         <VStack flex={1} space={2} px={4} py={8} justifyContent="space-between">
           <VStack>
             <Box my={3}>
@@ -58,6 +58,7 @@ export default function ExpenseCost() {
                   Qual é o valor total da despesa?
                 </Text>
                 <MoneyField
+                  error={errors.cost}
                   onChangeText={handleChange('cost')}
                   value={values.cost || '0'}
                   fontSize={40}

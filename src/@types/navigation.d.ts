@@ -23,6 +23,7 @@ export declare global {
       Expenses: GroupProps
       ExpenseName: undefined
       ExpenseCost: ExpenseForm
+      ExpensePayers: ExpenseForm
     }
   }
 }
