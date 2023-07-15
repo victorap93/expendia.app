@@ -1,19 +1,23 @@
 import React from 'react'
 import { Button, Text } from 'native-base'
+import { IButtonComponentType } from 'native-base/lib/typescript/components/primitives/Button/types'
 
 interface Props {
   handleSubmit: () => void
   isSubmitting?: boolean
   title?: string
+  buttonProps?: IButtonComponentType
 }
 
 export default function SubmitButton({
   handleSubmit,
   isSubmitting,
-  title = 'Continuar'
+  title = 'Continuar',
+  buttonProps
 }: Props) {
   return (
     <Button
+      {...buttonProps}
       isLoading={isSubmitting}
       onPress={() => handleSubmit()}
       bg="violet.600"

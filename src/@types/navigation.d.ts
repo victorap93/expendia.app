@@ -1,7 +1,9 @@
 import { FormEmail } from '../screens/Email'
+import { ExpenseForm } from '../screens/ExpenseName'
 import { GroupForm } from '../screens/GroupName'
 import { GroupProps } from '../screens/Groups'
 import { PasswordParams } from '../screens/Password'
+import { HandlePayingProps } from '../screens/PayingMembers'
 import { HandleMembersProps } from '../screens/RecentMembers'
 import { FormSignUp } from '../screens/SignUp'
 
@@ -21,9 +23,10 @@ export declare global {
       GroupMembers: GroupForm
       RecentMembers: HandleMembersProps
       Expenses: GroupProps
-      ExpenseName: undefined
+      ExpenseName: ExpenseForm
       ExpenseCost: ExpenseForm
       ExpensePayers: ExpenseForm
+      PayingMembers: HandlePayingProps
     }
   }
 }

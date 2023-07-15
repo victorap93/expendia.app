@@ -10,13 +10,15 @@ import { IconButton } from '@react-native-material/core'
 import Icon from '@expo/vector-icons/MaterialCommunityIcons'
 import PlusFab from '../components/PlusFab'
 
+export type GroupMemberType = {
+  createdAt: string
+  member: UserProps
+}
+
 export interface GroupProps {
   id: string
   title: string
-  Member: {
-    createdAt: string
-    member: UserProps
-  }[]
+  Member: GroupMemberType[]
 }
 
 export default function Group() {

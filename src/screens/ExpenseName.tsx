@@ -5,10 +5,11 @@ import BackButton from '../components/BackButton'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import TextField from '../components/TextField'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import SubmitButton from '../components/SubmitButton'
 import DateField from '../components/DateField'
 import dayjs from 'dayjs'
+import { GroupProps } from './Groups'
 
 export interface PayerForm {
   email: string
@@ -16,15 +17,18 @@ export interface PayerForm {
 }
 
 export interface ExpenseForm {
+  id?: string
+  group_id: string
   title: string
   cost: string
   dueDate: string
-  payers: string[]
+  payers: PayerForm[]
 }
 
 export default function ExpenseName() {
   const { navigate } = useNavigation()
   const today = dayjs().format('YYYY-MM-DD')
+  const route = useRoute()
 
   async function submit(
     values: ExpenseForm,
@@ -46,7 +50,7 @@ export default function ExpenseName() {
 
   return (
     <Formik
-      initialValues={{} as ExpenseForm}
+      initialValues={route.params as ExpenseForm}
       validationSchema={Yup.object({
         title: Yup.string()
           .required('Digite o nome da despesa.')

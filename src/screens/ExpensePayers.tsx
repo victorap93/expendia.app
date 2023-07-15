@@ -1,6 +1,6 @@
 import React from 'react'
 import { Alert } from 'react-native'
-import { Box, HStack, Text, VStack } from 'native-base'
+import { Badge, Box, HStack, ScrollView, Text, VStack } from 'native-base'
 import BackButton from '../components/BackButton'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
@@ -9,6 +9,9 @@ import SubmitButton from '../components/SubmitButton'
 import { ExpenseForm } from './ExpenseName'
 import MoneyField from '../components/MoneyField'
 import TotalValue from '../components/TotalValue'
+import PlusFab from '../components/PlusFab'
+import { UserPlus } from 'phosphor-react-native'
+import MembersList from '../components/MembersList'
 
 export default function ExpensePayers() {
   const { navigate } = useNavigation()
@@ -47,26 +50,79 @@ export default function ExpensePayers() {
       })}
       onSubmit={(values, { setSubmitting }) => submit(values, setSubmitting)}
     >
-      {({ handleChange, handleSubmit, values, errors, isSubmitting }) => (
-        <VStack flex={1} space={2} px={4} py={8} justifyContent="space-between">
-          <VStack>
-            <Box my={3}>
-              <BackButton />
-            </Box>
-            <VStack space={2}>
-              <Box>
-                <Text my={4} fontSize={28} color="white">
-                  Defina quem vão pagar e quanto cada um deve pagar
-                </Text>
-                <TotalValue expense={expense} my={2} />
-              </Box>
+      {({
+        handleChange,
+        handleSubmit,
+        values,
+        errors,
+        isSubmitting,
+        setFieldValue
+      }) => (
+        <>
+          <ScrollView>
+            <VStack px={4} py={8}>
+              <VStack>
+                <Box my={3}>
+                  <BackButton />
+                </Box>
+                <VStack space={2}>
+                  <Box>
+                    <Text my={4} fontSize={28} color="white">
+                      Defina quem vão pagar e quanto cada um deve pagar
+                    </Text>
+                    <TotalValue expense={expense} my={3} />
+                  </Box>
+                  <VStack space={4}>
+                    <HStack space={2} alignItems="center">
+                      <Text color="white" fontSize="xl">
+                        Pagantes:
+                      </Text>
+                      <Badge rounded="2xl">{values.payers.length}</Badge>
+                    </HStack>
+                    <MembersList
+                      members={values.payers.map(({ email, cost }) => {
+                        return {
+                          email,
+                          endComponent: (
+                            <Text color="white">{cost || 'R$ 0,00'}</Text>
+                          )
+                        }
+                      })}
+                      fetchUser
+                    />
+                  </VStack>
+                </VStack>
+              </VStack>
             </VStack>
-          </VStack>
-          <SubmitButton
-            isSubmitting={isSubmitting}
-            handleSubmit={handleSubmit}
+          </ScrollView>
+          <PlusFab
+            bottom={150}
+            icon={<UserPlus color="white" size={24} />}
+            onPress={() =>
+              navigate('PayingMembers', {
+                id: values.group_id,
+                payers: values.payers.map(({ email }) => email),
+                setPayers: emails =>
+                  setFieldValue(
+                    'payers',
+                    emails.map(email => {
+                      return {
+                        email,
+                        cost: ''
+                      }
+                    })
+                  )
+              })
+            }
           />
-        </VStack>
+          <VStack px={4} py={8}>
+            <SubmitButton
+              title="Criar despesa"
+              isSubmitting={isSubmitting}
+              handleSubmit={handleSubmit}
+            />
+          </VStack>
+        </>
       )}
     </Formik>
   )
