@@ -1,6 +1,14 @@
 import React from 'react'
 import { Alert } from 'react-native'
-import { Badge, Box, HStack, ScrollView, Text, VStack } from 'native-base'
+import {
+  Badge,
+  Box,
+  Button,
+  HStack,
+  ScrollView,
+  Text,
+  VStack
+} from 'native-base'
 import BackButton from '../components/BackButton'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
@@ -16,6 +24,7 @@ import {
   convertFloatToMoney,
   convertMoneyToFloat
 } from '../helpers/expenseHelper'
+import { setFieldValueType } from '../lib/formik'
 
 export default function ExpensePayers() {
   const { navigate } = useNavigation()
@@ -45,6 +54,23 @@ export default function ExpensePayers() {
     let subtotal = 0
     payers.map(({ cost }) => (subtotal += cost))
     return subtotal
+  }
+
+  const divideEqually = (
+    values: ExpenseForm,
+    setFieldValue: setFieldValueType
+  ) => {
+    const totalValue = convertMoneyToFloat(values.cost)
+    const cost = totalValue / values.payers.length
+    setFieldValue(
+      'payers',
+      values.payers.map(({ email }) => {
+        return {
+          email,
+          cost
+        }
+      })
+    )
   }
 
   return (
@@ -82,25 +108,41 @@ export default function ExpensePayers() {
                     </Text>
                     <TotalValue expense={expense} my={3} />
                   </Box>
-                  <VStack space={4}>
+                  <VStack space={5}>
                     <HStack space={2} alignItems="center">
                       <Text color="white" fontSize="xl">
                         Pagantes:
                       </Text>
                       <Badge rounded="2xl">{values.payers.length}</Badge>
                     </HStack>
-                    <HStack alignItems="center" justifyContent="space-between">
-                      <Text color="white" fontSize="md">
-                        Subtotal:{' '}
-                        {convertFloatToMoney(getSubtotal(values.payers))}
-                      </Text>
-                    </HStack>
+                    {values.payers.length > 0 && (
+                      <HStack
+                        alignItems="center"
+                        justifyContent="space-between"
+                      >
+                        <Text color="white" fontSize="md">
+                          Subtotal:{' '}
+                          {convertFloatToMoney(getSubtotal(values.payers))}
+                        </Text>
+                        <Button
+                          bgColor="gray.400"
+                          _pressed={{
+                            bgColor: 'gray.500'
+                          }}
+                          onPress={() => divideEqually(values, setFieldValue)}
+                        >
+                          Dividir igualmente
+                        </Button>
+                      </HStack>
+                    )}
                     <MembersList
                       members={values.payers.map(({ email, cost }) => {
                         return {
                           email,
                           endComponent: (
-                            <Text color="white">{cost || 'R$ 0,00'}</Text>
+                            <Text color="white">
+                              {convertFloatToMoney(cost)}
+                            </Text>
                           )
                         }
                       })}
@@ -124,7 +166,7 @@ export default function ExpensePayers() {
                     emails.map(email => {
                       return {
                         email,
-                        cost: ''
+                        cost: 0
                       }
                     })
                   )
