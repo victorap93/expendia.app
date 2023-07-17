@@ -6,12 +6,16 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import SubmitButton from '../components/SubmitButton'
-import { ExpenseForm } from './ExpenseName'
+import { ExpenseForm, PayerForm } from './ExpenseName'
 import MoneyField from '../components/MoneyField'
 import TotalValue from '../components/TotalValue'
 import PlusFab from '../components/PlusFab'
 import { UserPlus } from 'phosphor-react-native'
 import MembersList from '../components/MembersList'
+import {
+  convertFloatToMoney,
+  convertMoneyToFloat
+} from '../helpers/expenseHelper'
 
 export default function ExpensePayers() {
   const { navigate } = useNavigation()
@@ -35,6 +39,12 @@ export default function ExpensePayers() {
     } finally {
       setSubmitting(false)
     }
+  }
+
+  const getSubtotal = (payers: PayerForm[]) => {
+    let subtotal = 0
+    payers.map(({ cost }) => (subtotal += cost))
+    return subtotal
   }
 
   return (
@@ -78,6 +88,12 @@ export default function ExpensePayers() {
                         Pagantes:
                       </Text>
                       <Badge rounded="2xl">{values.payers.length}</Badge>
+                    </HStack>
+                    <HStack alignItems="center" justifyContent="space-between">
+                      <Text color="white" fontSize="md">
+                        Subtotal:{' '}
+                        {convertFloatToMoney(getSubtotal(values.payers))}
+                      </Text>
                     </HStack>
                     <MembersList
                       members={values.payers.map(({ email, cost }) => {
