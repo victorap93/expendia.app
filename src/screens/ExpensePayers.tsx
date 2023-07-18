@@ -14,17 +14,18 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import SubmitButton from '../components/SubmitButton'
-import { ExpenseForm, PayerForm } from './ExpenseName'
-import MoneyField from '../components/MoneyField'
+import { ExpenseForm } from './ExpenseName'
 import TotalValue from '../components/TotalValue'
 import PlusFab from '../components/PlusFab'
 import { UserPlus } from 'phosphor-react-native'
 import MembersList from '../components/MembersList'
 import {
   convertFloatToMoney,
-  convertMoneyToFloat
+  convertMoneyToFloat,
+  getSubtotal
 } from '../helpers/expenseHelper'
 import { setFieldValueType } from '../lib/formik'
+import PayerSplitProgress from '../components/PayerSplitProgress'
 
 export default function ExpensePayers() {
   const { navigate } = useNavigation()
@@ -48,12 +49,6 @@ export default function ExpensePayers() {
     } finally {
       setSubmitting(false)
     }
-  }
-
-  const getSubtotal = (payers: PayerForm[]) => {
-    let subtotal = 0
-    payers.map(({ cost }) => (subtotal += cost))
-    return subtotal
   }
 
   const divideEqually = (
@@ -125,9 +120,9 @@ export default function ExpensePayers() {
                           {convertFloatToMoney(getSubtotal(values.payers))}
                         </Text>
                         <Button
-                          bgColor="gray.400"
+                          bgColor="gray.500"
                           _pressed={{
-                            bgColor: 'gray.500'
+                            bgColor: 'gray.600'
                           }}
                           onPress={() => divideEqually(values, setFieldValue)}
                         >
@@ -173,7 +168,8 @@ export default function ExpensePayers() {
               })
             }
           />
-          <VStack px={4} py={8}>
+          <VStack px={4} py={8} space={4}>
+            <PayerSplitProgress expense={values} />
             <SubmitButton
               title="Criar despesa"
               isSubmitting={isSubmitting}
