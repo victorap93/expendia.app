@@ -1,10 +1,13 @@
-import React from 'react'
-import { Alert } from 'react-native'
+import React, { useState } from 'react'
+import { Alert, Platform } from 'react-native'
 import {
+  Actionsheet,
   Badge,
   Box,
   Button,
   HStack,
+  KeyboardAvoidingView,
+  Modal,
   ScrollView,
   Text,
   VStack
@@ -14,7 +17,7 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import SubmitButton from '../components/SubmitButton'
-import { ExpenseForm } from './ExpenseName'
+import { ExpenseForm, PayerForm } from './ExpenseName'
 import TotalValue from '../components/TotalValue'
 import PlusFab from '../components/PlusFab'
 import { UserPlus } from 'phosphor-react-native'
@@ -26,11 +29,15 @@ import {
 } from '../helpers/expenseHelper'
 import { setFieldValueType } from '../lib/formik'
 import PayerSplitProgress from '../components/PayerSplitProgress'
+import { UserProps } from '../context/AuthContext'
+import MoneyField from '../components/MoneyField'
 
 export default function ExpensePayers() {
   const { navigate } = useNavigation()
   const route = useRoute()
   const expense = route.params as ExpenseForm
+  const [selectedMember, setSelectedMember] = useState<UserProps>()
+  const [openedKeyboard, setOpenedKeyboard] = useState(false)
 
   const currency = 'R$ '
 
@@ -66,6 +73,16 @@ export default function ExpensePayers() {
         }
       })
     )
+  }
+
+  const handleValue = (
+    value: string,
+    payers: PayerForm[],
+    index: number,
+    setFieldValue: setFieldValueType
+  ) => {
+    payers[index].cost = convertMoneyToFloat(value)
+    setFieldValue('payers', payers)
   }
 
   return (
@@ -131,14 +148,32 @@ export default function ExpensePayers() {
                       </HStack>
                     )}
                     <MembersList
-                      members={values.payers.map(({ email, cost }) => {
+                      onPress={setSelectedMember}
+                      members={values.payers.map(({ email, cost }, index) => {
                         return {
                           email,
-                          endComponent: (
-                            <Text color="white">
-                              {convertFloatToMoney(cost)}
-                            </Text>
-                          )
+                          endComponent:
+                            selectedMember && selectedMember.email === email ? (
+                              <MoneyField
+                                onEndEditing={() =>
+                                  setSelectedMember(undefined)
+                                }
+                                fontSize={14}
+                                onChangeText={value =>
+                                  handleValue(
+                                    value,
+                                    values.payers,
+                                    index,
+                                    setFieldValue
+                                  )
+                                }
+                                value={convertFloatToMoney(cost)}
+                              />
+                            ) : (
+                              <Text color="white">
+                                {convertFloatToMoney(cost)}
+                              </Text>
+                            )
                         }
                       })}
                       fetchUser
@@ -148,26 +183,28 @@ export default function ExpensePayers() {
               </VStack>
             </VStack>
           </ScrollView>
-          <PlusFab
-            bottom={150}
-            icon={<UserPlus color="white" size={24} />}
-            onPress={() =>
-              navigate('PayingMembers', {
-                id: values.group_id,
-                payers: values.payers.map(({ email }) => email),
-                setPayers: emails =>
-                  setFieldValue(
-                    'payers',
-                    emails.map(email => {
-                      return {
-                        email,
-                        cost: 0
-                      }
-                    })
-                  )
-              })
-            }
-          />
+          {selectedMember === undefined && (
+            <PlusFab
+              bottom={150}
+              icon={<UserPlus color="white" size={24} />}
+              onPress={() =>
+                navigate('PayingMembers', {
+                  id: values.group_id,
+                  payers: values.payers.map(({ email }) => email),
+                  setPayers: emails =>
+                    setFieldValue(
+                      'payers',
+                      emails.map(email => {
+                        return {
+                          email,
+                          cost: 0
+                        }
+                      })
+                    )
+                })
+              }
+            />
+          )}
           <VStack px={4} py={8} space={4}>
             <PayerSplitProgress expense={values} />
             <SubmitButton
