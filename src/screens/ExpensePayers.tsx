@@ -89,23 +89,16 @@ export default function ExpensePayers() {
     <Formik
       initialValues={expense}
       validationSchema={Yup.object({
-        cost: Yup.string()
-          .notOneOf(
-            [`${currency} 0,00`],
-            `O valor precisa ser maior que ${currency} 0,00.`
-          )
-          .required('Informe o valor total da despesa.')
+        payers: Yup.array(
+          Yup.object({
+            email: Yup.string().email(),
+            cost: Yup.number().min(0.01, `O valor não pode ser ${currency}0,00`)
+          })
+        ).min(1, 'Adicione pelo menos um pagante a esta despesa.')
       })}
       onSubmit={(values, { setSubmitting }) => submit(values, setSubmitting)}
     >
-      {({
-        handleChange,
-        handleSubmit,
-        values,
-        errors,
-        isSubmitting,
-        setFieldValue
-      }) => (
+      {({ handleSubmit, values, errors, isSubmitting, setFieldValue }) => (
         <>
           <ScrollView>
             <VStack px={4} py={8}>
@@ -127,7 +120,7 @@ export default function ExpensePayers() {
                       </Text>
                       <Badge rounded="2xl">{values.payers.length}</Badge>
                     </HStack>
-                    {values.payers.length > 0 && (
+                    {values.payers.length > 0 ? (
                       <HStack
                         alignItems="center"
                         justifyContent="space-between"
@@ -146,6 +139,16 @@ export default function ExpensePayers() {
                           Dividir igualmente
                         </Button>
                       </HStack>
+                    ) : (
+                      <VStack alignItems="center" space={4}>
+                        <Text textAlign="center" color="gray.300" fontSize="lg">
+                          Nenhum membro foi adicionado como pagantes desta
+                          despesa.
+                        </Text>
+                        <Text textAlign="center" color="gray.300" fontSize="lg">
+                          Clique no botão flutuante para adicionar.
+                        </Text>
+                      </VStack>
                     )}
                     <MembersList
                       onPress={setSelectedMember}
@@ -208,7 +211,8 @@ export default function ExpensePayers() {
           <VStack px={4} py={8} space={4}>
             <PayerSplitProgress expense={values} />
             <SubmitButton
-              title="Criar despesa"
+              disabled={errors.payers !== undefined}
+              title={'Criar despesa'}
               isSubmitting={isSubmitting}
               handleSubmit={handleSubmit}
             />
