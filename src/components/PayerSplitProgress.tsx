@@ -1,6 +1,10 @@
 import React from 'react'
 import { HStack, Progress, Text, VStack } from 'native-base'
-import { getRest, getSubtotalPercentage } from '../helpers/expenseHelper'
+import {
+  convertFloatToMoney,
+  getRest,
+  getSubtotalPercentage
+} from '../helpers/expenseHelper'
 import { ExpenseForm } from '../screens/ExpenseName'
 
 interface Props {
@@ -8,13 +12,27 @@ interface Props {
 }
 
 export default function PayerSplitProgress({ expense }: Props) {
+  const rest = getRest(expense)
+  const exceeded = rest < 0
+
   return (
     <VStack space={2}>
       <HStack justifyContent="space-between" alignItems="center">
-        <Text color="white">Faltam {getRest(expense)}</Text>
-        <Text color="white">{getSubtotalPercentage(expense).toFixed()}%</Text>
+        {exceeded ? (
+          <Text color="red.500">
+            Ultrapassou {convertFloatToMoney(rest).replace('-', '')}
+          </Text>
+        ) : (
+          <Text color="white">Faltam {convertFloatToMoney(rest)}</Text>
+        )}
+        <Text color={exceeded ? 'red.500' : 'white'}>
+          {getSubtotalPercentage(expense).toFixed()}%
+        </Text>
       </HStack>
-      <Progress colorScheme="success" value={getSubtotalPercentage(expense)} />
+      <Progress
+        colorScheme={exceeded ? 'error' : 'success'}
+        value={getSubtotalPercentage(expense)}
+      />
     </VStack>
   )
 }

@@ -21,7 +21,7 @@ export const convertMoneyToFloat = (value: string) => {
 }
 
 export const convertFloatToMoney = (value: number) => {
-  return value > 0
+  return value !== 0
     ? value.toLocaleString('pt-BR', {
         style: 'currency',
         currency: 'BRL'
@@ -44,5 +44,10 @@ export const getSubtotalPercentage = (values: ExpenseForm) => {
 export const getRest = (values: ExpenseForm) => {
   const subtotal = getSubtotal(values.payers)
   const total = convertMoneyToFloat(values.cost)
-  return convertFloatToMoney(total - subtotal)
+  return total - subtotal
+}
+
+export const settleUp = (values: ExpenseForm) => {
+  const isSettleUp = getRest(values)
+  return isSettleUp === 0
 }

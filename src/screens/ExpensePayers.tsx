@@ -1,13 +1,10 @@
 import React, { useState } from 'react'
-import { Alert, Platform } from 'react-native'
+import { Alert } from 'react-native'
 import {
-  Actionsheet,
   Badge,
   Box,
   Button,
   HStack,
-  KeyboardAvoidingView,
-  Modal,
   ScrollView,
   Text,
   VStack
@@ -25,7 +22,8 @@ import MembersList from '../components/MembersList'
 import {
   convertFloatToMoney,
   convertMoneyToFloat,
-  getSubtotal
+  getSubtotal,
+  settleUp
 } from '../helpers/expenseHelper'
 import { setFieldValueType } from '../lib/formik'
 import PayerSplitProgress from '../components/PayerSplitProgress'
@@ -37,7 +35,6 @@ export default function ExpensePayers() {
   const route = useRoute()
   const expense = route.params as ExpenseForm
   const [selectedMember, setSelectedMember] = useState<UserProps>()
-  const [openedKeyboard, setOpenedKeyboard] = useState(false)
 
   const currency = 'R$ '
 
@@ -145,9 +142,6 @@ export default function ExpensePayers() {
                           Nenhum membro foi adicionado como pagantes desta
                           despesa.
                         </Text>
-                        <Text textAlign="center" color="gray.300" fontSize="lg">
-                          Clique no botão flutuante para adicionar.
-                        </Text>
                       </VStack>
                     )}
                     <MembersList
@@ -211,7 +205,7 @@ export default function ExpensePayers() {
           <VStack px={4} py={8} space={4}>
             <PayerSplitProgress expense={values} />
             <SubmitButton
-              disabled={errors.payers !== undefined}
+              disabled={errors.payers !== undefined || !settleUp(values)}
               title={'Criar despesa'}
               isSubmitting={isSubmitting}
               handleSubmit={handleSubmit}
