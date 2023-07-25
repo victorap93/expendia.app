@@ -19,6 +19,7 @@ export interface PayerForm {
 export interface ExpenseForm {
   id?: string
   group_id: string
+  group_title: string
   title: string
   cost: string
   dueDate: string

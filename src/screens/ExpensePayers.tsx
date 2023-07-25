@@ -7,7 +7,8 @@ import {
   HStack,
   ScrollView,
   Text,
-  VStack
+  VStack,
+  useToast
 } from 'native-base'
 import BackButton from '../components/BackButton'
 import { Formik } from 'formik'
@@ -29,8 +30,10 @@ import { setFieldValueType } from '../lib/formik'
 import PayerSplitProgress from '../components/PayerSplitProgress'
 import { UserProps } from '../context/AuthContext'
 import MoneyField from '../components/MoneyField'
+import { api } from '../lib/axios'
 
 export default function ExpensePayers() {
+  const toast = useToast()
   const { navigate } = useNavigation()
   const route = useRoute()
   const expense = route.params as ExpenseForm
@@ -44,10 +47,26 @@ export default function ExpensePayers() {
   ) {
     try {
       setSubmitting(true)
-      navigate('ExpensePayers', {
+      const response = await api.post(`/groups/${values.group_id}/expenses`, {
         ...values,
-        cost: values.cost.replace(currency, '')
+        cost: convertMoneyToFloat(values.cost),
+        payers: values.payers.filter(({ cost }) => cost > 0)
       })
+      if (response.status === 201) {
+        toast.show({
+          title: 'Despesa criada com sucesso!'
+        })
+        navigate('Expenses', {
+          id: values.group_id,
+          title: values.group_title,
+          Member: []
+        })
+      } else {
+        Alert.alert(
+          'Ops!',
+          'Não foi possível criar a despesa, verifique as informações que inseriu e tente novamente.'
+        )
+      }
     } catch (error) {
       Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
     } finally {

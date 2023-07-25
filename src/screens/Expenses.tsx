@@ -118,6 +118,7 @@ export default function Expenses() {
         onPress={() =>
           navigate('ExpenseName', {
             group_id: id,
+            group_title: title,
             cost: '',
             dueDate: '',
             title: '',
