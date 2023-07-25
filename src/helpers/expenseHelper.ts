@@ -37,14 +37,12 @@ export const getSubtotal = (payers: PayerForm[]) => {
 
 export const getSubtotalPercentage = (values: ExpenseForm) => {
   const subtotal = Number(getSubtotal(values.payers).toFixed(2))
-  const total = convertMoneyToFloat(values.cost)
-  return (subtotal / total) * 100
+  return (subtotal / values.cost) * 100
 }
 
 export const getRest = (values: ExpenseForm) => {
   const subtotal = Number(getSubtotal(values.payers).toFixed(2))
-  const total = convertMoneyToFloat(values.cost)
-  return total - subtotal
+  return values.cost - subtotal
 }
 
 export const settleUp = (values: ExpenseForm) => {

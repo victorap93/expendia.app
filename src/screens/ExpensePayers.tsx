@@ -49,7 +49,6 @@ export default function ExpensePayers() {
       setSubmitting(true)
       const response = await api.post(`/groups/${values.group_id}/expenses`, {
         ...values,
-        cost: convertMoneyToFloat(values.cost),
         payers: values.payers.filter(({ cost }) => cost > 0)
       })
       if (response.status === 201) {
@@ -78,8 +77,7 @@ export default function ExpensePayers() {
     values: ExpenseForm,
     setFieldValue: setFieldValueType
   ) => {
-    const totalValue = convertMoneyToFloat(values.cost)
-    const cost = totalValue / values.payers.length
+    const cost = values.cost / values.payers.length
     setFieldValue(
       'payers',
       values.payers.map(({ email }) => {

@@ -21,7 +21,7 @@ export interface ExpenseForm {
   group_id: string
   group_title: string
   title: string
-  cost: string
+  cost: number
   dueDate: string
   payers: PayerForm[]
 }

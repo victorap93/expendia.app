@@ -119,7 +119,7 @@ export default function Expenses() {
           navigate('ExpenseName', {
             group_id: id,
             group_title: title,
-            cost: '',
+            cost: 0,
             dueDate: '',
             title: '',
             payers: []

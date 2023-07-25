@@ -8,6 +8,10 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import SubmitButton from '../components/SubmitButton'
 import { ExpenseForm } from './ExpenseName'
 import MoneyField from '../components/MoneyField'
+import {
+  convertFloatToMoney,
+  convertMoneyToFloat
+} from '../helpers/expenseHelper'
 
 export default function ExpenseCost() {
   const { navigate } = useNavigation()
@@ -22,10 +26,7 @@ export default function ExpenseCost() {
   ) {
     try {
       setSubmitting(true)
-      navigate('ExpensePayers', {
-        ...values,
-        cost: values.cost.replace(currency, '')
-      })
+      navigate('ExpensePayers', values)
     } catch (error) {
       Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
     } finally {
@@ -46,7 +47,7 @@ export default function ExpenseCost() {
       })}
       onSubmit={(values, { setSubmitting }) => submit(values, setSubmitting)}
     >
-      {({ handleChange, handleSubmit, values, errors, isSubmitting }) => (
+      {({ setFieldValue, handleSubmit, values, errors, isSubmitting }) => (
         <VStack flex={1} space={2} px={4} py={8} justifyContent="space-between">
           <VStack>
             <Box my={3}>
@@ -59,8 +60,10 @@ export default function ExpenseCost() {
                 </Text>
                 <MoneyField
                   error={errors.cost}
-                  onChangeText={handleChange('cost')}
-                  value={values.cost || '0'}
+                  onChangeText={value =>
+                    setFieldValue('cost', convertMoneyToFloat(value))
+                  }
+                  value={convertFloatToMoney(values.cost)}
                   fontSize={40}
                 />
               </Box>
