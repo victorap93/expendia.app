@@ -5,7 +5,7 @@ import { HStack, Skeleton, Text, VStack } from 'native-base'
 import { Pressable } from '@react-native-material/core'
 import { AvatarGroup } from './MemberAvatar'
 import dayjs from 'dayjs'
-import { getUserPart } from '../helpers/expenseHelper'
+import { convertFloatToMoney, getUserPart } from '../helpers/expenseHelper'
 import { useAuth } from '../hooks/useAuth'
 import ExpenseStatusMessage, {
   ExpenseStatusMessageSetup
@@ -48,7 +48,7 @@ export function CardExpense({ expense, handlePress }: CardExpenseProps) {
           </HStack>
           <HStack justifyContent="space-between" alignItems="center">
             <Text color="white" fontSize="lg">
-              R$ {userPart}
+              {convertFloatToMoney(userPart)}
             </Text>
             <ExpenseStatusMessage
               expense={expense}
@@ -57,7 +57,10 @@ export function CardExpense({ expense, handlePress }: CardExpenseProps) {
           </HStack>
           <HStack justifyContent="space-between" alignItems="center">
             <Text color="white" fontSize="md">
-              Total: R$ <Text fontWeight="extrabold">{expense.cost}</Text>
+              Total:{' '}
+              <Text fontWeight="extrabold">
+                {convertFloatToMoney(Number(expense.cost))}
+              </Text>
             </Text>
             <AvatarGroup
               size="sm"

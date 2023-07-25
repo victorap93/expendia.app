@@ -23,7 +23,7 @@ export interface ExpenseProps {
   id: string
   title: string
   group_id: string
-  cost: string
+  cost: number
   dueDate: string
   createdAt: string
   updatedAt: string
@@ -32,7 +32,7 @@ export interface ExpenseProps {
 
 export interface PayingProps {
   user_id: string
-  cost: string
+  cost: number
   paid: boolean
   paidAt?: string
   createdAt: string
