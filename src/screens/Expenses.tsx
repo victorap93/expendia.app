@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react'
-import { ScrollView, VStack } from 'native-base'
+import { Box, Fab, ScrollView, VStack } from 'native-base'
 import {
   useFocusEffect,
   useNavigation,
@@ -18,6 +18,8 @@ import DateController, {
 } from '../components/DateController'
 import { UserProps } from '../context/AuthContext'
 import { CardExpense, CardSkeleton } from '../components/CardExpense'
+import { CheckCircle } from 'phosphor-react-native'
+import MarkAsPaid from './MarkAsPaid'
 
 export interface ExpenseProps {
   id: string
@@ -47,7 +49,9 @@ export default function Expenses() {
   const route = useRoute()
   const { title, id } = route.params as GroupProps
   const [expenses, setExpenses] = useState<ExpenseProps[]>([])
+  const [selecteds, setSelecteds] = useState<string[]>([])
   const [expensesDate, setExpensesDate] = useState<MonthlyProps>(present)
+  const [openMarkAsPaid, setOpenMarkAsPaid] = useState(false)
 
   const getExpenses = async () => {
     setIsLoading(true)
@@ -79,6 +83,14 @@ export default function Expenses() {
     }, [expensesDate])
   )
 
+  const handleSelecteds = (expense: ExpenseProps) => {
+    setSelecteds(prevState => {
+      return prevState.includes(expense.id)
+        ? prevState.filter(id => id !== expense.id)
+        : [...prevState, expense.id]
+    })
+  }
+
   return (
     <>
       <ScrollView
@@ -102,7 +114,15 @@ export default function Expenses() {
           <VStack space={3}>
             {!isLoading ? (
               expenses.map(expense => (
-                <CardExpense key={expense.id} expense={expense} />
+                <CardExpense
+                  key={expense.id}
+                  expense={expense}
+                  handlePress={
+                    selecteds.length > 0 ? handleSelecteds : undefined
+                  }
+                  handleLongPress={handleSelecteds}
+                  selected={selecteds.includes(expense.id)}
+                />
               ))
             ) : (
               <>
@@ -114,18 +134,37 @@ export default function Expenses() {
           </VStack>
         </VStack>
       </ScrollView>
-      <PlusFab
-        onPress={() =>
-          navigate('ExpenseName', {
-            group_id: id,
-            group_title: title,
-            cost: 0,
-            dueDate: '',
-            title: '',
-            payers: []
-          })
-        }
-      />
+      {openMarkAsPaid ? (
+        <MarkAsPaid
+          isOpen={true}
+          onClose={() => setOpenMarkAsPaid(false)}
+          expenses={selecteds}
+        />
+      ) : selecteds.length > 0 ? (
+        <PlusFab
+          onPress={() => setOpenMarkAsPaid(true)}
+          icon={<CheckCircle weight="fill" color="white" />}
+          label="Marcar como pago"
+          width={200}
+          bgColor="green.500"
+          _pressed={{
+            bgColor: 'green.800'
+          }}
+        />
+      ) : (
+        <PlusFab
+          onPress={() =>
+            navigate('ExpenseName', {
+              group_id: id,
+              group_title: title,
+              cost: 0,
+              dueDate: '',
+              title: '',
+              payers: []
+            })
+          }
+        />
+      )}
     </>
   )
 }

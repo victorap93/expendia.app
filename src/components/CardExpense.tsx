@@ -1,7 +1,15 @@
 import React, { useState } from 'react'
 import CardBox from './CardBox'
 import { ExpenseProps } from '../screens/Expenses'
-import { HStack, Skeleton, Text, VStack } from 'native-base'
+import {
+  Badge,
+  Box,
+  HStack,
+  Skeleton,
+  Text,
+  VStack,
+  useTheme
+} from 'native-base'
 import { Pressable } from '@react-native-material/core'
 import { AvatarGroup } from './MemberAvatar'
 import dayjs from 'dayjs'
@@ -10,14 +18,23 @@ import { useAuth } from '../hooks/useAuth'
 import ExpenseStatusMessage, {
   ExpenseStatusMessageSetup
 } from './ExpenseStatusMessage'
+import { Check, CheckCircle } from 'phosphor-react-native'
 
 interface CardExpenseProps {
   expense: ExpenseProps
   handlePress?: (expense: ExpenseProps) => void
+  handleLongPress?: (expense: ExpenseProps) => void
+  selected?: boolean
 }
 
-export function CardExpense({ expense, handlePress }: CardExpenseProps) {
+export function CardExpense({
+  expense,
+  handlePress,
+  handleLongPress,
+  selected
+}: CardExpenseProps) {
   const { user } = useAuth()
+  const { colors } = useTheme()
 
   const userPart = getUserPart(expense.Paying, user.email)
 
@@ -30,12 +47,32 @@ export function CardExpense({ expense, handlePress }: CardExpenseProps) {
   )
 
   return (
-    <CardBox borderLeftColor={statusMessage.color} borderLeftWidth={4}>
+    <CardBox
+      borderLeftColor={statusMessage.color}
+      borderLeftWidth={4}
+      position="relative"
+    >
+      {selected && (
+        <Badge
+          position="absolute"
+          left={-10}
+          top={-10}
+          bgColor={'green.500'}
+          rounded="full"
+          variant="solid"
+          padding={0.5}
+        >
+          <Check weight="fill" color={'white'} />
+        </Badge>
+      )}
       <Pressable
         style={{
           padding: 16
         }}
         onPress={handlePress ? () => handlePress(expense) : undefined}
+        onLongPress={
+          handleLongPress ? () => handleLongPress(expense) : undefined
+        }
       >
         <VStack space={1}>
           <HStack justifyContent="space-between" alignItems="center">
