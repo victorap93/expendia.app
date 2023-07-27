@@ -49,7 +49,7 @@ export default function Expenses() {
   const [isLoading, setIsLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const route = useRoute()
-  const { title, id } = route.params as GroupProps
+  const { title, id, Member } = route.params as GroupProps
   const [expenses, setExpenses] = useState<ExpenseProps[]>([])
   const [selecteds, setSelecteds] = useState<string[]>([])
   const [expensesDate, setExpensesDate] = useState<MonthlyProps>(present)
@@ -138,7 +138,8 @@ export default function Expenses() {
       </ScrollView>
       {openMarkAsPaid ? (
         <MarkAsPaid
-          user={user}
+          member={user}
+          members={Member.map(({ member }) => member)}
           isOpen={true}
           onClose={() => {
             setOpenMarkAsPaid(false)

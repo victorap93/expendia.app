@@ -5,7 +5,8 @@ import {
   Text,
   Box,
   Button,
-  useToast
+  useToast,
+  HStack
 } from 'native-base'
 import React from 'react'
 import { Alert } from 'react-native'
@@ -16,12 +17,14 @@ import * as Yup from 'yup'
 import { api } from '../lib/axios'
 import { UserProps } from '../context/AuthContext'
 import dayjs from 'dayjs'
+import { MemberSelect } from '../components/MemberSelect'
 
 interface Props {
   isOpen?: boolean
   onClose?: (paid?: boolean) => void
   expenses: string[]
-  user: UserProps
+  member: UserProps
+  members: UserProps[]
 }
 
 export interface MarkAsPaidForm {
@@ -30,7 +33,13 @@ export interface MarkAsPaidForm {
   email: string
 }
 
-export default function MarkAsPaid({ isOpen, onClose, expenses, user }: Props) {
+export default function MarkAsPaid({
+  isOpen,
+  onClose,
+  expenses,
+  member,
+  members
+}: Props) {
   const toast = useToast()
 
   async function submit(
@@ -70,7 +79,7 @@ export default function MarkAsPaid({ isOpen, onClose, expenses, user }: Props) {
         {
           paid: true,
           paidAt: dayjs().format(),
-          email: user.email
+          email: member.email
         } as MarkAsPaidForm
       }
       validationSchema={Yup.object({
@@ -83,7 +92,13 @@ export default function MarkAsPaid({ isOpen, onClose, expenses, user }: Props) {
         submit(values, setSubmitting)
       }}
     >
-      {({ handleChange, handleSubmit, values, isSubmitting }) => (
+      {({
+        handleChange,
+        setFieldValue,
+        handleSubmit,
+        values,
+        isSubmitting
+      }) => (
         <Center>
           <Actionsheet isOpen={isOpen} onClose={onClose} hideDragIndicator>
             <Actionsheet.Content bgColor="gray.900">
@@ -93,6 +108,15 @@ export default function MarkAsPaid({ isOpen, onClose, expenses, user }: Props) {
                     Marcar como pago
                   </Text>
                 </Box>
+                <MemberSelect
+                  memberSelected={
+                    members.find(({ email }) => email === values.email) || {
+                      email: values.email
+                    }
+                  }
+                  members={members}
+                  onChange={member => setFieldValue('email', member.email)}
+                />
                 <VStack space={3} w="full">
                   <Text color="gray.400" fontSize="md">
                     Quando foi pago?
