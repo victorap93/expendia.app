@@ -20,6 +20,7 @@ import { UserProps } from '../context/AuthContext'
 import { CardExpense, CardSkeleton } from '../components/CardExpense'
 import { CheckCircle } from 'phosphor-react-native'
 import MarkAsPaid from './MarkAsPaid'
+import { useAuth } from '../hooks/useAuth'
 
 export interface ExpenseProps {
   id: string
@@ -43,6 +44,7 @@ export interface PayingProps {
 }
 
 export default function Expenses() {
+  const { user } = useAuth()
   const { navigate } = useNavigation()
   const [isLoading, setIsLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
@@ -53,8 +55,8 @@ export default function Expenses() {
   const [expensesDate, setExpensesDate] = useState<MonthlyProps>(present)
   const [openMarkAsPaid, setOpenMarkAsPaid] = useState(false)
 
-  const getExpenses = async () => {
-    setIsLoading(true)
+  const getExpenses = async (loading = true) => {
+    setIsLoading(loading)
     try {
       const query = `month=${expensesDate.month + 1}&year=${expensesDate.year}`
       const response = await api.get(`/groups/${id}/expenses?${query}`)
@@ -136,8 +138,13 @@ export default function Expenses() {
       </ScrollView>
       {openMarkAsPaid ? (
         <MarkAsPaid
+          user={user}
           isOpen={true}
-          onClose={() => setOpenMarkAsPaid(false)}
+          onClose={() => {
+            setOpenMarkAsPaid(false)
+            getExpenses(false)
+            setSelecteds([])
+          }}
           expenses={selecteds}
         />
       ) : selecteds.length > 0 ? (

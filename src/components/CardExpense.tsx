@@ -1,15 +1,7 @@
 import React, { useState } from 'react'
 import CardBox from './CardBox'
 import { ExpenseProps } from '../screens/Expenses'
-import {
-  Badge,
-  Box,
-  HStack,
-  Skeleton,
-  Text,
-  VStack,
-  useTheme
-} from 'native-base'
+import { Badge, HStack, Skeleton, Text, VStack } from 'native-base'
 import { Pressable } from '@react-native-material/core'
 import { AvatarGroup } from './MemberAvatar'
 import dayjs from 'dayjs'
@@ -18,7 +10,7 @@ import { useAuth } from '../hooks/useAuth'
 import ExpenseStatusMessage, {
   ExpenseStatusMessageSetup
 } from './ExpenseStatusMessage'
-import { Check, CheckCircle } from 'phosphor-react-native'
+import { Check } from 'phosphor-react-native'
 
 interface CardExpenseProps {
   expense: ExpenseProps
@@ -34,7 +26,6 @@ export function CardExpense({
   selected
 }: CardExpenseProps) {
   const { user } = useAuth()
-  const { colors } = useTheme()
 
   const userPart = getUserPart(expense.Paying, user.email)
 

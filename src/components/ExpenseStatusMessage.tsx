@@ -56,7 +56,7 @@ export default function ExpenseStatusMessage({
   )
 
   useEffect(() => {
-    if (userPart !== '0') {
+    if (userPart > 0) {
       const userExpenseStatusMessage: ExpenseStatusMessageSetup = userPaid
         ? statusMessagesSetup[0]
         : expenseIsExpired

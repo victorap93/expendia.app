@@ -9,7 +9,6 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import SubmitButton from '../components/SubmitButton'
 import DateField from '../components/DateField'
 import dayjs from 'dayjs'
-import { GroupProps } from './Groups'
 
 export interface PayerForm {
   email: string
