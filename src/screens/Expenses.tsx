@@ -117,22 +117,22 @@ export default function Expenses() {
 
   return (
     <>
+      <AppBar
+        title={title}
+        onPress={() => navigate('Groups')}
+        left="back"
+        right={
+          <IconButton
+            icon={({ size }) => <Icon name="cog" color="white" size={size} />}
+          />
+        }
+      />
       <ScrollView
         h="full"
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
       >
-        <AppBar
-          title={title}
-          onPress={() => navigate('Groups')}
-          left="back"
-          right={
-            <IconButton
-              icon={({ size }) => <Icon name="cog" color="white" size={size} />}
-            />
-          }
-        />
         <VStack px={4} py={4} space={5}>
           <DateController date={expensesDate} onChange={setExpensesDate} />
           <VStack space={3}>

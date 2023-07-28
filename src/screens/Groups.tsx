@@ -58,24 +58,22 @@ export default function Group() {
 
   return (
     <>
+      <AppBar
+        title="Meus grupos"
+        left="menu"
+        right={
+          <IconButton
+            onPress={() => navigate('GroupName')}
+            icon={({ size }) => <Icon name="plus" color="white" size={size} />}
+          />
+        }
+      />
       <ScrollView
         h="full"
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
       >
-        <AppBar
-          title="Meus grupos"
-          left="menu"
-          right={
-            <IconButton
-              onPress={() => navigate('GroupName')}
-              icon={({ size }) => (
-                <Icon name="plus" color="white" size={size} />
-              )}
-            />
-          }
-        />
         <VStack px={4} py={8}>
           <VStack space={3}>
             {!isLoading ? (

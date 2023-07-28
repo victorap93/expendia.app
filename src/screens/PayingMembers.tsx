@@ -89,12 +89,7 @@ export default function PayingMembers() {
   }
 
   return (
-    <ScrollView
-      h="full"
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-      }
-    >
+    <>
       <AppBar
         title="Selecionar pagantes"
         left="back"
@@ -105,31 +100,38 @@ export default function PayingMembers() {
           />
         }
       />
-      <VStack px={4} py={8}>
-        <VStack space={3}>
-          {!isLoading ? (
-            <MembersList
-              onPress={handlePress}
-              members={members.map(member => {
-                return {
-                  ...member,
-                  endComponent: selectedMembers.includes(member.email) ? (
-                    <CheckCircle weight="fill" color="green" />
-                  ) : (
-                    <Circle color={colors.gray[400]} />
-                  )
-                }
-              })}
-            />
-          ) : (
-            <>
-              <CardSkeleton nameSkeleton />
-              <CardSkeleton />
-              <CardSkeleton nameSkeleton />
-            </>
-          )}
+      <ScrollView
+        h="full"
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+      >
+        <VStack px={4} py={8}>
+          <VStack space={3}>
+            {!isLoading ? (
+              <MembersList
+                onPress={handlePress}
+                members={members.map(member => {
+                  return {
+                    ...member,
+                    endComponent: selectedMembers.includes(member.email) ? (
+                      <CheckCircle weight="fill" color="green" />
+                    ) : (
+                      <Circle color={colors.gray[400]} />
+                    )
+                  }
+                })}
+              />
+            ) : (
+              <>
+                <CardSkeleton nameSkeleton />
+                <CardSkeleton />
+                <CardSkeleton nameSkeleton />
+              </>
+            )}
+          </VStack>
         </VStack>
-      </VStack>
-    </ScrollView>
+      </ScrollView>
+    </>
   )
 }
