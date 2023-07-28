@@ -14,7 +14,7 @@ import Icon from '@expo/vector-icons/MaterialCommunityIcons'
 import MembersList from '../components/MembersList'
 import { CheckCircle, Circle } from 'phosphor-react-native'
 import { CardSkeleton } from '../components/CardMember'
-import { GroupForm } from './GroupName'
+import EmptyMessage from '../components/EmptyMessage'
 
 export interface HandleMembersProps {
   members: string[]
@@ -100,19 +100,23 @@ export default function RecentMembers() {
         <VStack px={4} py={8}>
           <VStack space={3}>
             {!isLoading ? (
-              <MembersList
-                onPress={handlePress}
-                members={recentMembers.map(member => {
-                  return {
-                    ...member,
-                    endComponent: selectedMembers.includes(member.email) ? (
-                      <CheckCircle weight="fill" color="green" />
-                    ) : (
-                      <Circle color={colors.gray[400]} />
-                    )
-                  }
-                })}
-              />
+              recentMembers.length > 0 ? (
+                <MembersList
+                  onPress={handlePress}
+                  members={recentMembers.map(member => {
+                    return {
+                      ...member,
+                      endComponent: selectedMembers.includes(member.email) ? (
+                        <CheckCircle weight="fill" color="green" />
+                      ) : (
+                        <Circle color={colors.gray[400]} />
+                      )
+                    }
+                  })}
+                />
+              ) : (
+                <EmptyMessage message="Ops! Não encontramos nenhum membro recente de outro grupo..." />
+              )
             ) : (
               <>
                 <CardSkeleton nameSkeleton />

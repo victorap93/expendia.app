@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react'
-import { Box, Fab, ScrollView, VStack } from 'native-base'
+import { ScrollView, VStack } from 'native-base'
 import {
   useFocusEffect,
   useNavigation,
@@ -21,6 +21,7 @@ import { CardExpense, CardSkeleton } from '../components/CardExpense'
 import { CheckCircle } from 'phosphor-react-native'
 import MarkAsPaid from './MarkAsPaid'
 import { useAuth } from '../hooks/useAuth'
+import EmptyMessage from '../components/EmptyMessage'
 
 export interface ExpenseProps {
   id: string
@@ -137,17 +138,21 @@ export default function Expenses() {
           <DateController date={expensesDate} onChange={setExpensesDate} />
           <VStack space={3}>
             {!isLoading ? (
-              expenses.map(expense => (
-                <CardExpense
-                  key={expense.id}
-                  expense={expense}
-                  handlePress={
-                    selecteds.length > 0 ? handleSelecteds : undefined
-                  }
-                  handleLongPress={handleSelecteds}
-                  selected={selecteds.includes(expense.id)}
-                />
-              ))
+              expenses.length > 0 ? (
+                expenses.map(expense => (
+                  <CardExpense
+                    key={expense.id}
+                    expense={expense}
+                    handlePress={
+                      selecteds.length > 0 ? handleSelecteds : undefined
+                    }
+                    handleLongPress={handleSelecteds}
+                    selected={selecteds.includes(expense.id)}
+                  />
+                ))
+              ) : (
+                <EmptyMessage message="Ops! Ainda não foi criada nenhuma despesa nesse mês..." />
+              )
             ) : (
               <>
                 <CardSkeleton />
