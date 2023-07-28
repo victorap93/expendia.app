@@ -52,6 +52,7 @@ export default function Expenses() {
   const { title, id, Member } = route.params as GroupProps
   const [expenses, setExpenses] = useState<ExpenseProps[]>([])
   const [selecteds, setSelecteds] = useState<string[]>([])
+  const [payers, setPayers] = useState<UserProps[]>([])
   const [expensesDate, setExpensesDate] = useState<MonthlyProps>(present)
   const [openMarkAsPaid, setOpenMarkAsPaid] = useState(false)
 
@@ -81,6 +82,8 @@ export default function Expenses() {
   useFocusEffect(
     useCallback(() => {
       setExpenses([])
+      setSelecteds([])
+      setPayers([])
       getExpenses()
     }, [expensesDate])
   )
@@ -92,6 +95,25 @@ export default function Expenses() {
         : [...prevState, expense.id]
     })
   }
+
+  const getPayers = () => {
+    const expensePayers: UserProps[] = []
+    selecteds.map(selected => {
+      const selectedExpense = expenses.find(({ id }) => id === selected)
+      if (selectedExpense) {
+        selectedExpense.Paying.map(({ paying }) => {
+          if (!expensePayers.find(({ email }) => email === paying.email)) {
+            expensePayers.push(paying)
+          }
+        })
+      }
+    })
+    setPayers([...expensePayers])
+  }
+
+  useEffect(() => {
+    getPayers()
+  }, [selecteds])
 
   return (
     <>
@@ -138,8 +160,10 @@ export default function Expenses() {
       </ScrollView>
       {openMarkAsPaid ? (
         <MarkAsPaid
-          member={user}
-          members={Member.map(({ member }) => member)}
+          member={
+            payers.find(({ email }) => email === user.email) ? user : payers[0]
+          }
+          members={payers}
           isOpen={true}
           onClose={() => {
             setOpenMarkAsPaid(false)
