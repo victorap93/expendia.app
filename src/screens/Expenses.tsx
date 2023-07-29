@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react'
-import { ScrollView, VStack } from 'native-base'
+import { HStack, ScrollView, VStack } from 'native-base'
 import {
   useFocusEffect,
   useNavigation,
@@ -7,7 +7,7 @@ import {
 } from '@react-navigation/native'
 import { api } from '../lib/axios'
 import { Alert, RefreshControl } from 'react-native'
-import AppBar from '../components/AppBar'
+import AppBar, { BoxAppBar } from '../components/AppBar'
 import { IconButton } from '@react-native-material/core'
 import Icon from '@expo/vector-icons/MaterialCommunityIcons'
 import PlusFab from '../components/PlusFab'
@@ -97,6 +97,24 @@ export default function Expenses() {
     })
   }
 
+  const editExpense = () => {
+    const expense = expenses.find(({ id }) => id === selecteds[0])
+    if (expense) {
+      navigate('ExpenseName', {
+        ...expense,
+        cost: Number(expense.cost),
+        group_id: id,
+        group_title: title,
+        payers: expense.Paying.map(({ cost, paying: { email } }) => {
+          return {
+            cost: Number(cost),
+            email
+          }
+        })
+      })
+    }
+  }
+
   const getPayers = () => {
     const expensePayers: UserProps[] = []
     selecteds.map(selected => {
@@ -119,13 +137,38 @@ export default function Expenses() {
   return (
     <>
       <AppBar
-        title={title}
-        onPress={() => navigate('Groups')}
+        title={selecteds.length > 0 ? '' : title}
+        onPress={() =>
+          selecteds.length > 0 ? setSelecteds([]) : navigate('Groups')
+        }
         left="back"
         right={
-          <IconButton
-            icon={({ size }) => <Icon name="cog" color="white" size={size} />}
-          />
+          selecteds.length > 0 ? (
+            <HStack space={1}>
+              {selecteds.length === 1 && (
+                <IconButton
+                  onPress={editExpense}
+                  icon={({ size }) => (
+                    <Icon name="pencil" color="white" size={size} />
+                  )}
+                />
+              )}
+              <IconButton
+                icon={({ size }) => (
+                  <Icon name="delete" color="white" size={size} />
+                )}
+              />
+              <IconButton
+                icon={({ size }) => (
+                  <Icon name="content-copy" color="white" size={size} />
+                )}
+              />
+            </HStack>
+          ) : (
+            <IconButton
+              icon={({ size }) => <Icon name="cog" color="white" size={size} />}
+            />
+          )
         }
       />
       <ScrollView
