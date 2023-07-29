@@ -7,6 +7,8 @@ import { HandlePayingProps } from '../screens/PayingMembers'
 import { HandleMembersProps } from '../screens/RecentMembers'
 import { FormSignUp } from '../screens/SignUp'
 import { Configurations } from '../screens/Configurations'
+import { ConfigurationsUser } from '../screens/ConfigurationsUser'
+import { ConfigurationsApplication } from '../screens/ConfigurationsApplication'
 
 export declare global {
   namespace ReactNavigation {
@@ -29,6 +31,8 @@ export declare global {
       ExpensePayers: ExpenseForm
       PayingMembers: HandlePayingProps
       Configurations: undefined
+      ConfigurationsUser: undefined
+      ConfigurationsApplication: undefined
     }
   }
 }
