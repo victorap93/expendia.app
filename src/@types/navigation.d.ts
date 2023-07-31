@@ -1,4 +1,5 @@
 import { FormEmail } from '../screens/Email'
+import { ExpenseDetails } from '../screens/Expense'
 import { ExpenseForm } from '../screens/ExpenseName'
 import { GroupForm } from '../screens/GroupName'
 import { GroupProps } from '../screens/Groups'
@@ -23,6 +24,7 @@ export declare global {
       GroupMembers: GroupForm
       RecentMembers: HandleMembersProps
       Expenses: GroupProps
+      Expense: ExpenseDetails
       ExpenseName: ExpenseForm
       ExpenseCost: ExpenseForm
       ExpensePayers: ExpenseForm

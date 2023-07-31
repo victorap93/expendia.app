@@ -97,6 +97,17 @@ export default function Expenses() {
     })
   }
 
+  const expensesNavigation = (expense: ExpenseProps) => {
+    navigate('Expense', {
+      expense,
+      group: {
+        id,
+        title,
+        Member
+      }
+    })
+  }
+
   const editExpense = () => {
     const expense = expenses.find(({ id }) => id === selecteds[0])
     if (expense) {
@@ -187,7 +198,9 @@ export default function Expenses() {
                     key={expense.id}
                     expense={expense}
                     handlePress={
-                      selecteds.length > 0 ? handleSelecteds : undefined
+                      selecteds.length > 0
+                        ? handleSelecteds
+                        : expensesNavigation
                     }
                     handleLongPress={handleSelecteds}
                     selected={selecteds.includes(expense.id)}
