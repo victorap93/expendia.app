@@ -10,6 +10,7 @@ import { GroupProps } from './Groups'
 import MarkAsPaid from './MarkAsPaid'
 import { useAuth } from '../hooks/useAuth'
 import { ExpenseProps } from './Expenses'
+import MenuActionSheet from '../components/MenuActionSheet'
 
 export interface ExpenseDetails {
   group: GroupProps
@@ -143,6 +144,27 @@ export default function Expense() {
           </Box>
         </Actionsheet.Content>
       </Actionsheet>
+      <MenuActionSheet
+        isOpen={openMenu}
+        onClose={() => setOpenMenu(false)}
+        items={[
+          {
+            icon: <Icon name="pencil" size={20} />,
+            label: 'Editar',
+            onPress: editExpense
+          },
+          {
+            icon: <Icon name="delete" size={20} />,
+            label: 'Excluir',
+            onPress: () => {}
+          },
+          {
+            icon: <Icon name="content-copy" size={20} />,
+            label: 'Duplicar',
+            onPress: () => {}
+          }
+        ]}
+      />
     </>
   )
 }
