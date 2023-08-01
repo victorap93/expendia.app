@@ -1,6 +1,7 @@
 import React from 'react'
-import { Box, Button, Center, HStack, Text, VStack } from 'native-base'
+import { Box, Center, HStack, Text, VStack } from 'native-base'
 import { GestureResponderEvent } from 'react-native'
+import { Pressable } from '@react-native-material/core'
 
 type GroupItemsProps = {
   name: string
@@ -9,10 +10,8 @@ type GroupItemsProps = {
 
 export function GroupItems({ name, children }: GroupItemsProps) {
   return <VStack>
-    <Box w="100%" h={60} px={4} justifyContent="center">
-      <Text fontSize="16" color="gray.500" _dark={{
-        color: "gray.300"
-      }}>
+    <Box w="100%" h={45} px={4} justifyContent="center">
+      <Text fontSize="16" color="gray.500" _dark={{ color: "gray.300" }}>
         {name}
       </Text>
     </Box>
@@ -29,7 +28,10 @@ type ListItemProps = {
 }
 
 export function ListItem({ title, subTitle, left, right, onPress }: ListItemProps) {
-  return <Button justifyContent='flex-start' rounded={'none'} backgroundColor='#000' _pressed={{ backgroundColor: '#333' }} onPress={onPress}>
+  return <Pressable
+    onPress={onPress}
+    android_ripple={{ color: '#222' }}
+    style={{ padding: 10 }}>
     <HStack space={3} alignItems="center">
       {left && <Center minWidth={'30px'}>{left}</Center>}
       <VStack flexGrow={1} marginLeft={left ? '0' : '30px'}>
@@ -38,5 +40,5 @@ export function ListItem({ title, subTitle, left, right, onPress }: ListItemProp
       </VStack>
       {right && <Center w={'30px'}>{right}</Center>}
     </HStack>
-  </Button>
+  </Pressable>
 }
