@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { Actionsheet, Box, HStack, ScrollView, Text, VStack } from 'native-base'
+import {
+  Actionsheet,
+  Badge,
+  Box,
+  HStack,
+  ScrollView,
+  Text,
+  VStack
+} from 'native-base'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { api } from '../lib/axios'
 import { Alert, RefreshControl } from 'react-native'
@@ -14,6 +22,9 @@ import MenuActionSheet from '../components/MenuActionSheet'
 import TotalValue from '../components/TotalValue'
 import { ExpenseForm } from './ExpenseName'
 import dayjs from 'dayjs'
+import MembersList from '../components/MembersList'
+import { convertFloatToMoney } from '../helpers/expenseHelper'
+import ExpenseStatusMessage from '../components/ExpenseStatusMessage'
 
 export interface ExpenseDetails {
   group: GroupProps
@@ -103,6 +114,37 @@ export default function Expense() {
               {dayjs(expense.dueDate).format('DD/MM/YYYY')}
             </Text>
           </HStack>
+          <VStack space={5}>
+            <HStack space={2} alignItems="center">
+              <Text color="white" fontSize="xl">
+                Pagantes:
+              </Text>
+              <Badge rounded="2xl">{expense.Paying.length}</Badge>
+            </HStack>
+            <MembersList
+              members={expense.Paying.map(({ cost, paying, paid, paidAt }) => {
+                return {
+                  ...paying,
+                  hideSubtitle: true,
+                  endComponent: (
+                    <Text color="white">
+                      {convertFloatToMoney(Number(cost))}
+                    </Text>
+                  ),
+                  bottomComponent: (
+                    <HStack my={1} space={1}>
+                      <ExpenseStatusMessage payer={paying} expense={expense} />
+                      {paid && paidAt && (
+                        <Text color="white">
+                          em {dayjs(paidAt).format('DD/MM/YYYY')}
+                        </Text>
+                      )}
+                    </HStack>
+                  )
+                }
+              })}
+            />
+          </VStack>
         </VStack>
       </ScrollView>
       <MarkAsPaid

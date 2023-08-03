@@ -6,6 +6,8 @@ import { CardMember } from './CardMember'
 
 interface CardMemberProps extends UserProps {
   endComponent?: ReactElement<any, any>
+  bottomComponent?: ReactElement<any, any>
+  hideSubtitle?: boolean
 }
 
 interface MembersListProps {
@@ -32,6 +34,8 @@ export default function MembersList({
           member={member}
           fetchUser={fetchUser}
           endComponent={member.endComponent}
+          bottomComponent={member.bottomComponent}
+          hideSubtitle={member.hideSubtitle}
           onPress={onPress ? () => onPress(member) : undefined}
         />
       ))}

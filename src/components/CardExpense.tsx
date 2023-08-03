@@ -79,6 +79,7 @@ export function CardExpense({
               {convertFloatToMoney(userPart)}
             </Text>
             <ExpenseStatusMessage
+              payer={user}
               expense={expense}
               getStatusMessage={setStatusMessage}
             />

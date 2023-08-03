@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { HStack, Text, useTheme } from 'native-base'
 import { Circle } from 'phosphor-react-native'
-import { useAuth } from '../hooks/useAuth'
 import { getUserPart, isExpired, isPaid } from '../helpers/expenseHelper'
 import { ExpenseProps } from '../screens/Expenses'
+import { UserProps } from '../context/AuthContext'
 
 export interface ExpenseStatusMessageSetup {
   status: string | null
@@ -13,11 +13,13 @@ export interface ExpenseStatusMessageSetup {
 
 interface ExpenseStatusMessageProps {
   expense: ExpenseProps
+  payer: UserProps
   getStatusMessage?: (statusMessage: ExpenseStatusMessageSetup) => void
 }
 
 export default function ExpenseStatusMessage({
   expense,
+  payer,
   getStatusMessage
 }: ExpenseStatusMessageProps) {
   const { colors } = useTheme()
@@ -45,10 +47,8 @@ export default function ExpenseStatusMessage({
     }
   ]
 
-  const { user } = useAuth()
-
-  const userPart = getUserPart(expense.Paying, user.email)
-  const userPaid = isPaid(expense.Paying, user.email)
+  const userPart = getUserPart(expense.Paying, payer.email)
+  const userPaid = isPaid(expense.Paying, payer.email)
   const expenseIsExpired = isExpired(expense)
 
   const [statusMessage, setStatusMessage] = useState<ExpenseStatusMessageSetup>(

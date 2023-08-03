@@ -10,6 +10,8 @@ interface CardMemberProps {
   member: UserProps
   fetchUser?: boolean
   endComponent?: ReactElement<any, any>
+  bottomComponent?: ReactElement<any, any>
+  hideSubtitle?: boolean
   onPress?: () => void
 }
 
@@ -21,6 +23,8 @@ export function CardMember({
   member,
   fetchUser,
   endComponent,
+  bottomComponent,
+  hideSubtitle,
   onPress
 }: CardMemberProps) {
   const [user, setUser] = useState<UserProps | undefined>()
@@ -59,11 +63,12 @@ export function CardMember({
                   ? `${user.firstname} ${user.lastname || ''}`
                   : user.email}
               </Text>
-              {user.firstname && (
+              {user.firstname && !hideSubtitle && (
                 <Text color="gray.200" fontSize="sm">
                   {user.email}
                 </Text>
               )}
+              {bottomComponent}
             </VStack>
           </HStack>
           {endComponent}
