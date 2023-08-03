@@ -132,7 +132,7 @@ export default function ExpensePayers() {
                     <Text my={4} fontSize={28} color="white">
                       Defina quem vão pagar e quanto cada um deve pagar
                     </Text>
-                    <TotalValue expense={expense} my={3} />
+                    <TotalValue expense={expense} showTitle my={3} />
                   </Box>
                   <VStack space={5}>
                     <HStack space={2} alignItems="center">

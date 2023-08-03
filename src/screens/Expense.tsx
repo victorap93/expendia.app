@@ -11,6 +11,8 @@ import MarkAsPaid from './MarkAsPaid'
 import { useAuth } from '../hooks/useAuth'
 import { ExpenseProps } from './Expenses'
 import MenuActionSheet from '../components/MenuActionSheet'
+import TotalValue from '../components/TotalValue'
+import { ExpenseForm } from './ExpenseName'
 
 export interface ExpenseDetails {
   group: GroupProps
@@ -27,6 +29,18 @@ export default function Expense() {
   const [expense, setExpense] = useState<ExpenseProps>(expenseParam)
   const [openMenu, setOpenMenu] = useState(false)
   const [openMarkAsPaid, setOpenMarkAsPaid] = useState(false)
+  const expenseForm = {
+    ...expense,
+    cost: Number(expense.cost),
+    group_id: group.id,
+    group_title: group.title,
+    payers: expense.Paying.map(({ cost, paying: { email } }) => {
+      return {
+        cost: Number(cost),
+        email
+      }
+    })
+  } as ExpenseForm
 
   const getExpense = async (loading = true) => {
     setIsLoading(loading)
@@ -55,20 +69,7 @@ export default function Expense() {
   }, [expenseParam])
 
   const editExpense = () => {
-    if (expense) {
-      navigate('ExpenseName', {
-        ...expense,
-        cost: Number(expense.cost),
-        group_id: group.id,
-        group_title: group.title,
-        payers: expense.Paying.map(({ cost, paying: { email } }) => {
-          return {
-            cost: Number(cost),
-            email
-          }
-        })
-      })
-    }
+    if (expense) navigate('ExpenseName', expenseForm)
   }
 
   return (
@@ -91,7 +92,9 @@ export default function Expense() {
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
       >
-        <VStack px={4} py={4} space={5}></VStack>
+        <VStack px={4} py={4} my={8} space={5}>
+          <TotalValue expense={expenseForm} />
+        </VStack>
       </ScrollView>
       <MarkAsPaid
         member={
@@ -107,43 +110,6 @@ export default function Expense() {
         }}
         expenses={[expense.id]}
       />
-      <Actionsheet isOpen={openMenu} onClose={() => setOpenMenu(false)}>
-        <Actionsheet.Content bgColor="gray.900">
-          <Box w="full">
-            <Pressable
-              style={{
-                padding: 12
-              }}
-            >
-              <Text color="white" fontSize="lg">
-                <Icon name="pencil" size={24} /> Editar
-              </Text>
-            </Pressable>
-          </Box>
-          <Box w="full">
-            <Pressable
-              style={{
-                padding: 12
-              }}
-            >
-              <Text color="white" fontSize="lg">
-                <Icon name="delete" size={24} /> Excluir
-              </Text>
-            </Pressable>
-          </Box>
-          <Box w="full">
-            <Pressable
-              style={{
-                padding: 12
-              }}
-            >
-              <Text color="white" fontSize="lg">
-                <Icon name="content-copy" size={24} /> Duplicar
-              </Text>
-            </Pressable>
-          </Box>
-        </Actionsheet.Content>
-      </Actionsheet>
       <MenuActionSheet
         isOpen={openMenu}
         onClose={() => setOpenMenu(false)}
