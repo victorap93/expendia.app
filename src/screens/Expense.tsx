@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Actionsheet, Box, ScrollView, Text, VStack } from 'native-base'
+import { Actionsheet, Box, HStack, ScrollView, Text, VStack } from 'native-base'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { api } from '../lib/axios'
 import { Alert, RefreshControl } from 'react-native'
@@ -13,6 +13,7 @@ import { ExpenseProps } from './Expenses'
 import MenuActionSheet from '../components/MenuActionSheet'
 import TotalValue from '../components/TotalValue'
 import { ExpenseForm } from './ExpenseName'
+import dayjs from 'dayjs'
 
 export interface ExpenseDetails {
   group: GroupProps
@@ -92,8 +93,16 @@ export default function Expense() {
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
       >
-        <VStack px={4} py={4} my={8} space={5}>
+        <VStack px={4} py={4} my={8} space={8}>
           <TotalValue expense={expenseForm} />
+          <HStack space={1} justifyContent="center" alignItems="center">
+            <Text color="gray.200" fontSize="lg">
+              Vencimento:
+            </Text>
+            <Text color="white" fontSize="lg">
+              {dayjs(expense.dueDate).format('DD/MM/YYYY')}
+            </Text>
+          </HStack>
         </VStack>
       </ScrollView>
       <MarkAsPaid
