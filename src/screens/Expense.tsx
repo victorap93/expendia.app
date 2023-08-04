@@ -71,6 +71,9 @@ export default function Expense() {
       ? user
       : expense.Paying[0].paying
   )
+  const userPayer = expense.Paying.find(
+    ({ paying }) => paying.email === user.email
+  )
 
   const getExpense = async (loading = true) => {
     setIsLoading(loading)
@@ -200,8 +203,9 @@ export default function Expense() {
           </VStack>
         </VStack>
       </ScrollView>
-      {!expense.Paying.find(({ paying }) => paying.email === user.email)
-        ?.paid && <MarkAsPaidFab onPress={() => setOpenMarkAsPaid(true)} />}
+      {userPayer && !userPayer.paid && (
+        <MarkAsPaidFab onPress={() => setOpenMarkAsPaid(true)} />
+      )}
       <MarkAsPaid
         member={selectedMember}
         members={expense.Paying.map(({ paying }) => paying)}
