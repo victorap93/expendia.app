@@ -24,12 +24,18 @@ import { ExpenseForm } from './ExpenseName'
 import dayjs from 'dayjs'
 import MembersList from '../components/MembersList'
 import { convertFloatToMoney } from '../helpers/expenseHelper'
-import ExpenseStatusMessage from '../components/ExpenseStatusMessage'
+import ExpenseStatusMessage, {
+  ExpenseStatusMessageSetup
+} from '../components/ExpenseStatusMessage'
 import PayerSplitProgress from '../components/PayerSplitProgress'
 
 export interface ExpenseDetails {
   group: GroupProps
   expense: ExpenseProps
+}
+
+interface ExpenseStatusMessageSetupPayer extends ExpenseStatusMessageSetup {
+  email: string
 }
 
 export default function Expense() {
@@ -55,6 +61,9 @@ export default function Expense() {
       }
     })
   } as ExpenseForm
+  const [statusMessages, setStatusMessages] = useState<
+    ExpenseStatusMessageSetupPayer[]
+  >([])
 
   const getExpense = async (loading = true) => {
     setIsLoading(loading)
@@ -84,6 +93,23 @@ export default function Expense() {
 
   const editExpense = () => {
     if (expense) navigate('ExpenseName', expenseForm)
+  }
+
+  const handleStatusMessages = (
+    statusMessage: ExpenseStatusMessageSetup,
+    email: string
+  ) => {
+    const newStatus = { ...statusMessage, email }
+    setStatusMessages(prevState => {
+      const index = prevState.findIndex(status => status.email === email)
+
+      if (index > -1) {
+        prevState[index] = newStatus
+        return [...prevState]
+      } else {
+        return [...prevState, newStatus]
+      }
+    })
   }
 
   return (
@@ -136,14 +162,27 @@ export default function Expense() {
                   ),
                   bottomComponent: (
                     <HStack my={1} space={1}>
-                      <ExpenseStatusMessage payer={paying} expense={expense} />
+                      <ExpenseStatusMessage
+                        payer={paying}
+                        expense={expense}
+                        getStatusMessage={statusMessage =>
+                          handleStatusMessages(statusMessage, paying.email)
+                        }
+                      />
                       {paid && paidAt && (
                         <Text color="white">
                           em {dayjs(paidAt).format('DD/MM/YYYY')}
                         </Text>
                       )}
                     </HStack>
-                  )
+                  ),
+                  cardBoxProps: {
+                    borderLeftColor:
+                      statusMessages.find(
+                        status => status.email === paying.email
+                      )?.color || undefined,
+                    borderLeftWidth: 4
+                  }
                 }
               })}
             />
