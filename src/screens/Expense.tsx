@@ -191,7 +191,9 @@ export default function Expense() {
         </VStack>
       </ScrollView>
       {!expense.Paying.find(({ paying }) => paying.email === user.email)
-        ?.paid && <MarkAsPaidFab onPress={() => setOpenMarkAsPaid(true)} />}
+        ?.paid === false && (
+        <MarkAsPaidFab onPress={() => setOpenMarkAsPaid(true)} />
+      )}
       <MarkAsPaid
         member={
           expense.Paying.find(({ paying }) => paying.email === user.email)
