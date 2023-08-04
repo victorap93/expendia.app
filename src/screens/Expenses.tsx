@@ -7,7 +7,7 @@ import {
 } from '@react-navigation/native'
 import { api } from '../lib/axios'
 import { Alert, RefreshControl } from 'react-native'
-import AppBar, { BoxAppBar } from '../components/AppBar'
+import AppBar from '../components/AppBar'
 import { IconButton } from '@react-native-material/core'
 import Icon from '@expo/vector-icons/MaterialCommunityIcons'
 import PlusFab from '../components/PlusFab'
@@ -18,10 +18,10 @@ import DateController, {
 } from '../components/DateController'
 import { UserProps } from '../context/AuthContext'
 import { CardExpense, CardSkeleton } from '../components/CardExpense'
-import { CheckCircle } from 'phosphor-react-native'
 import MarkAsPaid from './MarkAsPaid'
 import { useAuth } from '../hooks/useAuth'
 import EmptyMessage from '../components/EmptyMessage'
+import MarkAsPaidFab from '../components/MarkAsPaidFab'
 
 export interface ExpenseProps {
   id: string
@@ -234,16 +234,7 @@ export default function Expenses() {
           expenses={selecteds}
         />
       ) : selecteds.length > 0 ? (
-        <PlusFab
-          onPress={() => setOpenMarkAsPaid(true)}
-          icon={<CheckCircle weight="fill" color="white" />}
-          label="Marcar como pago"
-          width={200}
-          bgColor="green.500"
-          _pressed={{
-            bgColor: 'green.800'
-          }}
-        />
+        <MarkAsPaidFab onPress={() => setOpenMarkAsPaid(true)} />
       ) : (
         <PlusFab
           onPress={() =>
