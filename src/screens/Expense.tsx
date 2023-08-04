@@ -29,6 +29,7 @@ import ExpenseStatusMessage, {
 } from '../components/ExpenseStatusMessage'
 import PayerSplitProgress from '../components/PayerSplitProgress'
 import MarkAsPaidFab from '../components/MarkAsPaidFab'
+import { UserProps } from '../context/AuthContext'
 
 export interface ExpenseDetails {
   group: GroupProps
@@ -65,6 +66,11 @@ export default function Expense() {
   const [statusMessages, setStatusMessages] = useState<
     ExpenseStatusMessageSetupPayer[]
   >([])
+  const [selectedMember, setSelectedMember] = useState<UserProps>(
+    expense.Paying.find(({ paying }) => paying.email === user.email)
+      ? user
+      : expense.Paying[0].paying
+  )
 
   const getExpense = async (loading = true) => {
     setIsLoading(loading)
@@ -152,6 +158,10 @@ export default function Expense() {
               <Badge rounded="2xl">{expense.Paying.length}</Badge>
             </HStack>
             <MembersList
+              onPress={member => {
+                setSelectedMember(member)
+                setOpenMarkAsPaid(true)
+              }}
               members={expense.Paying.map(({ cost, paying, paid, paidAt }) => {
                 return {
                   ...paying,
@@ -195,11 +205,7 @@ export default function Expense() {
         <MarkAsPaidFab onPress={() => setOpenMarkAsPaid(true)} />
       )}
       <MarkAsPaid
-        member={
-          expense.Paying.find(({ paying }) => paying.email === user.email)
-            ? user
-            : expense.Paying[0].paying
-        }
+        member={selectedMember}
         members={expense.Paying.map(({ paying }) => paying)}
         isOpen={openMarkAsPaid}
         onClose={() => {
