@@ -29,23 +29,28 @@ export const convertFloatToMoney = (value: number) => {
     : 'R$ 0,00'
 }
 
-export const getSubtotal = (payers: PayerForm[]) => {
+export const getSubtotal = (payers: PayerForm[], checkIsPaid = false) => {
   let subtotal = 0
-  payers.map(({ cost }) => (subtotal += cost))
+  payers.map(({ cost, paid }) => {
+    subtotal += checkIsPaid && !paid ? 0 : cost
+  })
   return subtotal
 }
 
-export const getSubtotalPercentage = (values: ExpenseForm) => {
-  const subtotal = Number(getSubtotal(values.payers).toFixed(2))
+export const getSubtotalPercentage = (
+  values: ExpenseForm,
+  checkIsPaid = false
+) => {
+  const subtotal = Number(getSubtotal(values.payers, checkIsPaid).toFixed(2))
   return (subtotal / values.cost) * 100
 }
 
-export const getRest = (values: ExpenseForm) => {
-  const subtotal = Number(getSubtotal(values.payers).toFixed(2))
+export const getRest = (values: ExpenseForm, checkIsPaid = false) => {
+  const subtotal = Number(getSubtotal(values.payers, checkIsPaid).toFixed(2))
   return values.cost - subtotal
 }
 
-export const settleUp = (values: ExpenseForm) => {
-  const isSettleUp = getRest(values)
+export const settleUp = (values: ExpenseForm, checkIsPaid = false) => {
+  const isSettleUp = getRest(values, checkIsPaid)
   return isSettleUp === 0
 }

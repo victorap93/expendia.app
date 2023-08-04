@@ -13,6 +13,7 @@ import dayjs from 'dayjs'
 export interface PayerForm {
   email: string
   cost: number
+  paid?: boolean
 }
 
 export interface ExpenseForm {

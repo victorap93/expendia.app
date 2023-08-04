@@ -25,6 +25,7 @@ import dayjs from 'dayjs'
 import MembersList from '../components/MembersList'
 import { convertFloatToMoney } from '../helpers/expenseHelper'
 import ExpenseStatusMessage from '../components/ExpenseStatusMessage'
+import PayerSplitProgress from '../components/PayerSplitProgress'
 
 export interface ExpenseDetails {
   group: GroupProps
@@ -46,10 +47,11 @@ export default function Expense() {
     cost: Number(expense.cost),
     group_id: group.id,
     group_title: group.title,
-    payers: expense.Paying.map(({ cost, paying: { email } }) => {
+    payers: expense.Paying.map(({ cost, paid, paying: { email } }) => {
       return {
         cost: Number(cost),
-        email
+        email,
+        paid
       }
     })
   } as ExpenseForm
@@ -115,6 +117,7 @@ export default function Expense() {
             </Text>
           </HStack>
           <VStack space={5}>
+            <PayerSplitProgress expense={expenseForm} checkIsPaid />
             <HStack space={2} alignItems="center">
               <Text color="white" fontSize="xl">
                 Pagantes:
