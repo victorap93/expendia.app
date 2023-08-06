@@ -7,6 +7,8 @@ import { PasswordParams } from '../screens/Password'
 import { HandlePayingProps } from '../screens/PayingMembers'
 import { HandleMembersProps } from '../screens/RecentMembers'
 import { FormSignUp } from '../screens/SignUp'
+import { Configurations } from '../screens/Configurations'
+import { Logout } from '../screens/Logout'
 
 export declare global {
   namespace ReactNavigation {
@@ -29,6 +31,8 @@ export declare global {
       ExpenseCost: ExpenseForm
       ExpensePayers: ExpenseForm
       PayingMembers: HandlePayingProps
+      Configurations: undefined
+      Logout: undefined
     }
   }
 }

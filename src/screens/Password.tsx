@@ -5,7 +5,7 @@ import BackButton from '../components/BackButton'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import TextField from '../components/TextField'
-import { useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { Eye, EyeClosed } from 'phosphor-react-native'
 import SubmitButton from '../components/SubmitButton'
 import { api } from '../lib/axios'
@@ -24,6 +24,7 @@ export interface PasswordParams {
 
 export default function Password() {
   const route = useRoute()
+  const { navigate } = useNavigation()
   const { isRecovery, user } = route.params as PasswordParams
   const [show, setShow] = React.useState(false)
   const { setUser } = useAuth()
@@ -38,11 +39,18 @@ export default function Password() {
       setSubmitting(true)
       const response = await api.patch('/password', values)
       if (response.data.status) {
-        if (isRecovery && user) {
-          setUser(user)
-          toast.show({
-            title: 'Senha redefinida com sucesso!'
-          })
+        if (user) {
+          if (isRecovery) {
+            setUser(user)
+            toast.show({
+              title: 'Senha redefinida com sucesso!'
+            })
+          } else {
+            navigate('Configurations')
+            toast.show({
+              title: 'Senha alterada com sucesso!'
+            })
+          }
         }
       } else Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
     } catch (error) {
@@ -85,7 +93,7 @@ export default function Password() {
               <BackButton />
             </Box>
             <Text my={4} fontSize={28} color="white">
-              Redefinir senha
+              {isRecovery ? "Redefinir senha" : "Alterar senha"}
             </Text>
             <VStack space={2}>
               <TextField
