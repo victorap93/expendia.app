@@ -6,9 +6,10 @@ import { convertFloatToMoney } from '../helpers/expenseHelper'
 
 interface Props extends InterfaceBoxProps {
   expense: ExpenseForm
+  showTitle?: boolean
 }
 
-export default function TotalValue({ expense, ...rest }: Props) {
+export default function TotalValue({ expense, showTitle, ...rest }: Props) {
   return (
     <Box {...rest}>
       <HStack justifyContent="center" alignItems="baseline" space={1}>
@@ -18,8 +19,8 @@ export default function TotalValue({ expense, ...rest }: Props) {
       </HStack>
       <HStack justifyContent="center">
         <Text fontSize={20} color="gray.200">
-          Valor Total:
-          <Text fontWeight="bold">{' ' + expense.title}</Text>
+          Valor Total
+          {showTitle && <Text fontWeight="bold">{': ' + expense.title}</Text>}
         </Text>
       </HStack>
     </Box>

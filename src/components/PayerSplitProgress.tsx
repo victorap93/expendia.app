@@ -9,10 +9,14 @@ import { ExpenseForm } from '../screens/ExpenseName'
 
 interface Props {
   expense: ExpenseForm
+  checkIsPaid?: boolean
 }
 
-export default function PayerSplitProgress({ expense }: Props) {
-  const rest = getRest(expense)
+export default function PayerSplitProgress({
+  expense,
+  checkIsPaid = false
+}: Props) {
+  const rest = getRest(expense, checkIsPaid)
   const exceeded = rest < 0
 
   return (
@@ -26,12 +30,12 @@ export default function PayerSplitProgress({ expense }: Props) {
           <Text color="white">Faltam {convertFloatToMoney(rest)}</Text>
         )}
         <Text color={exceeded ? 'red.500' : 'white'}>
-          {getSubtotalPercentage(expense).toFixed()}%
+          {getSubtotalPercentage(expense, checkIsPaid).toFixed()}%
         </Text>
       </HStack>
       <Progress
         colorScheme={exceeded ? 'error' : 'success'}
-        value={getSubtotalPercentage(expense)}
+        value={getSubtotalPercentage(expense, checkIsPaid)}
       />
     </VStack>
   )

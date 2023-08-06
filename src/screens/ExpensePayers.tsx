@@ -47,13 +47,18 @@ export default function ExpensePayers() {
   ) {
     try {
       setSubmitting(true)
-      const response = await api.post(`/groups/${values.group_id}/expenses`, {
-        ...values,
-        payers: values.payers.filter(({ cost }) => cost > 0)
-      })
-      if (response.status === 201) {
+      const response = values.id
+        ? await api.put(`/expenses/${values.id}`, {
+            ...values,
+            payers: values.payers.filter(({ cost }) => cost > 0)
+          })
+        : await api.post(`/groups/${values.group_id}/expenses`, {
+            ...values,
+            payers: values.payers.filter(({ cost }) => cost > 0)
+          })
+      if (response.status === 201 || response.data?.status === true) {
         toast.show({
-          title: 'Despesa criada com sucesso!'
+          title: `Despesa ${values.id ? 'editada' : 'criada'} com sucesso!`
         })
         navigate('Expenses', {
           id: values.group_id,
@@ -63,7 +68,9 @@ export default function ExpensePayers() {
       } else {
         Alert.alert(
           'Ops!',
-          'Não foi possível criar a despesa, verifique as informações que inseriu e tente novamente.'
+          `Não foi possível ${
+            values.id ? 'editar' : 'criar'
+          } a despesa, verifique as informações que inseriu e tente novamente.`
         )
       }
     } catch (error) {
@@ -125,7 +132,7 @@ export default function ExpensePayers() {
                     <Text my={4} fontSize={28} color="white">
                       Defina quem vão pagar e quanto cada um deve pagar
                     </Text>
-                    <TotalValue expense={expense} my={3} />
+                    <TotalValue expense={expense} showTitle my={3} />
                   </Box>
                   <VStack space={5}>
                     <HStack space={2} alignItems="center">
@@ -223,7 +230,7 @@ export default function ExpensePayers() {
             <PayerSplitProgress expense={values} />
             <SubmitButton
               disabled={errors.payers !== undefined || !settleUp(values)}
-              title={'Criar despesa'}
+              title={`${values.id ? 'Editar' : 'Criar'} despesa`}
               isSubmitting={isSubmitting}
               handleSubmit={handleSubmit}
             />

@@ -19,6 +19,7 @@ import ExpenseName from '../screens/ExpenseName'
 import ExpenseCost from '../screens/ExpenseCost'
 import ExpensePayers from '../screens/ExpensePayers'
 import PayingMembers from '../screens/PayingMembers'
+import Expense from '../screens/Expense'
 import Configurations from '../screens/Configurations'
 import ConfigurationsUser from '../screens/ConfigurationsUser'
 import ConfigurationsApplication from '../screens/ConfigurationsApplication'
@@ -53,6 +54,7 @@ export default function Routes() {
         <Screen name="GroupMembers" component={GroupMembers} />
         <Screen name="RecentMembers" component={RecentMembers} />
         <Screen name="Expenses" component={Expenses} />
+        <Screen name="Expense" component={Expense} />
         <Screen name="ExpenseName" component={ExpenseName} />
         <Screen name="ExpenseCost" component={ExpenseCost} />
         <Screen name="ExpensePayers" component={ExpensePayers} />

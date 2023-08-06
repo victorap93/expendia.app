@@ -14,7 +14,7 @@ import Icon from '@expo/vector-icons/MaterialCommunityIcons'
 import MembersList from '../components/MembersList'
 import { CheckCircle, Circle } from 'phosphor-react-native'
 import { CardSkeleton } from '../components/CardMember'
-import { GroupForm } from './GroupName'
+import EmptyMessage from '../components/EmptyMessage'
 
 export interface HandleMembersProps {
   members: string[]
@@ -80,12 +80,7 @@ export default function RecentMembers() {
   }
 
   return (
-    <ScrollView
-      h="full"
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-      }
-    >
+    <>
       <AppBar
         title="Membros recentes"
         left="back"
@@ -96,31 +91,42 @@ export default function RecentMembers() {
           />
         }
       />
-      <VStack px={4} py={8}>
-        <VStack space={3}>
-          {!isLoading ? (
-            <MembersList
-              onPress={handlePress}
-              members={recentMembers.map(member => {
-                return {
-                  ...member,
-                  endComponent: selectedMembers.includes(member.email) ? (
-                    <CheckCircle weight="fill" color="green" />
-                  ) : (
-                    <Circle color={colors.gray[400]} />
-                  )
-                }
-              })}
-            />
-          ) : (
-            <>
-              <CardSkeleton nameSkeleton />
-              <CardSkeleton />
-              <CardSkeleton nameSkeleton />
-            </>
-          )}
+      <ScrollView
+        h="full"
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+      >
+        <VStack px={4} py={8}>
+          <VStack space={3}>
+            {!isLoading ? (
+              recentMembers.length > 0 ? (
+                <MembersList
+                  onPress={handlePress}
+                  members={recentMembers.map(member => {
+                    return {
+                      ...member,
+                      endComponent: selectedMembers.includes(member.email) ? (
+                        <CheckCircle weight="fill" color="green" />
+                      ) : (
+                        <Circle color={colors.gray[400]} />
+                      )
+                    }
+                  })}
+                />
+              ) : (
+                <EmptyMessage message="Ops! Não encontramos nenhum membro recente de outro grupo..." />
+              )
+            ) : (
+              <>
+                <CardSkeleton nameSkeleton />
+                <CardSkeleton />
+                <CardSkeleton nameSkeleton />
+              </>
+            )}
+          </VStack>
         </VStack>
-      </VStack>
-    </ScrollView>
+      </ScrollView>
+    </>
   )
 }

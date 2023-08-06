@@ -5,11 +5,15 @@ import { UserProps } from '../context/AuthContext'
 import { MemberAvatar } from './MemberAvatar'
 import { api } from '../lib/axios'
 import { Pressable } from '@react-native-material/core'
+import { InterfaceBoxProps } from 'native-base/lib/typescript/components/primitives/Box'
 
 interface CardMemberProps {
   member: UserProps
   fetchUser?: boolean
   endComponent?: ReactElement<any, any>
+  bottomComponent?: ReactElement<any, any>
+  cardBoxProps?: InterfaceBoxProps
+  hideSubtitle?: boolean
   onPress?: () => void
 }
 
@@ -21,6 +25,9 @@ export function CardMember({
   member,
   fetchUser,
   endComponent,
+  bottomComponent,
+  cardBoxProps,
+  hideSubtitle,
   onPress
 }: CardMemberProps) {
   const [user, setUser] = useState<UserProps | undefined>()
@@ -42,7 +49,7 @@ export function CardMember({
   }, [member])
 
   return user ? (
-    <CardBox>
+    <CardBox {...cardBoxProps}>
       <Pressable
         disabled={onPress === undefined}
         onPress={onPress}
@@ -59,11 +66,12 @@ export function CardMember({
                   ? `${user.firstname} ${user.lastname || ''}`
                   : user.email}
               </Text>
-              {user.firstname && (
+              {user.firstname && !hideSubtitle && (
                 <Text color="gray.200" fontSize="sm">
                   {user.email}
                 </Text>
               )}
+              {bottomComponent}
             </VStack>
           </HStack>
           {endComponent}

@@ -75,6 +75,7 @@ export default function MarkAsPaid({
 
   return (
     <Formik
+      enableReinitialize
       initialValues={
         {
           paid: true,

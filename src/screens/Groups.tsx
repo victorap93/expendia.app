@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { ScrollView, VStack } from 'native-base'
+import { ScrollView, Text, VStack } from 'native-base'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { UserProps } from '../context/AuthContext'
 import { api } from '../lib/axios'
@@ -9,6 +9,7 @@ import AppBar from '../components/AppBar'
 import { IconButton } from '@react-native-material/core'
 import Icon from '@expo/vector-icons/MaterialCommunityIcons'
 import PlusFab from '../components/PlusFab'
+import EmptyMessage from '../components/EmptyMessage'
 
 export type GroupMemberType = {
   createdAt: string
@@ -58,34 +59,44 @@ export default function Group() {
 
   return (
     <>
+      <AppBar
+        title="Meus grupos"
+        left="menu"
+        right={
+          <IconButton
+            onPress={() => navigate('GroupName')}
+            icon={({ size }) => <Icon name="plus" color="white" size={size} />}
+          />
+        }
+      />
       <ScrollView
         h="full"
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
       >
-        <AppBar
-          title="Meus grupos"
-          left="menu"
-          right={
-            <IconButton
-              onPress={() => navigate('GroupName')}
-              icon={({ size }) => (
-                <Icon name="plus" color="white" size={size} />
-              )}
-            />
-          }
-        />
         <VStack px={4} py={8}>
           <VStack space={3}>
             {!isLoading ? (
-              groups.map(group => (
-                <Item.CardGroup
-                  key={group.id}
-                  group={group}
-                  handlePress={item => navigate('Expenses', item)}
-                />
-              ))
+              groups.length > 0 ? (
+                groups.map(group => (
+                  <Item.CardGroup
+                    key={group.id}
+                    group={group}
+                    handlePress={item => navigate('Expenses', item)}
+                  />
+                ))
+              ) : (
+                <VStack justifyContent="center" textAlign="center" space={6}>
+                  <Text color="white" textAlign="center" fontSize="3xl">
+                    Bem vindo ao <Text color="yellow.500">TrooPay</Text>
+                  </Text>
+                  <EmptyMessage
+                    message="Crie um novo grupo ou peça para adicionarem seu e-mail em
+                      um grupo existente."
+                  />
+                </VStack>
+              )
             ) : (
               <>
                 <Item.CardSkeleton />
