@@ -59,7 +59,7 @@ export function MemberAvatar({ member, ...rest }: MemberAvatarProps) {
       {member.firstname
         ? member.firstname.substring(0, 1).toUpperCase() +
           member.lastname!.substring(0, 1).toUpperCase()
-        : member.email.substring(0, 2).toUpperCase()}
+        : member.email?.substring(0, 2).toUpperCase()}
     </Avatar>
   )
 }
