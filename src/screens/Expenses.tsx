@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react'
-import { HStack, ScrollView, VStack } from 'native-base'
+import { Box, HStack, ScrollView, Text, VStack } from 'native-base'
 import {
   useFocusEffect,
   useNavigation,
@@ -22,6 +22,7 @@ import MarkAsPaid from './MarkAsPaid'
 import { useAuth } from '../hooks/useAuth'
 import EmptyMessage from '../components/EmptyMessage'
 import MarkAsPaidFab from '../components/MarkAsPaidFab'
+import ExpenseDashboard from '../components/ExpenseDashboard'
 
 export interface ExpenseProps {
   id: string
@@ -181,6 +182,7 @@ export default function Expenses() {
             />
           )
         }
+        bottom={<ExpenseDashboard expenses={expenses} />}
       />
       <ScrollView
         h="full"

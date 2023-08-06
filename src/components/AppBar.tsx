@@ -32,7 +32,7 @@ export default function AppBar({
 }: AppBarProps) {
   return (
     <BoxAppBar>
-      <VStack justifyContent="space-between">
+      <VStack justifyContent="space-between" space={2}>
         <HStack justifyContent="space-between" alignItems="center">
           <Box>
             {left ? (
