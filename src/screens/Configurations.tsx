@@ -28,35 +28,39 @@ export default function Configurations() {
       <MenuItems.GroupItems name='Segurança'>
         <MenuItems.ListItem
           title="Senha"
-          subTitle="Gerencie sua foto, nome e informações pessoais"
+          subTitle="Altere sua senha de acesso ao aplicativo"
           left={<Ionicons name="key-sharp" size={24} color="white" />}
-          onPress={() => navigate('ConfigurationsUser')}
+          onPress={() => navigate('Password', {
+            user
+          })}
         />
         <MenuItems.ListItem
           title="Biometria"
-          subTitle="Tema, notificações e segurança"
-          left={<Ionicons name="finger-print" size={24} color="white" />}
-          right={<Switch offTrackColor="violet.100" onTrackColor="violet.400" onThumbColor="violet.500" offThumbColor="violet.400" />}
+          subTitle="Facilite seu acesso com o uso da biometria"
+          left={<Ionicons name="finger-print" size={24} color="#999" />}
+          right={<Switch offTrackColor="violet.100" onTrackColor="violet.400" onThumbColor="violet.500" offThumbColor="violet.400" disabled={true} />}
+          disabled={true}
         />
         <MenuItems.ListItem
           title="Contas sociais"
-          subTitle="Tema, notificações e segurança"
-          left={<MaterialIcons name="group" size={24} color="white" />}
-          onPress={() => navigate('ConfigurationsApplication')}
+          subTitle="Gerencie as contas sociais vinculadas ao seu perfil"
+          left={<MaterialIcons name="group" size={24} color="#999" />}
+          disabled={true}
         />
       </MenuItems.GroupItems>
       <MenuItems.GroupItems name='Configurações'>
         <MenuItems.ListItem
           title="Tema"
-          subTitle="Tema, notificações e segurança"
-          left={false ? <Ionicons name="sunny" size={24} color="white" /> : <Ionicons name="moon" size={24} color="white" />}
-          right={<Switch offTrackColor="violet.100" onTrackColor="violet.400" onThumbColor="violet.500" offThumbColor="violet.400" />}
+          subTitle="Escolha o tema que mais te agrada"
+          left={false ? <Ionicons name="sunny" size={24} color="#999" /> : <Ionicons name="moon" size={24} color="#999" />}
+          right={<Switch offTrackColor="violet.100" onTrackColor="violet.400" onThumbColor="violet.500" offThumbColor="violet.400" disabled={true} />}
+          disabled={true}
         />
         <MenuItems.ListItem
           title="Notificações"
-          subTitle="Tema, notificações e segurança"
-          left={<Ionicons name="notifications" size={24} color="white" />}
-          onPress={() => navigate('ConfigurationsApplication')}
+          subTitle="Foque nas notificações mais importantes"
+          left={<Ionicons name="notifications" size={24} color="#999" />}
+          disabled={true}
         />
       </MenuItems.GroupItems>
       <MenuItems.GroupItems name='Sessão'>
@@ -64,7 +68,7 @@ export default function Configurations() {
           title="Logout"
           subTitle="Desconectar usuario"
           left={<Feather name="log-out" size={24} color="white" />}
-          onPress={() => console.log('logout')}
+          onPress={() => navigate('Logout')}
         />
       </MenuItems.GroupItems>
     </VStack>
