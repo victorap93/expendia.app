@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react'
-import { Box, HStack, ScrollView, Text, VStack } from 'native-base'
+import { HStack, ScrollView, VStack } from 'native-base'
 import {
   useFocusEffect,
   useNavigation,
@@ -23,6 +23,7 @@ import { useAuth } from '../hooks/useAuth'
 import EmptyMessage from '../components/EmptyMessage'
 import MarkAsPaidFab from '../components/MarkAsPaidFab'
 import ExpenseDashboard from '../components/ExpenseDashboard'
+import { CaretCircleDown } from 'phosphor-react-native'
 
 export interface ExpenseProps {
   id: string
@@ -184,6 +185,15 @@ export default function Expenses() {
         }
         bottom={<ExpenseDashboard expenses={expenses} />}
       />
+      <HStack
+        justifyContent="center"
+        position="relative"
+        top={-10}
+        h={3}
+        width="full"
+      >
+        <CaretCircleDown weight="fill" color="white" />
+      </HStack>
       <ScrollView
         h="full"
         refreshControl={

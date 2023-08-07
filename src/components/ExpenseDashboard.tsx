@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { ExpenseProps } from '../screens/Expenses'
-import { HStack, IconButton, ScrollView, Text, VStack } from 'native-base'
+import { HStack, IconButton, ScrollView, Text, VStack, View } from 'native-base'
 import { convertFloatToMoney } from '../helpers/expenseHelper'
 import { useAuth } from '../hooks/useAuth'
 import { ArrowDown, CaretCircleDown } from 'phosphor-react-native'
@@ -39,7 +39,7 @@ export default function ExpenseDashboard({ expenses }: Props) {
   }, [expenses])
 
   return (
-    <ScrollView horizontal>
+    <ScrollView horizontal py={1}>
       <HStack w="full" space={2} alignItems="center">
         <VStack
           bgColor="dark.300"
