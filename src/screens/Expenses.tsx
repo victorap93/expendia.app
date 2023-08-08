@@ -184,7 +184,17 @@ export default function Expenses() {
             />
           )
         }
-        bottom={openDashboard && <ExpenseDashboard expenses={expenses} />}
+        bottom={
+          openDashboard && (
+            <ExpenseDashboard
+              expenses={
+                selecteds.length === 0
+                  ? expenses
+                  : expenses.filter(expense => selecteds.includes(expense.id))
+              }
+            />
+          )
+        }
       />
       <ScrollView
         h="full"
