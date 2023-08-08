@@ -39,7 +39,7 @@ export default function ExpenseDashboard({ expenses }: Props) {
 
   return (
     <ScrollView horizontal py={1}>
-      <HStack w="full" space={2} alignItems="center">
+      <HStack w="full" space={2} alignItems="center" pl={4}>
         <VStack
           bgColor="dark.300"
           px={4}

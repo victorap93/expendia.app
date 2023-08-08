@@ -17,7 +17,7 @@ interface AppBarProps {
 
 export function BoxAppBar({ children }: BoxAppBarProps) {
   return (
-    <Box px={4} pb={4} pt={12} roundedBottom={24} bg="dark.200" width="full">
+    <Box pb={4} pt={12} roundedBottom={24} bg="dark.200" width="full">
       {children}
     </Box>
   )
@@ -33,7 +33,7 @@ export default function AppBar({
   return (
     <BoxAppBar>
       <VStack justifyContent="space-between" space={2}>
-        <HStack justifyContent="space-between" alignItems="center">
+        <HStack justifyContent="space-between" alignItems="center" px={4}>
           <Box>
             {left ? (
               left === 'back' ? (
