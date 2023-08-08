@@ -6,7 +6,7 @@ import {
   useRoute
 } from '@react-navigation/native'
 import { api } from '../lib/axios'
-import { Alert, RefreshControl } from 'react-native'
+import { Alert, RefreshControl, TouchableOpacity } from 'react-native'
 import AppBar from '../components/AppBar'
 import { IconButton } from '@react-native-material/core'
 import Icon from '@expo/vector-icons/MaterialCommunityIcons'
@@ -23,7 +23,7 @@ import { useAuth } from '../hooks/useAuth'
 import EmptyMessage from '../components/EmptyMessage'
 import MarkAsPaidFab from '../components/MarkAsPaidFab'
 import ExpenseDashboard from '../components/ExpenseDashboard'
-import { CaretCircleDown } from 'phosphor-react-native'
+import { CaretCircleDown, CaretCircleUp } from 'phosphor-react-native'
 
 export interface ExpenseProps {
   id: string
@@ -58,6 +58,7 @@ export default function Expenses() {
   const [payers, setPayers] = useState<UserProps[]>([])
   const [expensesDate, setExpensesDate] = useState<MonthlyProps>(present)
   const [openMarkAsPaid, setOpenMarkAsPaid] = useState(false)
+  const [openDashboard, setOpenDashboard] = useState(true)
 
   const getExpenses = async (loading = true) => {
     setIsLoading(loading)
@@ -183,17 +184,8 @@ export default function Expenses() {
             />
           )
         }
-        bottom={<ExpenseDashboard expenses={expenses} />}
+        bottom={openDashboard && <ExpenseDashboard expenses={expenses} />}
       />
-      <HStack
-        justifyContent="center"
-        position="relative"
-        top={-10}
-        h={3}
-        width="full"
-      >
-        <CaretCircleDown weight="fill" color="white" />
-      </HStack>
       <ScrollView
         h="full"
         refreshControl={
@@ -231,6 +223,20 @@ export default function Expenses() {
           </VStack>
         </VStack>
       </ScrollView>
+      <HStack
+        justifyContent="center"
+        w="full"
+        position="absolute"
+        top={openDashboard ? '21%' : '11.5%'}
+      >
+        <TouchableOpacity onPress={() => setOpenDashboard(!openDashboard)}>
+          {openDashboard ? (
+            <CaretCircleUp weight="fill" color="white" />
+          ) : (
+            <CaretCircleDown weight="fill" color="white" />
+          )}
+        </TouchableOpacity>
+      </HStack>
       {openMarkAsPaid ? (
         <MarkAsPaid
           member={

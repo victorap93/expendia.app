@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { ExpenseProps } from '../screens/Expenses'
-import { HStack, IconButton, ScrollView, Text, VStack, View } from 'native-base'
+import { HStack, ScrollView, Text, VStack } from 'native-base'
 import { convertFloatToMoney } from '../helpers/expenseHelper'
 import { useAuth } from '../hooks/useAuth'
-import { ArrowDown, CaretCircleDown } from 'phosphor-react-native'
 
 interface Props {
   expenses: ExpenseProps[]
