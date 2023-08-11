@@ -30,6 +30,7 @@ import ExpenseStatusMessage, {
 import PayerSplitProgress from '../components/PayerSplitProgress'
 import MarkAsPaidFab from '../components/MarkAsPaidFab'
 import { UserProps } from '../context/AuthContext'
+import DeleteExpense from '../components/DeleteExpense'
 
 export interface ExpenseDetails {
   group: GroupProps
@@ -42,7 +43,7 @@ interface ExpenseStatusMessageSetupPayer extends ExpenseStatusMessageSetup {
 
 export default function Expense() {
   const { user } = useAuth()
-  const { navigate } = useNavigation()
+  const { navigate, goBack } = useNavigation()
   const [isLoading, setIsLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const route = useRoute()
@@ -50,6 +51,7 @@ export default function Expense() {
   const [expense, setExpense] = useState<ExpenseProps>(expenseParam)
   const [openMenu, setOpenMenu] = useState(false)
   const [openMarkAsPaid, setOpenMarkAsPaid] = useState(false)
+  const [openDelete, setOpenDelete] = useState(false)
   const expenseForm = {
     ...expense,
     cost: Number(expense.cost),
@@ -206,6 +208,14 @@ export default function Expense() {
       {userPayer && !userPayer.paid && (
         <MarkAsPaidFab onPress={() => setOpenMarkAsPaid(true)} />
       )}
+      <DeleteExpense
+        expenses={[expense.id]}
+        isOpen={openDelete}
+        onClose={() => {
+          setOpenDelete(false)
+          goBack()
+        }}
+      />
       <MarkAsPaid
         member={selectedMember}
         members={expense.Paying.map(({ paying }) => paying)}
@@ -228,7 +238,7 @@ export default function Expense() {
           {
             icon: <Icon name="delete" size={20} />,
             label: 'Excluir',
-            onPress: () => {}
+            onPress: () => setOpenDelete(true)
           },
           {
             icon: <Icon name="content-copy" size={20} />,

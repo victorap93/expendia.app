@@ -23,6 +23,7 @@ import { useAuth } from '../hooks/useAuth'
 import EmptyMessage from '../components/EmptyMessage'
 import MarkAsPaidFab from '../components/MarkAsPaidFab'
 import ExpenseDashboard from '../components/ExpenseDashboard'
+import DeleteExpense from '../components/DeleteExpense'
 
 export interface ExpenseProps {
   id: string
@@ -57,6 +58,7 @@ export default function Expenses() {
   const [payers, setPayers] = useState<UserProps[]>([])
   const [expensesDate, setExpensesDate] = useState<MonthlyProps>(present)
   const [openMarkAsPaid, setOpenMarkAsPaid] = useState(false)
+  const [openDelete, setOpenDelete] = useState(false)
 
   const getExpenses = async (loading = true) => {
     setIsLoading(loading)
@@ -166,6 +168,7 @@ export default function Expenses() {
                 />
               )}
               <IconButton
+                onPress={() => setOpenDelete(true)}
                 icon={({ size }) => (
                   <Icon name="delete" color="white" size={size} />
                 )}
@@ -229,6 +232,15 @@ export default function Expenses() {
           </VStack>
         </VStack>
       </ScrollView>
+      <DeleteExpense
+        expenses={selecteds}
+        isOpen={openDelete}
+        onClose={() => {
+          setOpenDelete(false)
+          getExpenses(false)
+          setSelecteds([])
+        }}
+      />
       {openMarkAsPaid ? (
         <MarkAsPaid
           member={
