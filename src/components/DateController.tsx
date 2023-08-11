@@ -83,7 +83,7 @@ export default function DateController({
   const goToPresent = () => onChange(present)
 
   return (
-    <HStack w="full" alignItems="center">
+    <HStack w="full" mb={'12.5px'} alignItems="center">
       <HStack space={1} alignItems="center" w="1/4">
         <IconButton
           icon={() => <Icon name="chevron-left" color="white" size={32} />}
