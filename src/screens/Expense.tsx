@@ -23,7 +23,7 @@ import TotalValue from '../components/TotalValue'
 import { ExpenseForm } from './ExpenseName'
 import dayjs from 'dayjs'
 import MembersList from '../components/MembersList'
-import { convertFloatToMoney } from '../helpers/expenseHelper'
+import { convertFloatToMoney, getExpenseForm } from '../helpers/expenseHelper'
 import ExpenseStatusMessage, {
   ExpenseStatusMessageSetup
 } from '../components/ExpenseStatusMessage'
@@ -31,6 +31,7 @@ import PayerSplitProgress from '../components/PayerSplitProgress'
 import MarkAsPaidFab from '../components/MarkAsPaidFab'
 import { UserProps } from '../context/AuthContext'
 import DeleteExpense from '../components/DeleteExpense'
+import DuplicateExpense from '../components/DuplicateExpense'
 
 export interface ExpenseDetails {
   group: GroupProps
@@ -52,22 +53,11 @@ export default function Expense() {
   const [openMenu, setOpenMenu] = useState(false)
   const [openMarkAsPaid, setOpenMarkAsPaid] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
-  const expenseForm = {
-    ...expense,
-    cost: Number(expense.cost),
-    group_id: group.id,
-    group_title: group.title,
-    payers: expense.Paying.map(({ cost, paid, paying: { email } }) => {
-      return {
-        cost: Number(cost),
-        email,
-        paid
-      }
-    })
-  } as ExpenseForm
+  const expenseForm = getExpenseForm(expense, group)
   const [statusMessages, setStatusMessages] = useState<
     ExpenseStatusMessageSetupPayer[]
   >([])
+  const [openDuplicate, setOpenDuplicate] = useState(false)
   const [selectedMember, setSelectedMember] = useState<UserProps>(
     expense.Paying.find(({ paying }) => paying.email === user.email)
       ? user
@@ -226,6 +216,11 @@ export default function Expense() {
         }}
         expenses={[expense.id]}
       />
+      <DuplicateExpense
+        expenses={[expenseForm]}
+        isOpen={openDuplicate}
+        onClose={() => setOpenDuplicate(false)}
+      />
       <MenuActionSheet
         isOpen={openMenu}
         onClose={() => setOpenMenu(false)}
@@ -243,7 +238,10 @@ export default function Expense() {
           {
             icon: <Icon name="content-copy" size={20} />,
             label: 'Duplicar',
-            onPress: () => {}
+            onPress: () => {
+              setOpenMenu(false)
+              setOpenDuplicate(true)
+            }
           }
         ]}
       />

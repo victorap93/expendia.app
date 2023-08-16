@@ -1,6 +1,7 @@
 import { ExpenseForm, PayerForm } from '../screens/ExpenseName'
 import { ExpenseProps, PayingProps } from '../screens/Expenses'
 import dayjs from 'dayjs'
+import { GroupProps } from '../screens/Groups'
 
 export const getUserPart = (paying: PayingProps[], email: string) => {
   return Number(paying.find(payer => payer.paying.email === email)?.cost || '0')
@@ -53,4 +54,20 @@ export const getRest = (values: ExpenseForm, checkIsPaid = false) => {
 export const settleUp = (values: ExpenseForm, checkIsPaid = false) => {
   const isSettleUp = getRest(values, checkIsPaid)
   return isSettleUp === 0
+}
+
+export const getExpenseForm = (expense: ExpenseProps, group: GroupProps) => {
+  return {
+    ...expense,
+    cost: Number(expense.cost),
+    group_id: group.id,
+    group_title: group.title,
+    payers: expense.Paying.map(({ cost, paid, paying: { email } }) => {
+      return {
+        cost: Number(cost),
+        email,
+        paid
+      }
+    })
+  } as ExpenseForm
 }

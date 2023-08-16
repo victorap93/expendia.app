@@ -24,6 +24,8 @@ import EmptyMessage from '../components/EmptyMessage'
 import MarkAsPaidFab from '../components/MarkAsPaidFab'
 import ExpenseDashboard from '../components/ExpenseDashboard'
 import DeleteExpense from '../components/DeleteExpense'
+import DuplicateExpense from '../components/DuplicateExpense'
+import { getExpenseForm } from '../helpers/expenseHelper'
 
 export interface ExpenseProps {
   id: string
@@ -59,6 +61,7 @@ export default function Expenses() {
   const [expensesDate, setExpensesDate] = useState<MonthlyProps>(present)
   const [openMarkAsPaid, setOpenMarkAsPaid] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
+  const [openDuplicate, setOpenDuplicate] = useState(false)
 
   const getExpenses = async (loading = true) => {
     setIsLoading(loading)
@@ -174,6 +177,7 @@ export default function Expenses() {
                 )}
               />
               <IconButton
+                onPress={() => setOpenDuplicate(true)}
                 icon={({ size }) => (
                   <Icon name="content-copy" color="white" size={size} />
                 )}
@@ -232,6 +236,17 @@ export default function Expenses() {
           </VStack>
         </VStack>
       </ScrollView>
+      <DuplicateExpense
+        expenses={selecteds.map(selectedId => {
+          const expense = expenses.find(({ id }) => id === selectedId)
+          return getExpenseForm(expense!, { id, title } as GroupProps)
+        })}
+        isOpen={openDuplicate}
+        onClose={() => {
+          setOpenDuplicate(false)
+          setSelecteds([])
+        }}
+      />
       <DeleteExpense
         expenses={selecteds}
         isOpen={openDelete}
