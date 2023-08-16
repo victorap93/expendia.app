@@ -18,7 +18,7 @@ import DateController, {
 } from '../components/DateController'
 import { UserProps } from '../context/AuthContext'
 import { CardExpense, CardSkeleton } from '../components/CardExpense'
-import MarkAsPaid from './MarkAsPaid'
+import MarkAsPaid from '../components/MarkAsPaid'
 import { useAuth } from '../hooks/useAuth'
 import EmptyMessage from '../components/EmptyMessage'
 import MarkAsPaidFab from '../components/MarkAsPaidFab'
