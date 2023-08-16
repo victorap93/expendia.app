@@ -214,7 +214,7 @@ export default function Expense() {
           setOpenMarkAsPaid(false)
           getExpense(false)
         }}
-        expenses={[expense.id]}
+        expenses={[expense]}
       />
       <DuplicateExpense
         expenses={[expenseForm]}
