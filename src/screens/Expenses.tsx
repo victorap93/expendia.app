@@ -268,7 +268,9 @@ export default function Expenses() {
             getExpenses(false)
             setSelecteds([])
           }}
-          expenses={selecteds}
+          expenses={selecteds.map(selectedId => {
+            return expenses.find(({ id }) => id === selectedId)!
+          })}
         />
       ) : selecteds.length > 0 ? (
         <MarkAsPaidFab onPress={() => setOpenMarkAsPaid(true)} />

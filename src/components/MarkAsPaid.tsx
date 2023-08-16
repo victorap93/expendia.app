@@ -20,11 +20,12 @@ import dayjs from 'dayjs'
 import { MemberSelect } from './MemberSelect'
 import { Pressable } from '@react-native-material/core'
 import { ArrowsLeftRight } from 'phosphor-react-native'
+import { ExpenseProps } from '../screens/Expenses'
 
 interface Props {
   isOpen?: boolean
   onClose?: (paid?: boolean) => void
-  expenses: string[]
+  expenses: ExpenseProps[]
   member: UserProps
   members: UserProps[]
   unmark?: boolean
@@ -53,13 +54,17 @@ export default function MarkAsPaid({
   ) {
     try {
       setSubmitting(true)
-      const promises = expenses.map(expense =>
-        api.patch(`/expenses/${expense}`, {
-          ...values,
-          paid: !isUnmark,
-          paidAt: values.paidAt ? dayjs(values.paidAt).format() : undefined
-        })
-      )
+      const promises = expenses.map(expense => {
+        if (
+          expense.Paying.find(({ paying }) => paying.email === values.email)
+        ) {
+          api.patch(`/expenses/${expense.id}`, {
+            ...values,
+            paid: !isUnmark,
+            paidAt: values.paidAt ? dayjs(values.paidAt).format() : undefined
+          })
+        }
+      })
       Promise.all(promises)
         .then(() => {
           toast.show({
