@@ -185,6 +185,7 @@ export default function Expenses() {
             </HStack>
           ) : (
             <IconButton
+              onPress={() => navigate('Group', route.params as GroupProps)}
               icon={({ size }) => <Icon name="cog" color="white" size={size} />}
             />
           )

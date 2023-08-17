@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native'
 import SubmitButton from '../components/SubmitButton'
 
 export interface GroupForm {
+  id?: string
   title: string
   members: string[]
 }

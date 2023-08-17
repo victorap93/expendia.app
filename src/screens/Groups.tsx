@@ -22,7 +22,7 @@ export interface GroupProps {
   Member: GroupMemberType[]
 }
 
-export default function Group() {
+export default function Groups() {
   const { navigate } = useNavigation()
   const [groups, setGroups] = useState<GroupProps[]>([])
   const [isLoading, setIsLoading] = useState(true)
