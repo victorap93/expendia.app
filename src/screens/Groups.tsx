@@ -19,6 +19,7 @@ export type GroupMemberType = {
 export interface GroupProps {
   id: string
   title: string
+  user_id: string
   Member: GroupMemberType[]
 }
 

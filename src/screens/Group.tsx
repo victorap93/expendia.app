@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { Badge, HStack, ScrollView, Text, VStack } from 'native-base'
+import { Badge, Box, HStack, ScrollView, Text, VStack } from 'native-base'
 import {
   useFocusEffect,
   useNavigation,
@@ -15,6 +15,7 @@ import { api } from '../lib/axios'
 import MembersList from '../components/MembersList'
 import PlusFab from '../components/PlusFab'
 import { UserPlus } from 'phosphor-react-native'
+import UserLabels from '../components/UserLabels'
 
 export default function Group() {
   const { user } = useAuth()
@@ -81,7 +82,18 @@ export default function Group() {
             </Text>
             <Badge rounded="2xl">{group.Member.length}</Badge>
           </HStack>
-          <MembersList members={group.Member.map(({ member }) => member)} />
+          <MembersList
+            members={group.Member.map(({ member }) => {
+              return {
+                ...member,
+                bottomComponent: (
+                  <Box mt={2}>
+                    <UserLabels isCreator={member.id === group.user_id} />
+                  </Box>
+                )
+              }
+            })}
+          />
         </VStack>
       </ScrollView>
       <PlusFab
