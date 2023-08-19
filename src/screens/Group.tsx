@@ -14,11 +14,12 @@ import { useAuth } from '../hooks/useAuth'
 import { api } from '../lib/axios'
 import MembersList from '../components/MembersList'
 import PlusFab from '../components/PlusFab'
-import { SignOut, UserPlus } from 'phosphor-react-native'
+import { SignOut, Trash, UserPlus } from 'phosphor-react-native'
 import UserLabels from '../components/UserLabels'
 import MenuActionSheet from '../components/MenuActionSheet'
 import { UserProps } from '../context/AuthContext'
 import DeleteMember from '../components/DeleteMember'
+import DeleteGroup from '../components/DeleteGroup'
 
 export default function Group() {
   const { user } = useAuth()
@@ -28,6 +29,7 @@ export default function Group() {
   const { id } = route.params as GroupProps
   const [group, setGroup] = useState<GroupProps>(route.params as GroupProps)
   const [openGroupMenu, setOpenGroupMenu] = useState(false)
+  const [openDeleteGroup, setOpenDeleteGroup] = useState(false)
   const [openDeleteMember, setOpenDeleteMember] = useState(false)
   const [selectedMember, setSelectedMember] = useState<UserProps | undefined>(
     undefined
@@ -130,6 +132,15 @@ export default function Group() {
           member={selectedMember}
         />
       )}
+      <DeleteGroup
+        isOpen={openDeleteGroup}
+        onClose={() => {
+          setOpenDeleteGroup(false)
+          setOpenGroupMenu(false)
+          navigate('Groups')
+        }}
+        group={group}
+      />
       <MenuActionSheet
         isOpen={selectedMember !== undefined && !openGroupMenu}
         onClose={() => setSelectedMember(undefined)}
@@ -155,6 +166,11 @@ export default function Group() {
               setSelectedMember(user)
               setOpenDeleteMember(true)
             }
+          },
+          {
+            label: 'Excluir grupo',
+            icon: <Trash color="white" />,
+            onPress: () => setOpenDeleteGroup(true)
           }
         ]}
       />
