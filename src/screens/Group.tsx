@@ -14,17 +14,23 @@ import { useAuth } from '../hooks/useAuth'
 import { api } from '../lib/axios'
 import MembersList from '../components/MembersList'
 import PlusFab from '../components/PlusFab'
-import { UserPlus } from 'phosphor-react-native'
+import { SignOut, UserPlus } from 'phosphor-react-native'
 import UserLabels from '../components/UserLabels'
+import MenuActionSheet from '../components/MenuActionSheet'
+import { UserProps } from '../context/AuthContext'
+import DeleteMember from '../components/DeleteMember'
 
 export default function Group() {
   const { user } = useAuth()
   const { navigate } = useNavigation()
-  const [isLoading, setIsLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const route = useRoute()
   const { id } = route.params as GroupProps
   const [group, setGroup] = useState<GroupProps>(route.params as GroupProps)
+  const [openDeleteMember, setOpenDeleteMember] = useState(false)
+  const [selectedMember, setSelectedMember] = useState<UserProps | undefined>(
+    undefined
+  )
 
   async function getGroup() {
     try {
@@ -83,6 +89,7 @@ export default function Group() {
             <Badge rounded="2xl">{group.Member.length}</Badge>
           </HStack>
           <MembersList
+            onPress={setSelectedMember}
             members={group.Member.map(({ member }) => {
               return {
                 ...member,
@@ -106,6 +113,29 @@ export default function Group() {
             ).map(({ member }) => member.email)
           })
         }
+      />
+      {selectedMember && (
+        <DeleteMember
+          isOpen={openDeleteMember}
+          onClose={() => {
+            getGroup()
+            setOpenDeleteMember(false)
+            setSelectedMember(undefined)
+          }}
+          group={group}
+          member={selectedMember}
+        />
+      )}
+      <MenuActionSheet
+        isOpen={selectedMember !== undefined}
+        onClose={() => setSelectedMember(undefined)}
+        items={[
+          {
+            label: 'Remover do grupo',
+            icon: <SignOut color="white" />,
+            onPress: () => setOpenDeleteMember(true)
+          }
+        ]}
       />
     </>
   )
