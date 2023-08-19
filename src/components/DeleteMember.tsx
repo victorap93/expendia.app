@@ -11,6 +11,7 @@ import { api } from '../lib/axios'
 import { Alert } from 'react-native'
 import { UserProps } from '../context/AuthContext'
 import { GroupProps } from '../screens/Groups'
+import { useAuth } from '../hooks/useAuth'
 
 interface Props {
   isOpen?: boolean
@@ -27,6 +28,7 @@ export default function DeleteMember({
 }: Props) {
   const cancelRef = useRef(null)
   const toast = useToast()
+  const { user } = useAuth()
 
   async function submit() {
     try {
@@ -35,7 +37,8 @@ export default function DeleteMember({
       )
       if (response.data.status) {
         toast.show({
-          title: 'Excluído com sucesso!'
+          title:
+            member.email === user.email ? 'Saiu do grupo!' : 'Membro removido!'
         })
       } else {
         Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
@@ -60,11 +63,15 @@ export default function DeleteMember({
           <VStack space={4}>
             <HStack>
               <Text color="white" fontSize="lg">
-                Remover membro
+                {member.email === user.email
+                  ? 'Sair do grupo'
+                  : 'Remover membro'}
               </Text>
             </HStack>
             <Text color="white">
-              Tem certeza que deseja remover este membro do grupo?
+              {member.email === user.email
+                ? 'Tem certeza que deseja sair do grupo?'
+                : 'Tem certeza que deseja remover este membro do grupo?'}
             </Text>
             <Button.Group w="full" justifyContent="flex-end" space={2}>
               <Button
@@ -76,7 +83,7 @@ export default function DeleteMember({
                 <Text color="white">Cancelar</Text>
               </Button>
               <Button colorScheme="danger" onPress={submit}>
-                Remover
+                {member.email === user.email ? 'Sair' : 'Remover'}
               </Button>
             </Button.Group>
           </VStack>

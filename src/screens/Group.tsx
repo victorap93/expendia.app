@@ -27,6 +27,7 @@ export default function Group() {
   const route = useRoute()
   const { id } = route.params as GroupProps
   const [group, setGroup] = useState<GroupProps>(route.params as GroupProps)
+  const [openGroupMenu, setOpenGroupMenu] = useState(false)
   const [openDeleteMember, setOpenDeleteMember] = useState(false)
   const [selectedMember, setSelectedMember] = useState<UserProps | undefined>(
     undefined
@@ -68,7 +69,7 @@ export default function Group() {
         left="back"
         right={
           <IconButton
-            onPress={() => {}}
+            onPress={() => setOpenGroupMenu(true)}
             icon={({ size }) => (
               <Icon name="dots-vertical" color="white" size={size} />
             )}
@@ -121,19 +122,39 @@ export default function Group() {
             getGroup()
             setOpenDeleteMember(false)
             setSelectedMember(undefined)
+            if (selectedMember.email === user.email) {
+              navigate('Groups')
+            }
           }}
           group={group}
           member={selectedMember}
         />
       )}
       <MenuActionSheet
-        isOpen={selectedMember !== undefined}
+        isOpen={selectedMember !== undefined && !openGroupMenu}
         onClose={() => setSelectedMember(undefined)}
         items={[
           {
-            label: 'Remover do grupo',
+            label:
+              selectedMember?.email === user.email
+                ? 'Sair do grupo'
+                : 'Remover do grupo',
             icon: <SignOut color="white" />,
             onPress: () => setOpenDeleteMember(true)
+          }
+        ]}
+      />
+      <MenuActionSheet
+        isOpen={openGroupMenu}
+        onClose={() => setOpenGroupMenu(false)}
+        items={[
+          {
+            label: 'Sair do grupo',
+            icon: <SignOut color="white" />,
+            onPress: () => {
+              setSelectedMember(user)
+              setOpenDeleteMember(true)
+            }
           }
         ]}
       />
