@@ -10,7 +10,7 @@ interface Props {
   onClose: () => void
 }
 
-export default function EditTitleGroup({ group, setGroup, onClose }: Props) {
+export default function EditGroupTitle({ group, setGroup, onClose }: Props) {
   async function changeTitle(title: string) {
     try {
       const response = await api.patch(`/groups/${group.id}`, { title })

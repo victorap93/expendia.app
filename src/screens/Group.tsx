@@ -20,7 +20,7 @@ import MenuActionSheet from '../components/MenuActionSheet'
 import { UserProps } from '../context/AuthContext'
 import DeleteMember from '../components/DeleteMember'
 import DeleteGroup from '../components/DeleteGroup'
-import EditTitleGroup from '../components/EditTitleGroup'
+import EditGroupTitle from '../components/EditGroupTitle'
 
 export default function Group() {
   const { user } = useAuth()
@@ -69,7 +69,7 @@ export default function Group() {
   return (
     <>
       {editGroupTitle ? (
-        <EditTitleGroup
+        <EditGroupTitle
           group={group}
           setGroup={setGroup}
           onClose={() => setEditGroupTitle(false)}
