@@ -5,6 +5,7 @@ import { CLIENT_ID } from '@env'
 import { api } from '../lib/axios'
 
 export interface UserProps {
+  id?: string
   firstname?: string
   lastname?: string
   email: string

@@ -54,7 +54,7 @@ export default function Expenses() {
   const [isLoading, setIsLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const route = useRoute()
-  const { title, id, Member } = route.params as GroupProps
+  const { title, id } = route.params as GroupProps
   const [expenses, setExpenses] = useState<ExpenseProps[]>([])
   const [selecteds, setSelecteds] = useState<string[]>([])
   const [payers, setPayers] = useState<UserProps[]>([])
@@ -106,11 +106,7 @@ export default function Expenses() {
   const expensesNavigation = (expense: ExpenseProps) => {
     navigate('Expense', {
       expense,
-      group: {
-        id,
-        title,
-        Member
-      }
+      group: route.params as GroupProps
     })
   }
 
@@ -185,6 +181,7 @@ export default function Expenses() {
             </HStack>
           ) : (
             <IconButton
+              onPress={() => navigate('Group', route.params as GroupProps)}
               icon={({ size }) => <Icon name="cog" color="white" size={size} />}
             />
           )

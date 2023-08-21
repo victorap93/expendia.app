@@ -8,7 +8,8 @@ import {
   HStack,
   ScrollView,
   Text,
-  VStack
+  VStack,
+  useToast
 } from 'native-base'
 import BackButton from '../components/BackButton'
 import { Formik } from 'formik'
@@ -33,10 +34,11 @@ type ErrorsEmail = {
 }
 
 export default function GroupMembers() {
+  const toast = useToast()
   const { user } = useAuth()
-  const { navigate } = useNavigation()
+  const { navigate, goBack } = useNavigation()
   const route = useRoute()
-  const { title, members } = route.params as GroupForm
+  const { title, members, id } = route.params as GroupForm
 
   async function submit(
     values: GroupMembersForm,
@@ -44,20 +46,30 @@ export default function GroupMembers() {
   ) {
     try {
       setSubmitting(true)
-      const response = await api.post('/groups', values)
-      if (response.data.status && response.data.group_id) {
-        navigate('Expenses', {
-          ...values,
-          Member: values.members.map(email => {
-            return {
-              createdAt: '',
-              member: { email }
-            }
-          }),
-          id: response.data.group_id
-        })
+      if (!values.id) {
+        const response = await api.post('/groups', values)
+        if (response.data.status && response.data.group_id) {
+          navigate('Expenses', {
+            ...values,
+            Member: [],
+            user_id: user.id!,
+            id: response.data.group_id
+          })
+        } else {
+          Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
+        }
       } else {
-        Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
+        const response = await api.patch(`/groups/${values.id}/members`, {
+          members: [...values.members, user.email]
+        })
+        if (response.data.status) {
+          toast.show({
+            title: 'Membros salvos com sucesso!'
+          })
+          goBack()
+        } else {
+          Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
+        }
       }
     } catch (error) {
       Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
@@ -96,6 +108,7 @@ export default function GroupMembers() {
     <ScrollView>
       <Formik
         initialValues={{
+          id,
           title,
           members,
           email: ''
@@ -131,7 +144,7 @@ export default function GroupMembers() {
                   <BackButton />
                 </Box>
                 <Text fontSize={28} color="white">
-                  Gostaria de já adicionar alguém no seu grupo?
+                  Gostaria de adicionar mais alguém no seu grupo?
                 </Text>
               </VStack>
               <VStack>
@@ -229,7 +242,7 @@ export default function GroupMembers() {
             </VStack>
             <Box mt={12}>
               <SubmitButton
-                title="Criar grupo"
+                title={values.id ? 'Salvar membros' : 'Criar grupo'}
                 isSubmitting={isSubmitting}
                 handleSubmit={handleSubmit}
               />

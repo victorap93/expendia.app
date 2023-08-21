@@ -22,6 +22,7 @@ export declare global {
       ValidateCode: FormEmail
       Password: PasswordParams
       Groups: undefined
+      Group: GroupProps
       GroupName: undefined
       GroupMembers: GroupForm
       RecentMembers: HandleMembersProps

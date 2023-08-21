@@ -19,10 +19,11 @@ export type GroupMemberType = {
 export interface GroupProps {
   id: string
   title: string
+  user_id: string
   Member: GroupMemberType[]
 }
 
-export default function Group() {
+export default function Groups() {
   const { navigate } = useNavigation()
   const [groups, setGroups] = useState<GroupProps[]>([])
   const [isLoading, setIsLoading] = useState(true)
