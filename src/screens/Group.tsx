@@ -1,3 +1,4 @@
+import { Alert, RefreshControl, TouchableOpacity } from 'react-native'
 import React, { useCallback, useState } from 'react'
 import { Badge, Box, HStack, ScrollView, Text, VStack } from 'native-base'
 import {
@@ -5,7 +6,6 @@ import {
   useNavigation,
   useRoute
 } from '@react-navigation/native'
-import { Alert, RefreshControl } from 'react-native'
 import AppBar from '../components/AppBar'
 import { IconButton } from '@react-native-material/core'
 import Icon from '@expo/vector-icons/MaterialCommunityIcons'
@@ -20,6 +20,7 @@ import MenuActionSheet from '../components/MenuActionSheet'
 import { UserProps } from '../context/AuthContext'
 import DeleteMember from '../components/DeleteMember'
 import DeleteGroup from '../components/DeleteGroup'
+import EditTitleGroup from '../components/EditTitleGroup'
 
 export default function Group() {
   const { user } = useAuth()
@@ -34,6 +35,7 @@ export default function Group() {
   const [selectedMember, setSelectedMember] = useState<UserProps | undefined>(
     undefined
   )
+  const [editGroupTitle, setEditGroupTitle] = useState(false)
 
   async function getGroup() {
     try {
@@ -66,18 +68,32 @@ export default function Group() {
 
   return (
     <>
-      <AppBar
-        title={group.title}
-        left="back"
-        right={
-          <IconButton
-            onPress={() => setOpenGroupMenu(true)}
-            icon={({ size }) => (
-              <Icon name="dots-vertical" color="white" size={size} />
-            )}
-          />
-        }
-      />
+      {editGroupTitle ? (
+        <EditTitleGroup
+          group={group}
+          setGroup={setGroup}
+          onClose={() => setEditGroupTitle(false)}
+        />
+      ) : (
+        <AppBar
+          title={
+            <TouchableOpacity onPress={() => setEditGroupTitle(true)}>
+              <Text fontSize="lg" color="white">
+                {group.title}
+              </Text>
+            </TouchableOpacity>
+          }
+          left="back"
+          right={
+            <IconButton
+              onPress={() => setOpenGroupMenu(true)}
+              icon={({ size }) => (
+                <Icon name="dots-vertical" color="white" size={size} />
+              )}
+            />
+          }
+        />
+      )}
       <ScrollView
         h="full"
         refreshControl={
