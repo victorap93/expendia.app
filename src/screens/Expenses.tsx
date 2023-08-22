@@ -1,12 +1,12 @@
 import React, { useCallback, useState, useEffect } from 'react'
-import { HStack, ScrollView, VStack } from 'native-base'
+import { HStack, ScrollView, Text, VStack } from 'native-base'
 import {
   useFocusEffect,
   useNavigation,
   useRoute
 } from '@react-navigation/native'
 import { api } from '../lib/axios'
-import { Alert, RefreshControl } from 'react-native'
+import { Alert, RefreshControl, TouchableOpacity } from 'react-native'
 import AppBar from '../components/AppBar'
 import { IconButton } from '@react-native-material/core'
 import Icon from '@expo/vector-icons/MaterialCommunityIcons'
@@ -26,6 +26,7 @@ import ExpenseDashboard from '../components/ExpenseDashboard'
 import DeleteExpense from '../components/DeleteExpense'
 import DuplicateExpense from '../components/DuplicateExpense'
 import { getExpenseForm } from '../helpers/expenseHelper'
+import EditGroupTitle from '../components/EditGroupTitle'
 
 export interface ExpenseProps {
   id: string
@@ -54,7 +55,7 @@ export default function Expenses() {
   const [isLoading, setIsLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const route = useRoute()
-  const { title, id } = route.params as GroupProps
+  const [group, setGroup] = useState<GroupProps>(route.params as GroupProps)
   const [expenses, setExpenses] = useState<ExpenseProps[]>([])
   const [selecteds, setSelecteds] = useState<string[]>([])
   const [payers, setPayers] = useState<UserProps[]>([])
@@ -62,21 +63,39 @@ export default function Expenses() {
   const [openMarkAsPaid, setOpenMarkAsPaid] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
   const [openDuplicate, setOpenDuplicate] = useState(false)
+  const [editGroupTitle, setEditGroupTitle] = useState(false)
 
   const getExpenses = async (loading = true) => {
     setIsLoading(loading)
     try {
       const query = `month=${expensesDate.month + 1}&year=${expensesDate.year}`
-      const response = await api.get(`/groups/${id}/expenses?${query}`)
+      const response = await api.get(`/groups/${group.id}/expenses?${query}`)
       setExpenses(response.data.expenses || [])
     } catch (error) {
       Alert.alert(
         'Ops!',
-        'Não foi possível buscar as despesas do grupo ' + title
+        'Não foi possível buscar as despesas do grupo ' + group.title
       )
       console.log(error)
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  async function getGroup() {
+    try {
+      const response = await api.get(`/groups/${group.id}`)
+      if (response.data.group) setGroup(response.data.group)
+      else
+        Alert.alert(
+          'Ops!',
+          'Não foi possível obter as informações deste grupo. Tente novamente mais tarde!'
+        )
+    } catch (error) {
+      Alert.alert(
+        'Ops!',
+        'Não foi possível obter as informações deste grupo. Tente novamente mais tarde!'
+      )
     }
   }
 
@@ -88,6 +107,7 @@ export default function Expenses() {
 
   useFocusEffect(
     useCallback(() => {
+      getGroup()
       setExpenses([])
       setSelecteds([])
       setPayers([])
@@ -116,8 +136,8 @@ export default function Expenses() {
       navigate('ExpenseName', {
         ...expense,
         cost: Number(expense.cost),
-        group_id: id,
-        group_title: title,
+        group_id: group.id,
+        group_title: group.title,
         payers: expense.Paying.map(({ cost, paying: { email } }) => {
           return {
             cost: Number(cost),
@@ -149,53 +169,73 @@ export default function Expenses() {
 
   return (
     <>
-      <AppBar
-        title={selecteds.length > 0 ? '' : title}
-        onPress={() =>
-          selecteds.length > 0 ? setSelecteds([]) : navigate('Groups')
-        }
-        left="back"
-        right={
-          selecteds.length > 0 ? (
-            <HStack space={1}>
-              {selecteds.length === 1 && (
+      {editGroupTitle ? (
+        <EditGroupTitle
+          group={group}
+          setGroup={setGroup}
+          onClose={() => setEditGroupTitle(false)}
+        />
+      ) : (
+        <AppBar
+          title={
+            selecteds.length > 0 ? (
+              ''
+            ) : (
+              <TouchableOpacity onPress={() => setEditGroupTitle(true)}>
+                <Text fontSize="lg" color="white">
+                  {group.title}
+                </Text>
+              </TouchableOpacity>
+            )
+          }
+          onPress={() =>
+            selecteds.length > 0 ? setSelecteds([]) : navigate('Groups')
+          }
+          left="back"
+          right={
+            selecteds.length > 0 ? (
+              <HStack space={1}>
+                {selecteds.length === 1 && (
+                  <IconButton
+                    onPress={editExpense}
+                    icon={({ size }) => (
+                      <Icon name="pencil" color="white" size={size} />
+                    )}
+                  />
+                )}
                 <IconButton
-                  onPress={editExpense}
+                  onPress={() => setOpenDelete(true)}
                   icon={({ size }) => (
-                    <Icon name="pencil" color="white" size={size} />
+                    <Icon name="delete" color="white" size={size} />
                   )}
                 />
-              )}
+                <IconButton
+                  onPress={() => setOpenDuplicate(true)}
+                  icon={({ size }) => (
+                    <Icon name="content-copy" color="white" size={size} />
+                  )}
+                />
+              </HStack>
+            ) : (
               <IconButton
-                onPress={() => setOpenDelete(true)}
+                onPress={() => navigate('Group', route.params as GroupProps)}
                 icon={({ size }) => (
-                  <Icon name="delete" color="white" size={size} />
+                  <Icon name="cog" color="white" size={size} />
                 )}
               />
-              <IconButton
-                onPress={() => setOpenDuplicate(true)}
-                icon={({ size }) => (
-                  <Icon name="content-copy" color="white" size={size} />
-                )}
-              />
-            </HStack>
-          ) : (
-            <IconButton
-              onPress={() => navigate('Group', route.params as GroupProps)}
-              icon={({ size }) => <Icon name="cog" color="white" size={size} />}
+            )
+          }
+          bottom={
+            <ExpenseDashboard
+              expenses={
+                selecteds.length === 0
+                  ? expenses
+                  : expenses.filter(expense => selecteds.includes(expense.id))
+              }
             />
-          )
-        }
-        bottom={
-          <ExpenseDashboard
-            expenses={
-              selecteds.length === 0
-                ? expenses
-                : expenses.filter(expense => selecteds.includes(expense.id))
-            }
-          />
-        }
-      />
+          }
+        />
+      )}
       <DateController date={expensesDate} onChange={setExpensesDate} />
       <ScrollView
         h="full"
@@ -236,7 +276,7 @@ export default function Expenses() {
       <DuplicateExpense
         expenses={selecteds.map(selectedId => {
           const expense = expenses.find(({ id }) => id === selectedId)
-          return getExpenseForm(expense!, { id, title } as GroupProps)
+          return getExpenseForm(expense!, group)
         })}
         isOpen={openDuplicate}
         onClose={() => {
@@ -275,8 +315,8 @@ export default function Expenses() {
         <PlusFab
           onPress={() =>
             navigate('ExpenseName', {
-              group_id: id,
-              group_title: title,
+              group_id: group.id,
+              group_title: group.title,
               cost: 0,
               dueDate: '',
               title: '',
