@@ -1,18 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import {
-  Actionsheet,
-  Badge,
-  Box,
-  HStack,
-  ScrollView,
-  Text,
-  VStack
-} from 'native-base'
+import { Badge, HStack, ScrollView, Text, VStack } from 'native-base'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { api } from '../lib/axios'
-import { Alert, RefreshControl } from 'react-native'
+import { Alert, RefreshControl, TouchableOpacity } from 'react-native'
 import AppBar from '../components/AppBar'
-import { IconButton, Pressable } from '@react-native-material/core'
+import { IconButton } from '@react-native-material/core'
 import Icon from '@expo/vector-icons/MaterialCommunityIcons'
 import { GroupProps } from './Groups'
 import MarkAsPaid from '../components/MarkAsPaid'
@@ -20,7 +12,6 @@ import { useAuth } from '../hooks/useAuth'
 import { ExpenseProps } from './Expenses'
 import MenuActionSheet from '../components/MenuActionSheet'
 import TotalValue from '../components/TotalValue'
-import { ExpenseForm } from './ExpenseName'
 import dayjs from 'dayjs'
 import MembersList from '../components/MembersList'
 import { convertFloatToMoney, getExpenseForm } from '../helpers/expenseHelper'
@@ -32,6 +23,7 @@ import MarkAsPaidFab from '../components/MarkAsPaidFab'
 import { UserProps } from '../context/AuthContext'
 import DeleteExpense from '../components/DeleteExpense'
 import DuplicateExpense from '../components/DuplicateExpense'
+import EditExpenseTitle from '../components/EditExpenseTitle'
 
 export interface ExpenseDetails {
   group: GroupProps
@@ -66,6 +58,7 @@ export default function Expense() {
   const userPayer = expense.Paying.find(
     ({ paying }) => paying.email === user.email
   )
+  const [editExpenseTitle, setEditExpenseTitle] = useState(false)
 
   const getExpense = async (loading = true) => {
     setIsLoading(loading)
@@ -116,18 +109,33 @@ export default function Expense() {
 
   return (
     <>
-      <AppBar
-        title={expense.title}
-        left="back"
-        right={
-          <IconButton
-            onPress={() => setOpenMenu(true)}
-            icon={({ size }) => (
-              <Icon name="dots-vertical" color="white" size={size} />
-            )}
-          />
-        }
-      />
+      {editExpenseTitle ? (
+        <EditExpenseTitle
+          group={group}
+          expense={expense}
+          setExpense={setExpense}
+          onClose={() => setEditExpenseTitle(false)}
+        />
+      ) : (
+        <AppBar
+          title={
+            <TouchableOpacity onPress={() => setEditExpenseTitle(true)}>
+              <Text fontSize="lg" color="white">
+                {expense.title}
+              </Text>
+            </TouchableOpacity>
+          }
+          left="back"
+          right={
+            <IconButton
+              onPress={() => setOpenMenu(true)}
+              icon={({ size }) => (
+                <Icon name="dots-vertical" color="white" size={size} />
+              )}
+            />
+          }
+        />
+      )}
       <ScrollView
         h="full"
         refreshControl={

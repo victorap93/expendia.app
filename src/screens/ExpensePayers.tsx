@@ -31,8 +31,10 @@ import PayerSplitProgress from '../components/PayerSplitProgress'
 import { UserProps } from '../context/AuthContext'
 import MoneyField from '../components/MoneyField'
 import { api } from '../lib/axios'
+import { useAuth } from '../hooks/useAuth'
 
 export default function ExpensePayers() {
+  const { user } = useAuth()
   const toast = useToast()
   const { navigate } = useNavigation()
   const route = useRoute()
@@ -63,7 +65,8 @@ export default function ExpensePayers() {
         navigate('Expenses', {
           id: values.group_id,
           title: values.group_title,
-          Member: []
+          Member: [],
+          user_id: user.id || ''
         })
       } else {
         Alert.alert(
