@@ -43,9 +43,8 @@ export default function Configurations() {
             <MenuItems.ListItem
               title="Perfil"
               subTitle="Altere seus dados de perfil no aplicativo"
-              left={<Ionicons name="person" size={24} color="#999" />}
-              onPress={() => {}}
-              disabled
+              left={<Ionicons name="person" size={24} color="white" />}
+              onPress={() => navigate('Profile')}
             />
             <MenuItems.ListItem
               title="Foto"
