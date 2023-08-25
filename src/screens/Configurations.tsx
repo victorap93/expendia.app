@@ -62,9 +62,8 @@ export default function Configurations() {
             <MenuItems.ListItem
               title="E-mail"
               subTitle="Altere o e-mail da sua conta"
-              left={<Ionicons name="mail-open" size={26} color="#999" />}
-              onPress={() => {}}
-              disabled
+              left={<Ionicons name="mail-open" size={26} color="white" />}
+              onPress={() => navigate('Email', user)}
             />
           </MenuItems.GroupItems>
           <MenuItems.GroupItems name="Segurança">

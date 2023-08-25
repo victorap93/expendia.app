@@ -1,16 +1,15 @@
 import React from 'react'
 import { Alert } from 'react-native'
-import { Box, Center, Pressable, Text, VStack, useToast } from 'native-base'
+import { Box, Text, VStack, useToast } from 'native-base'
 import BackButton from '../components/BackButton'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import TextField from '../components/TextField'
 import { api } from '../lib/axios'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useAuth } from '../hooks/useAuth'
-import { FormSignUp } from './SignUp'
 import SubmitButton from '../components/SubmitButton'
 import { UserProps } from '../context/AuthContext'
 
