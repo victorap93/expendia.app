@@ -29,7 +29,9 @@ export default function Email() {
       if (response.data.hasOwnProperty('error')) {
         switch (response.data.error) {
           case 'INVALID_PASSWORD':
-            navigate('SignIn', values)
+            navigate('SignIn', {
+              user: values
+            })
             break
           case 'USER_DOES_NOT_EXIST':
             navigate('SignUp', values)

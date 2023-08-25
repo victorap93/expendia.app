@@ -17,6 +17,7 @@ export interface FormProfile {
   firstname: string
   lastname: string
   avatarUrl?: string
+  hasPassword?: boolean
 }
 
 interface FormRegister extends FormProfile, FormSignUp {}
@@ -36,8 +37,8 @@ export default function Register() {
       const response = await api.post('/sign-up', values)
       if (response.data.status && response.data.token) {
         await AsyncStorage.setItem('accessToken', response.data.token)
-        await AsyncStorage.setItem('user', JSON.stringify(values))
-        setUser(values)
+        await AsyncStorage.setItem('user', JSON.stringify(response.data.user))
+        setUser(response.data.user)
         toast.show({
           title: 'Conta criada com sucesso!'
         })
@@ -85,7 +86,7 @@ export default function Register() {
             <Text my={4} fontSize={28} color="white">
               Como podemos te chamar?
             </Text>
-            <VStack space={2}>
+            <VStack space={6}>
               <TextField
                 error={errors.firstname}
                 onChangeText={handleChange('firstname')}

@@ -73,7 +73,7 @@ export default function SignUp() {
             <Text my={4} fontSize={28} color="white">
               Agora crie sua senha
             </Text>
-            <VStack space={2}>
+            <VStack space={6}>
               <TextField
                 type={show ? 'text' : 'password'}
                 error={

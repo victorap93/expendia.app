@@ -11,6 +11,7 @@ export interface UserProps {
   email: string
   avatarUrl?: string
   noRedirect?: boolean
+  hasPassword?: boolean
 }
 
 export interface AuthContextDataProps {

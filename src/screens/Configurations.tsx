@@ -35,12 +35,14 @@ export default function Configurations() {
         <MenuItems.GroupItems name="Segurança">
           <MenuItems.ListItem
             title="Senha"
-            subTitle="Altere sua senha de acesso ao aplicativo"
+            subTitle={`${
+              user.hasPassword ? 'Altere' : 'Crie'
+            } sua senha de acesso ao aplicativo`}
             left={<Ionicons name="key-sharp" size={24} color="white" />}
             onPress={() =>
-              navigate('Password', {
-                user
-              })
+              user.hasPassword
+                ? navigate('SignIn', { user, isConfirmPassword: true })
+                : navigate('Password', { user })
             }
           />
           <MenuItems.ListItem

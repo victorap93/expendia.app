@@ -9,13 +9,14 @@ import { HandleMembersProps } from '../screens/RecentMembers'
 import { FormSignUp } from '../screens/SignUp'
 import { Configurations } from '../screens/Configurations'
 import { Logout } from '../screens/Logout'
+import { SignInParams } from '../screens/SignIn'
 
 export declare global {
   namespace ReactNavigation {
     interface RootParamList {
       Home: undefined
       Email: undefined
-      SignIn: FormEmail
+      SignIn: SignInParams
       SignUp: FormEmail
       Register: FormSignUp
       PasswordRecovery: FormEmail
