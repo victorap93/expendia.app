@@ -7,6 +7,7 @@ import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { MemberAvatar } from '../components/MemberAvatar'
 import { useAuth } from '../hooks/useAuth'
 import ConfirmLogout from '../components/ConfirmLogout'
+import ChangeAvatar from '../components/ChangeAvatar'
 
 export interface GroupForm {
   title: string
@@ -17,6 +18,7 @@ export default function Configurations() {
   const { navigate } = useNavigation()
   const { user } = useAuth()
   const [openConfirmLogout, setOpenConfirmLogout] = useState(false)
+  const [openChangeAvatar, setOpenChangeAvatar] = useState(false)
 
   return (
     <ScrollView h="full">
@@ -51,13 +53,8 @@ export default function Configurations() {
               subTitle={`${
                 user.avatarUrl ? 'Altere' : 'Crie'
               } sua foto de perfil no aplicativo`}
-              left={<Ionicons name="person-circle" size={28} color="#999" />}
-              onPress={() =>
-                user.hasPassword
-                  ? navigate('SignIn', { user, isConfirmPassword: true })
-                  : navigate('Password', { user })
-              }
-              disabled
+              left={<Ionicons name="person-circle" size={28} color="white" />}
+              onPress={() => setOpenChangeAvatar(true)}
             />
             <MenuItems.ListItem
               title="E-mail"
@@ -142,6 +139,10 @@ export default function Configurations() {
         <ConfirmLogout
           isOpen={openConfirmLogout}
           onClose={() => setOpenConfirmLogout(false)}
+        />
+        <ChangeAvatar
+          isOpen={openChangeAvatar}
+          onClose={() => setOpenChangeAvatar(false)}
         />
       </VStack>
     </ScrollView>
