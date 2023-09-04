@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { TouchableOpacity, Alert } from 'react-native'
 import * as MediaLibrary from 'expo-media-library'
-import { Camera } from 'expo-camera'
 import * as ImagePicker from 'expo-image-picker'
 import * as ImageManipulator from 'expo-image-manipulator'
-import axios, { AxiosError } from 'axios'
 import { useAuth } from '../hooks/useAuth'
 import {
   Actionsheet,
@@ -29,26 +27,28 @@ interface Props {
 export default function ChangeAvatar({ isOpen, onClose }: Props) {
   const toast = useToast()
   const { user, setUser } = useAuth()
-  const [editedImage, setEditedImage] = useState<{ uri: string } | null>(
-    user.avatarUrl ? { uri: user.avatarUrl } : null
-  )
+  const [editedImage, setEditedImage] = useState<{ uri: string } | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [hasCameraPermission, setHasCameraPermission] = useState<
     boolean | null
   >(null)
 
   useEffect(() => {
-    checkPermissions()
-  }, [])
+    if (isOpen) {
+      setEditedImage(user.avatarUrl ? { uri: user.avatarUrl } : null)
+      checkPermissions()
+    }
+  }, [isOpen])
 
   const checkPermissions = async () => {
-    const { status } = await Camera.requestCameraPermissionsAsync()
-    setHasCameraPermission(status === 'granted')
     const { status: mediaLibraryStatus } =
       await MediaLibrary.requestPermissionsAsync()
 
-    if (status !== 'granted' || mediaLibraryStatus !== 'granted') {
-      // Handle permissions not granted
+    if (mediaLibraryStatus !== 'granted') {
+      handleClose()
+      toast.show({
+        title: 'Sem permissão de acesso a galeria!'
+      })
     }
   }
 
@@ -66,9 +66,7 @@ export default function ChangeAvatar({ isOpen, onClose }: Props) {
   }
 
   const editImage = async (uri: string) => {
-    const manipulatedImage = await ImageManipulator.manipulateAsync(uri, [
-      { resize: { width: 500 } }
-    ])
+    const manipulatedImage = await ImageManipulator.manipulateAsync(uri)
     setEditedImage(manipulatedImage)
   }
 
@@ -77,30 +75,35 @@ export default function ChangeAvatar({ isOpen, onClose }: Props) {
     if (editedImage?.uri === user.avatarUrl) return handleClose()
 
     try {
-      const formData = new FormData()
+      let avatar = null
       if (editedImage) {
-        const response = await fetch(editedImage.uri)
-        const blob = await response.blob()
-        formData.append('avatar', blob)
+        const responseFile = await fetch(editedImage.uri)
+        const blob = await responseFile.blob()
+        avatar = await new Promise((resolve, reject) => {
+          const reader = new FileReader()
+          reader.onerror = reject
+          reader.onload = () => {
+            const base64String = reader.result as string
+            const avatar = base64String.split(',')[1]
+            resolve(avatar)
+          }
+          reader.readAsDataURL(blob)
+        })
       }
 
-      const response = await api.post('/avatar', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })
+      const response = await api.patch('/avatar', { avatar })
 
-      if (response.data.status && response.data.avatarUrl) {
+      if (response.data.status) {
         await AsyncStorage.setItem(
           'user',
           JSON.stringify({
             ...user,
-            avatarUrl: response.data.avatarUrl
+            avatarUrl: response.data.avatarUrl || null
           })
         )
         setUser({
           ...user,
-          avatarUrl: response.data.avatarUrl
+          avatarUrl: response.data.avatarUrl || null
         })
         toast.show({
           title: 'Foto alterada com sucesso!'
@@ -116,9 +119,7 @@ export default function ChangeAvatar({ isOpen, onClose }: Props) {
         'Ops!',
         'Ocorreu um erro ao fazer o upload da imagem. Tente novamente mais tarde!'
       )
-      if (error instanceof AxiosError && error.isAxiosError) {
-        console.log('Axios error', error)
-      } else console.log('erro genérico', error)
+      console.log(error)
     } finally {
       handleClose()
     }
@@ -126,7 +127,6 @@ export default function ChangeAvatar({ isOpen, onClose }: Props) {
 
   const handleClose = () => {
     setIsLoading(false)
-    setEditedImage(user.avatarUrl ? { uri: user.avatarUrl } : null)
     onClose()
   }
 
