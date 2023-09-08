@@ -51,7 +51,7 @@ export default function Configurations() {
             <MenuItems.ListItem
               title="Foto"
               subTitle={`${
-                user.avatarUrl ? 'Altere' : 'Crie'
+                user.avatarUri ? 'Altere' : 'Crie'
               } sua foto de perfil no aplicativo`}
               left={<Ionicons name="person-circle" size={28} color="white" />}
               onPress={() => setOpenChangeAvatar(true)}

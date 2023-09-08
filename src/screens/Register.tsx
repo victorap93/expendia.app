@@ -16,7 +16,6 @@ import SubmitButton from '../components/SubmitButton'
 export interface FormProfile {
   firstname: string
   lastname: string
-  avatarUrl?: string
   hasPassword?: boolean
 }
 

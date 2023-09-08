@@ -18,24 +18,29 @@ import SubmitButton from '../components/SubmitButton'
 import { Trash } from 'phosphor-react-native'
 import { api } from '../lib/axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { getAvatarUrl } from '../helpers/memberHelper'
 
 interface Props {
   isOpen?: boolean
   onClose: () => void
 }
 
+type ImageEditor = {
+  uri: string
+  base64?: string
+}
+
 export default function ChangeAvatar({ isOpen, onClose }: Props) {
   const toast = useToast()
   const { user, setUser } = useAuth()
-  const [editedImage, setEditedImage] = useState<{ uri: string } | null>(null)
+  const [editedImage, setEditedImage] = useState<ImageEditor | null>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [hasCameraPermission, setHasCameraPermission] = useState<
-    boolean | null
-  >(null)
 
   useEffect(() => {
     if (isOpen) {
-      setEditedImage(user.avatarUrl ? { uri: user.avatarUrl } : null)
+      setEditedImage(
+        user.avatarUri ? { uri: getAvatarUrl(user.avatarUri) } : null
+      )
       checkPermissions()
     }
   }, [isOpen])
@@ -66,44 +71,35 @@ export default function ChangeAvatar({ isOpen, onClose }: Props) {
   }
 
   const editImage = async (uri: string) => {
-    const manipulatedImage = await ImageManipulator.manipulateAsync(uri)
+    const manipulatedImage = await ImageManipulator.manipulateAsync(
+      uri,
+      [{ resize: { width: 500 } }],
+      { base64: true, compress: 1, format: ImageManipulator.SaveFormat.JPEG }
+    )
     setEditedImage(manipulatedImage)
   }
 
   const uploadImage = async () => {
-    setIsLoading(true)
-    if (editedImage?.uri === user.avatarUrl) return handleClose()
-
     try {
-      let avatar = null
-      if (editedImage) {
-        const responseFile = await fetch(editedImage.uri)
-        const blob = await responseFile.blob()
-        avatar = await new Promise((resolve, reject) => {
-          const reader = new FileReader()
-          reader.onerror = reject
-          reader.onload = () => {
-            const base64String = reader.result as string
-            const avatar = base64String.split(',')[1]
-            resolve(avatar)
-          }
-          reader.readAsDataURL(blob)
-        })
-      }
+      setIsLoading(true)
+      if (editedImage?.uri === getAvatarUrl(user.avatarUri || ''))
+        return handleClose()
 
-      const response = await api.patch('/avatar', { avatar })
+      const response = await api.patch('/avatar', {
+        avatar: editedImage?.base64 || null
+      })
 
       if (response.data.status) {
         await AsyncStorage.setItem(
           'user',
           JSON.stringify({
             ...user,
-            avatarUrl: response.data.avatarUrl || null
+            avatarUri: response.data.avatarUri || null
           })
         )
         setUser({
           ...user,
-          avatarUrl: response.data.avatarUrl || null
+          avatarUri: response.data.avatarUri || null
         })
         toast.show({
           title: 'Foto alterada com sucesso!'
@@ -142,9 +138,10 @@ export default function ChangeAvatar({ isOpen, onClose }: Props) {
               <VStack alignItems="center">
                 <TouchableOpacity onPress={selectImage}>
                   <MemberAvatar
+                    noGetAvatarUrl
                     member={{
                       ...user,
-                      avatarUrl: editedImage?.uri || undefined
+                      avatarUri: editedImage?.uri || undefined
                     }}
                     size="2xl"
                   />

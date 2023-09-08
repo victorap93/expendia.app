@@ -9,7 +9,7 @@ export interface UserProps {
   firstname?: string
   lastname?: string
   email: string
-  avatarUrl?: string
+  avatarUri?: string
   noRedirect?: boolean
   hasPassword?: boolean
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import { Avatar, IAvatarProps } from 'native-base'
 import { UserProps } from '../context/AuthContext'
 import { ThemeComponentSizeType } from 'native-base/lib/typescript/components/types'
+import { getAvatarUrl } from '../helpers/memberHelper'
 
 interface AvatarGroupProps {
   members: UserProps[]
@@ -10,6 +11,7 @@ interface AvatarGroupProps {
 
 interface MemberAvatarProps extends IAvatarProps {
   member: UserProps
+  noGetAvatarUrl?: boolean
 }
 
 export function AvatarGroup({ members = [], size }: AvatarGroupProps) {
@@ -25,9 +27,9 @@ export function AvatarGroup({ members = [], size }: AvatarGroupProps) {
           key={member.email}
           bg="gray.200"
           source={
-            member.avatarUrl
+            member.avatarUri
               ? {
-                  uri: member.avatarUrl
+                  uri: getAvatarUrl(member.avatarUri)
                 }
               : undefined
           }
@@ -42,16 +44,22 @@ export function AvatarGroup({ members = [], size }: AvatarGroupProps) {
   )
 }
 
-export function MemberAvatar({ member, ...rest }: MemberAvatarProps) {
+export function MemberAvatar({
+  member,
+  noGetAvatarUrl,
+  ...rest
+}: MemberAvatarProps) {
   return (
     <Avatar
       {...rest}
       key={member.email}
       bg="gray.200"
       source={
-        member.avatarUrl
+        member.avatarUri
           ? {
-              uri: member.avatarUrl
+              uri: noGetAvatarUrl
+                ? member.avatarUri
+                : getAvatarUrl(member.avatarUri)
             }
           : undefined
       }
