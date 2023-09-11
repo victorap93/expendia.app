@@ -8,6 +8,7 @@ import { MemberAvatar } from '../components/MemberAvatar'
 import { useAuth } from '../hooks/useAuth'
 import ConfirmLogout from '../components/ConfirmLogout'
 import ChangeAvatar from '../components/ChangeAvatar'
+import Me from '../components/Me'
 
 export interface GroupForm {
   title: string
@@ -27,20 +28,7 @@ export default function Configurations() {
           <Box my={3}>
             <BackButton />
           </Box>
-          <HStack alignItems={'center'} space={3} ml={2}>
-            <MemberAvatar member={user} size="md" />
-            <VStack>
-              {user.firstname && user.firstname && (
-                <Text color="white" fontSize="3xl">
-                  {user.firstname + ' ' + user.lastname}
-                </Text>
-              )}
-              <Text color="gray.200" fontSize="sm">
-                {user.email}
-              </Text>
-            </VStack>
-          </HStack>
-
+          <Me onPressOnAvatar={() => setOpenChangeAvatar(true)} />
           <MenuItems.GroupItems name="Conta">
             <MenuItems.ListItem
               title="Perfil"

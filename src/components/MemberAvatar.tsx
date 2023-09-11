@@ -1,8 +1,9 @@
-import React from 'react'
-import { Avatar, IAvatarProps } from 'native-base'
+import React, { ReactNode } from 'react'
+import { Avatar, Badge, IAvatarProps } from 'native-base'
 import { UserProps } from '../context/AuthContext'
 import { ThemeComponentSizeType } from 'native-base/lib/typescript/components/types'
 import { getAvatarUrl } from '../helpers/memberHelper'
+import { IAvatarBadgeProps } from 'native-base/lib/typescript/components/composites/Avatar'
 
 interface AvatarGroupProps {
   members: UserProps[]
@@ -12,6 +13,8 @@ interface AvatarGroupProps {
 interface MemberAvatarProps extends IAvatarProps {
   member: UserProps
   noGetAvatarUrl?: boolean
+  badge?: ReactNode
+  badgeProps?: IAvatarBadgeProps
 }
 
 export function AvatarGroup({ members = [], size }: AvatarGroupProps) {
@@ -47,6 +50,8 @@ export function AvatarGroup({ members = [], size }: AvatarGroupProps) {
 export function MemberAvatar({
   member,
   noGetAvatarUrl,
+  badge,
+  badgeProps,
   ...rest
 }: MemberAvatarProps) {
   return (
@@ -68,6 +73,7 @@ export function MemberAvatar({
         ? member.firstname.substring(0, 1).toUpperCase() +
           member.lastname!.substring(0, 1).toUpperCase()
         : member.email?.substring(0, 2).toUpperCase()}
+      {badge && <Avatar.Badge {...badgeProps}>{badge}</Avatar.Badge>}
     </Avatar>
   )
 }
