@@ -36,7 +36,7 @@ export default function Me({ onPressOnAvatar }: Props) {
             </Text>
           </TouchableOpacity>
         )}
-        <TouchableOpacity onPress={() => navigate('Email')}>
+        <TouchableOpacity onPress={() => navigate('Email', user)}>
           <Text color="gray.200" fontSize="sm">
             {user.email}
           </Text>
