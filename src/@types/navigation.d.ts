@@ -10,12 +10,13 @@ import { FormSignUp } from '../screens/SignUp'
 import { Configurations } from '../screens/Configurations'
 import { Logout } from '../screens/Logout'
 import { SignInParams } from '../screens/SignIn'
+import { UserProps } from '../context/AuthContext'
 
 export declare global {
   namespace ReactNavigation {
     interface RootParamList {
       Home: undefined
-      Email: undefined
+      Email: FormEmail | undefined
       SignIn: SignInParams
       SignUp: FormEmail
       Register: FormSignUp
@@ -35,6 +36,7 @@ export declare global {
       PayingMembers: HandlePayingProps
       Configurations: undefined
       Logout: undefined
+      Profile: undefined
     }
   }
 }

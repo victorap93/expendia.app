@@ -1,20 +1,25 @@
 import React from 'react'
 import { Alert } from 'react-native'
-import { Box, Text, VStack } from 'native-base'
+import { Box, Text, VStack, useToast } from 'native-base'
 import BackButton from '../components/BackButton'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import TextField from '../components/TextField'
 import { api } from '../lib/axios'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import SubmitButton from '../components/SubmitButton'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useAuth } from '../hooks/useAuth'
 
 export interface FormEmail {
   email: string
 }
 
 export default function Email() {
-  const { navigate } = useNavigation()
+  const { setUser, user } = useAuth()
+  const { navigate, goBack } = useNavigation()
+  const route = useRoute()
+  const toast = useToast()
 
   async function submit(
     values: FormEmail,
@@ -22,10 +27,12 @@ export default function Email() {
   ) {
     try {
       setSubmitting(true)
-      const response = await api.post('/sign-in', {
-        ...values,
-        password: ''
-      })
+      const response = !route.params
+        ? await api.post('/sign-in', {
+            ...values,
+            password: ''
+          })
+        : await api.patch('/profile', values)
       if (response.data.hasOwnProperty('error')) {
         switch (response.data.error) {
           case 'INVALID_PASSWORD':
@@ -42,12 +49,35 @@ export default function Email() {
               'Usuário autenticado com o Google, volte para a tela inicial e continue com o Google ou tente continuar com outro e-mail.'
             )
             break
+          case 'EMAIL_ALREADY_REGISTERED':
+            Alert.alert(
+              'Ops! E-mail já está sendo usado',
+              'Este e-mail já está vinculado a outra conta. Utilize um diferente. '
+            )
+            break
           default:
             Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
             break
         }
+      } else if (response.data.status && route.params) {
+        await AsyncStorage.setItem(
+          'user',
+          JSON.stringify({
+            ...user,
+            email: values.email
+          })
+        )
+        setUser({
+          ...user,
+          email: values.email
+        })
+        toast.show({
+          title: 'E-mail alterado com sucesso!'
+        })
+        goBack()
       }
     } catch (error) {
+      Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
       console.log(error)
     } finally {
       setSubmitting(false)
@@ -56,7 +86,9 @@ export default function Email() {
 
   return (
     <Formik
-      initialValues={{} as FormEmail}
+      initialValues={
+        route.params ? (route.params as FormEmail) : ({} as FormEmail)
+      }
       validationSchema={Yup.object({
         email: Yup.string()
           .email('Formato de e-mail inválido.')
@@ -78,7 +110,9 @@ export default function Email() {
               <BackButton />
             </Box>
             <Text my={4} fontSize={28} color="white">
-              Comece com seu e-mail
+              {route.params
+                ? 'Alterar e-mail de acesso'
+                : 'Comece com seu e-mail'}
             </Text>
             <VStack>
               <TextField
@@ -91,6 +125,7 @@ export default function Email() {
             </VStack>
           </VStack>
           <SubmitButton
+            title={route.params ? 'Salvar' : 'Continuar'}
             isSubmitting={isSubmitting}
             handleSubmit={handleSubmit}
           />

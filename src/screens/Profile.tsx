@@ -1,49 +1,40 @@
 import React from 'react'
 import { Alert } from 'react-native'
-import { Box, Center, Pressable, Text, VStack, useToast } from 'native-base'
+import { Box, Text, VStack, useToast } from 'native-base'
 import BackButton from '../components/BackButton'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import TextField from '../components/TextField'
 import { api } from '../lib/axios'
-import { useRoute } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useAuth } from '../hooks/useAuth'
-import { FormSignUp } from './SignUp'
 import SubmitButton from '../components/SubmitButton'
+import { UserProps } from '../context/AuthContext'
 
-export interface FormProfile {
-  firstname: string
-  lastname: string
-  hasPassword?: boolean
-}
-
-interface FormRegister extends FormProfile, FormSignUp {}
-
-export default function Register() {
-  const route = useRoute()
-  const { email, password, confirmPassword } = route.params as FormSignUp
-  const { setUser } = useAuth()
+export default function Profile() {
+  const { goBack } = useNavigation()
+  const { user, setUser } = useAuth()
   const toast = useToast()
 
   async function submit(
-    values: FormRegister,
+    values: UserProps,
     setSubmitting: (isSubmitting: boolean) => void
   ) {
     try {
       setSubmitting(true)
-      const response = await api.post('/sign-up', values)
-      if (response.data.status && response.data.token) {
-        await AsyncStorage.setItem('accessToken', response.data.token)
-        await AsyncStorage.setItem('user', JSON.stringify(response.data.user))
-        setUser(response.data.user)
+      const response = await api.patch('/profile', values)
+      if (response.data.status) {
+        await AsyncStorage.setItem('user', JSON.stringify(values))
+        setUser(values)
         toast.show({
-          title: 'Conta criada com sucesso!'
+          title: 'Perfil alterado com sucesso!'
         })
+        goBack()
       } else Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
     } catch (error) {
-      console.log(error)
+      Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
     } finally {
       setSubmitting(false)
     }
@@ -51,19 +42,8 @@ export default function Register() {
 
   return (
     <Formik
-      initialValues={
-        {
-          email,
-          password,
-          confirmPassword,
-          firstname: '',
-          lastname: ''
-        } as FormRegister
-      }
+      initialValues={user}
       validationSchema={Yup.object({
-        email: Yup.string().required(),
-        password: Yup.string().required(),
-        confirmPassword: Yup.string().required(),
         firstname: Yup.string().required('Digite seu primeiro nome.'),
         lastname: Yup.string().required('Digite seu sobrenome.')
       })}
@@ -100,22 +80,10 @@ export default function Register() {
                 value={values.lastname || ''}
                 placeholder="Digite seu sobrenome..."
               />
-              <Center>
-                <Pressable>
-                  <Text color="white" fontSize="md">
-                    Protegemos e respeitamos seus dados de acordo com a lei
-                    geral de proteção de dados e com nossa{' '}
-                    <Text color="white" bold underline fontSize="md">
-                      política de privacidade
-                    </Text>
-                    .
-                  </Text>
-                </Pressable>
-              </Center>
             </VStack>
           </VStack>
           <SubmitButton
-            title="Criar conta"
+            title="Salvar"
             isSubmitting={isSubmitting}
             handleSubmit={handleSubmit}
           />

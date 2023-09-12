@@ -12,6 +12,7 @@ import { Eye, EyeClosed } from 'phosphor-react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useAuth } from '../hooks/useAuth'
 import SubmitButton from '../components/SubmitButton'
+import { API_URL } from '@env'
 
 export interface FormSignIn extends FormEmail {
   password: string
