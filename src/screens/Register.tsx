@@ -1,5 +1,5 @@
-import React from 'react'
-import { Alert, LogBox } from 'react-native'
+import React, { useState } from 'react'
+import { Alert, LogBox, TouchableOpacity } from 'react-native'
 import {
   Box,
   Center,
@@ -21,6 +21,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useAuth } from '../hooks/useAuth'
 import { FormSignUp } from './SignUp'
 import SubmitButton from '../components/SubmitButton'
+import TermSheet from '../components/TermSheet'
 
 LogBox.ignoreLogs([
   'We can not support a function callback. See Github Issues for details https://github.com/adobe/react-spectrum/issues/2320'
@@ -42,6 +43,8 @@ export default function Register() {
   const { email, password, confirmPassword } = route.params as FormSignUp
   const { setUser } = useAuth()
   const toast = useToast()
+  const [openPrivacyPolicy, setOpenPrivacyPolicy] = useState(false)
+  const [openTermsOfUse, setOpenTermsOfUse] = useState(false)
 
   async function submit(
     values: FormRegister,
@@ -135,16 +138,6 @@ export default function Register() {
                 placeholder="Digite seu sobrenome..."
               />
               <Center>
-                <Pressable>
-                  <Text color="white" fontSize="md">
-                    Protegemos e respeitamos seus dados de acordo com a lei
-                    geral de proteção de dados e com nossa{' '}
-                    <Text color="white" bold underline fontSize="md">
-                      política de privacidade
-                    </Text>
-                    .
-                  </Text>
-                </Pressable>
                 <VStack space={1} my={2}>
                   <HStack space={1} alignItems="center">
                     <Switch
@@ -157,12 +150,16 @@ export default function Register() {
                       }
                       colorScheme="success"
                     />
-                    <Text color="white" fontSize="md">
-                      Li e concordo com a{' '}
-                      <Text color="white" bold underline fontSize="md">
-                        política de privacidade.
+                    <TouchableOpacity
+                      onPress={() => setOpenPrivacyPolicy(true)}
+                    >
+                      <Text color="white" fontSize="md">
+                        Li e concordo com a{' '}
+                        <Text color="white" bold underline fontSize="md">
+                          política de privacidade.
+                        </Text>
                       </Text>
-                    </Text>
+                    </TouchableOpacity>
                   </HStack>
                   <HStack space={1} alignItems="center">
                     <Switch
@@ -175,12 +172,14 @@ export default function Register() {
                       }
                       colorScheme="success"
                     />
-                    <Text color="white" fontSize="md">
-                      Li e concordo com os{' '}
-                      <Text color="white" bold underline fontSize="md">
-                        termos de uso.
+                    <TouchableOpacity onPress={() => setOpenTermsOfUse(true)}>
+                      <Text color="white" fontSize="md">
+                        Li e concordo com os{' '}
+                        <Text color="white" bold underline fontSize="md">
+                          termos de uso.
+                        </Text>
                       </Text>
-                    </Text>
+                    </TouchableOpacity>
                   </HStack>
                   {submitCount > 0 && errors.acceptPrivacyPolicy && (
                     <Text color="red.500" fontSize="sm">
@@ -196,6 +195,16 @@ export default function Register() {
               </Center>
             </VStack>
           </VStack>
+          <TermSheet
+            slug="privacy-policy"
+            isOpen={openPrivacyPolicy}
+            onClose={() => setOpenPrivacyPolicy(false)}
+          />
+          <TermSheet
+            slug="terms-of-use"
+            isOpen={openTermsOfUse}
+            onClose={() => setOpenTermsOfUse(false)}
+          />
           <SubmitButton
             title="Criar conta"
             isSubmitting={isSubmitting}
