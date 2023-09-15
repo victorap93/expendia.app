@@ -1,6 +1,15 @@
-import React from 'react'
-import { Alert } from 'react-native'
-import { Box, Center, Pressable, Text, VStack, useToast } from 'native-base'
+import React, { useState } from 'react'
+import { Alert, LogBox, TouchableOpacity } from 'react-native'
+import {
+  Box,
+  Center,
+  HStack,
+  Pressable,
+  Switch,
+  Text,
+  VStack,
+  useToast
+} from 'native-base'
 import BackButton from '../components/BackButton'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
@@ -12,6 +21,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useAuth } from '../hooks/useAuth'
 import { FormSignUp } from './SignUp'
 import SubmitButton from '../components/SubmitButton'
+import TermSheet from '../components/TermSheet'
+
+LogBox.ignoreLogs([
+  'We can not support a function callback. See Github Issues for details https://github.com/adobe/react-spectrum/issues/2320'
+])
 
 export interface FormProfile {
   firstname: string
@@ -19,13 +33,18 @@ export interface FormProfile {
   hasPassword?: boolean
 }
 
-interface FormRegister extends FormProfile, FormSignUp {}
+interface FormRegister extends FormProfile, FormSignUp {
+  acceptPrivacyPolicy: boolean
+  acceptTermsOfUse: boolean
+}
 
 export default function Register() {
   const route = useRoute()
   const { email, password, confirmPassword } = route.params as FormSignUp
   const { setUser } = useAuth()
   const toast = useToast()
+  const [openPrivacyPolicy, setOpenPrivacyPolicy] = useState(false)
+  const [openTermsOfUse, setOpenTermsOfUse] = useState(false)
 
   async function submit(
     values: FormRegister,
@@ -57,7 +76,9 @@ export default function Register() {
           password,
           confirmPassword,
           firstname: '',
-          lastname: ''
+          lastname: '',
+          acceptPrivacyPolicy: false,
+          acceptTermsOfUse: false
         } as FormRegister
       }
       validationSchema={Yup.object({
@@ -65,7 +86,13 @@ export default function Register() {
         password: Yup.string().required(),
         confirmPassword: Yup.string().required(),
         firstname: Yup.string().required('Digite seu primeiro nome.'),
-        lastname: Yup.string().required('Digite seu sobrenome.')
+        lastname: Yup.string().required('Digite seu sobrenome.'),
+        acceptPrivacyPolicy: Yup.boolean().isTrue(
+          'Para criar sua conta é necessário estar de acordo com nossa política de privacidade.'
+        ),
+        acceptTermsOfUse: Yup.boolean().isTrue(
+          'Para criar sua conta é necessário estar de acordo com nossos termos de uso.'
+        )
       })}
       onSubmit={(values, { setSubmitting }) => submit(values, setSubmitting)}
     >
@@ -75,7 +102,9 @@ export default function Register() {
         handleSubmit,
         values,
         errors,
-        isSubmitting
+        isSubmitting,
+        submitCount,
+        setFieldValue
       }) => (
         <VStack flex={1} space={2} px={4} py={8} justifyContent="space-between">
           <VStack>
@@ -87,33 +116,95 @@ export default function Register() {
             </Text>
             <VStack space={6}>
               <TextField
-                error={errors.firstname}
+                error={
+                  submitCount > 0 && errors.firstname
+                    ? errors.firstname
+                    : undefined
+                }
                 onChangeText={handleChange('firstname')}
                 onBlur={handleBlur('firstname')}
                 value={values.firstname || ''}
                 placeholder="Digite seu primeiro nome..."
               />
               <TextField
-                error={errors.lastname}
+                error={
+                  submitCount > 0 && errors.lastname
+                    ? errors.lastname
+                    : undefined
+                }
                 onChangeText={handleChange('lastname')}
                 onBlur={handleBlur('lastname')}
                 value={values.lastname || ''}
                 placeholder="Digite seu sobrenome..."
               />
               <Center>
-                <Pressable>
-                  <Text color="white" fontSize="md">
-                    Protegemos e respeitamos seus dados de acordo com a lei
-                    geral de proteção de dados e com nossa{' '}
-                    <Text color="white" bold underline fontSize="md">
-                      política de privacidade
+                <VStack space={1} my={2}>
+                  <HStack space={1} alignItems="center">
+                    <Switch
+                      isChecked={values.acceptPrivacyPolicy}
+                      onChange={() =>
+                        setFieldValue(
+                          'acceptPrivacyPolicy',
+                          !values.acceptPrivacyPolicy
+                        )
+                      }
+                      colorScheme="success"
+                    />
+                    <TouchableOpacity
+                      onPress={() => setOpenPrivacyPolicy(true)}
+                    >
+                      <Text color="white" fontSize="md">
+                        Li e concordo com a{' '}
+                        <Text color="white" bold underline fontSize="md">
+                          política de privacidade.
+                        </Text>
+                      </Text>
+                    </TouchableOpacity>
+                  </HStack>
+                  <HStack space={1} alignItems="center">
+                    <Switch
+                      defaultIsChecked={values.acceptTermsOfUse}
+                      onChange={() =>
+                        setFieldValue(
+                          'acceptTermsOfUse',
+                          !values.acceptTermsOfUse
+                        )
+                      }
+                      colorScheme="success"
+                    />
+                    <TouchableOpacity onPress={() => setOpenTermsOfUse(true)}>
+                      <Text color="white" fontSize="md">
+                        Li e concordo com os{' '}
+                        <Text color="white" bold underline fontSize="md">
+                          termos de uso.
+                        </Text>
+                      </Text>
+                    </TouchableOpacity>
+                  </HStack>
+                  {submitCount > 0 && errors.acceptPrivacyPolicy && (
+                    <Text color="red.500" fontSize="sm">
+                      {errors.acceptPrivacyPolicy}
                     </Text>
-                    .
-                  </Text>
-                </Pressable>
+                  )}
+                  {submitCount > 0 && errors.acceptTermsOfUse && (
+                    <Text color="red.500" fontSize="sm">
+                      {errors.acceptTermsOfUse}
+                    </Text>
+                  )}
+                </VStack>
               </Center>
             </VStack>
           </VStack>
+          <TermSheet
+            slug="privacy-policy"
+            isOpen={openPrivacyPolicy}
+            onClose={() => setOpenPrivacyPolicy(false)}
+          />
+          <TermSheet
+            slug="terms-of-use"
+            isOpen={openTermsOfUse}
+            onClose={() => setOpenTermsOfUse(false)}
+          />
           <SubmitButton
             title="Criar conta"
             isSubmitting={isSubmitting}

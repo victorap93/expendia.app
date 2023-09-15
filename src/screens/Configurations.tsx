@@ -9,6 +9,7 @@ import { useAuth } from '../hooks/useAuth'
 import ConfirmLogout from '../components/ConfirmLogout'
 import ChangeAvatar from '../components/ChangeAvatar'
 import Me from '../components/Me'
+import TermSheet from '../components/TermSheet'
 
 export interface GroupForm {
   title: string
@@ -20,6 +21,8 @@ export default function Configurations() {
   const { user } = useAuth()
   const [openConfirmLogout, setOpenConfirmLogout] = useState(false)
   const [openChangeAvatar, setOpenChangeAvatar] = useState(false)
+  const [openPrivacyPolicy, setOpenPrivacyPolicy] = useState(false)
+  const [openTermsOfUse, setOpenTermsOfUse] = useState(false)
 
   return (
     <ScrollView h="full">
@@ -115,6 +118,22 @@ export default function Configurations() {
               disabled={true}
             />
           </MenuItems.GroupItems>
+          <MenuItems.GroupItems name="Aplicativo">
+            <MenuItems.ListItem
+              title="Política de privacidade"
+              subTitle="Como usamos os seus dados"
+              left={
+                <Ionicons name="shield-checkmark" size={24} color="white" />
+              }
+              onPress={() => setOpenPrivacyPolicy(true)}
+            />
+            <MenuItems.ListItem
+              title="Termos de uso"
+              subTitle="Como usar nosso app"
+              left={<Ionicons name="document-text" size={24} color="white" />}
+              onPress={() => setOpenTermsOfUse(true)}
+            />
+          </MenuItems.GroupItems>
           <MenuItems.GroupItems name="Sessão">
             <MenuItems.ListItem
               title="Logout"
@@ -124,6 +143,16 @@ export default function Configurations() {
             />
           </MenuItems.GroupItems>
         </VStack>
+        <TermSheet
+          slug="privacy-policy"
+          isOpen={openPrivacyPolicy}
+          onClose={() => setOpenPrivacyPolicy(false)}
+        />
+        <TermSheet
+          slug="terms-of-use"
+          isOpen={openTermsOfUse}
+          onClose={() => setOpenTermsOfUse(false)}
+        />
         <ConfirmLogout
           isOpen={openConfirmLogout}
           onClose={() => setOpenConfirmLogout(false)}
