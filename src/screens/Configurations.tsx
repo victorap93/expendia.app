@@ -10,6 +10,7 @@ import ConfirmLogout from '../components/ConfirmLogout'
 import ChangeAvatar from '../components/ChangeAvatar'
 import Me from '../components/Me'
 import TermSheet from '../components/TermSheet'
+import IntroSteps from '../components/IntroSteps'
 
 export interface GroupForm {
   title: string
@@ -23,8 +24,11 @@ export default function Configurations() {
   const [openChangeAvatar, setOpenChangeAvatar] = useState(false)
   const [openPrivacyPolicy, setOpenPrivacyPolicy] = useState(false)
   const [openTermsOfUse, setOpenTermsOfUse] = useState(false)
+  const [openIntro, setOpenIntro] = useState(false)
 
-  return (
+  return openIntro ? (
+    <IntroSteps onDone={() => setOpenIntro(false)} />
+  ) : (
     <ScrollView h="full">
       <VStack flex={1} space={2} px={4} py={8} justifyContent="space-between">
         <VStack space={4}>
@@ -119,6 +123,14 @@ export default function Configurations() {
             />
           </MenuItems.GroupItems>
           <MenuItems.GroupItems name="Aplicativo">
+            <MenuItems.ListItem
+              title="Introdução"
+              subTitle="Uma breve introdução do aplicativo"
+              left={
+                <Ionicons name="information-circle" size={24} color="white" />
+              }
+              onPress={() => setOpenIntro(true)}
+            />
             <MenuItems.ListItem
               title="Política de privacidade"
               subTitle="Como usamos os seus dados"
