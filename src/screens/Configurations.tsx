@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, HStack, ScrollView, Switch, Text, VStack } from 'native-base'
+import { Box, ScrollView, Switch, Text, VStack } from 'native-base'
 import BackButton from '../components/BackButton'
 import { useNavigation } from '@react-navigation/native'
 import * as MenuItems from '../components/MenuItems'
@@ -11,6 +11,7 @@ import ChangeAvatar from '../components/ChangeAvatar'
 import Me from '../components/Me'
 import TermSheet from '../components/TermSheet'
 import IntroSteps from '../components/IntroSteps'
+import * as packageJson from '../../package.json'
 
 export interface GroupForm {
   title: string
@@ -125,7 +126,7 @@ export default function Configurations() {
           <MenuItems.GroupItems name="Aplicativo">
             <MenuItems.ListItem
               title="Introdução"
-              subTitle="Uma breve introdução do app"
+              subTitle="Uma breve introdução ao app."
               left={
                 <Ionicons name="information-circle" size={24} color="white" />
               }
@@ -154,6 +155,9 @@ export default function Configurations() {
               onPress={() => setOpenConfirmLogout(true)}
             />
           </MenuItems.GroupItems>
+          <VStack w="full" alignItems="center">
+            <Text color="white">Versão: {packageJson.version}</Text>
+          </VStack>
         </VStack>
         <TermSheet
           slug="privacy-policy"
