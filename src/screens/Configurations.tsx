@@ -125,7 +125,7 @@ export default function Configurations() {
           <MenuItems.GroupItems name="Aplicativo">
             <MenuItems.ListItem
               title="Introdução"
-              subTitle="Uma breve introdução do aplicativo"
+              subTitle="Uma breve introdução do app"
               left={
                 <Ionicons name="information-circle" size={24} color="white" />
               }
