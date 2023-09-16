@@ -3,16 +3,21 @@ import { Box, Button, Center, HStack, Image, Text, VStack } from 'native-base'
 import { EnvelopeSimple } from 'phosphor-react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useAuth } from '../hooks/useAuth'
+import IntroSteps from '../components/IntroSteps'
+import { useIntro } from '../hooks/useIntro'
 
 const Home = () => {
   const { navigate } = useNavigation()
   const { continueWithGoogle, isOAuthLoading, user } = useAuth()
+  const { introduced, setIntroduced } = useIntro()
 
   useEffect(() => {
     if (user.email && user.noRedirect !== true) navigate('Groups')
   }, [user])
 
-  return (
+  return !introduced ? (
+    <IntroSteps onDone={() => setIntroduced(true)} />
+  ) : (
     <VStack flex={1} justifyContent="flex-end" space={2} p={4}>
       <Center mb={6}>
         <Image
