@@ -90,7 +90,7 @@ export default function Groups() {
               ) : (
                 <VStack justifyContent="center" textAlign="center" space={6}>
                   <Text color="white" textAlign="center" fontSize="3xl">
-                    Bem vindo ao <Text color="yellow.500">TrooPay</Text>
+                    Bem vindo ao <Text color="yellow.500">Expendia</Text>
                   </Text>
                   <EmptyMessage
                     message="Crie um novo grupo ou peça para adicionarem seu e-mail em

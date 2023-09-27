@@ -28,7 +28,7 @@ const Home = () => {
       </Center>
       <Box px={4}>
         <Text color="white" fontSize={40} fontFamily="heading">
-          Troo<Text color="yellow.400">Pay</Text>
+          Expendia
         </Text>
       </Box>
       <Box mb={6} px={4}>

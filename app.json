@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "mobile",
-    "slug": "troopay",
-    "scheme": "troopay",
+    "name": "expendia",
+    "slug": "expendia",
+    "scheme": "expendia",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
