@@ -26,10 +26,7 @@ export function IntroContextProvider({ children }: IntroProviderProps) {
 
   async function storeIntroduced() {
     try {
-      const introducedStorage = await AsyncStorage.setItem(
-        'introduced',
-        introduced ? '1' : '0'
-      )
+      await AsyncStorage.setItem('introduced', introduced ? '1' : '0')
     } catch (error) {
       console.error(error)
     }
