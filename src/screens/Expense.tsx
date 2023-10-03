@@ -234,17 +234,17 @@ export default function Expense() {
         onClose={() => setOpenMenu(false)}
         items={[
           {
-            icon: <Icon name="pencil" size={20} />,
+            icon: <Icon color="white" name="pencil" size={20} />,
             label: 'Editar',
             onPress: editExpense
           },
           {
-            icon: <Icon name="delete" size={20} />,
+            icon: <Icon color="white" name="delete" size={20} />,
             label: 'Excluir',
             onPress: () => setOpenDelete(true)
           },
           {
-            icon: <Icon name="content-copy" size={20} />,
+            icon: <Icon color="white" name="content-copy" size={20} />,
             label: 'Duplicar',
             onPress: () => {
               setOpenMenu(false)
