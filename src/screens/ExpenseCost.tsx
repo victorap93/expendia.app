@@ -38,11 +38,8 @@ export default function ExpenseCost() {
     <Formik
       initialValues={expense}
       validationSchema={Yup.object({
-        cost: Yup.string()
-          .notOneOf(
-            [`${currency} 0,00`],
-            `O valor precisa ser maior que ${currency} 0,00.`
-          )
+        cost: Yup.number()
+          .min(0.01, `O valor precisa ser maior que ${currency}0,00.`)
           .required('Informe o valor total da despesa.')
       })}
       onSubmit={(values, { setSubmitting }) => submit(values, setSubmitting)}
