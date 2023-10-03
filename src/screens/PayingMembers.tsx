@@ -47,8 +47,8 @@ export default function PayingMembers() {
     try {
       setIsLoading(true)
       const response = await api.get(`/groups/${id}`)
-      if (response.data.members) {
-        const groupMembers: GroupMemberType[] = response.data.members
+      if (response.data?.group?.Member) {
+        const groupMembers: GroupMemberType[] = response.data.group.Member
         setMembers(groupMembers.map(({ member }) => member))
       } else {
         Alert.alert(
