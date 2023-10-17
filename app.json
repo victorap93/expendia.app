@@ -3,7 +3,7 @@
     "name": "expendia",
     "slug": "expendia",
     "scheme": "expendia",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -22,14 +22,15 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.devluigiraynel.expendia"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "8a8c95eb-bab9-4943-8abe-1470638ec427"
+        "projectId": "0b4ad4b3-7e6b-4a48-b753-9d8d28ae1b4d"
       }
     },
     "owner": "devluigiraynel"
