@@ -22,16 +22,19 @@ const Home = () => {
       <Center mb={6}>
         <Image
           source={require('../assets/homepayers.gif')}
-          alt="Alternate Text"
+          alt="Payers"
           size={400}
         />
       </Center>
       <Box px={4}>
-        <Text color="white" fontSize={40} fontFamily="heading">
-          Expendia
-        </Text>
+        <Image
+          source={require('../assets/logo.png')}
+          alt="Expendia Logo"
+          width={200}
+          height={30}
+        />
       </Box>
-      <Box mb={6} px={4}>
+      <Box mt={2} mb={6} px={4}>
         <Text color="gray.200" fontSize={20} fontFamily="body">
           Descomplique o <Text color="violet.600">controle de despesas</Text> em
           grupos, casais e famílias.

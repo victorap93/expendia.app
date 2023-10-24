@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { ScrollView, Text, VStack } from 'native-base'
+import { Image, ScrollView, Text, VStack } from 'native-base'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { UserProps } from '../context/AuthContext'
 import { api } from '../lib/axios'
@@ -88,14 +88,25 @@ export default function Groups() {
                   />
                 ))
               ) : (
-                <VStack justifyContent="center" textAlign="center" space={6}>
+                <VStack
+                  justifyContent="center"
+                  alignItems="center"
+                  textAlign="center"
+                  space={6}
+                >
                   <Text color="white" textAlign="center" fontSize="3xl">
-                    Bem vindo ao <Text color="yellow.500">Expendia</Text>
+                    Bem vindo ao
                   </Text>
-                  <EmptyMessage
-                    message="Crie um novo grupo ou peça para adicionarem seu e-mail em
-                      um grupo existente."
+                  {/* <VStack alignItems=""> */}
+                  <Image
+                    source={require('../assets/logo.png')}
+                    alt="Expendia Logo"
+                    width="3/4"
+                    height={50}
                   />
+                  {/* </VStack> */}
+
+                  <EmptyMessage message="Crie um novo grupo ou peça para adicionarem seu e-mail em um grupo existente." />
                 </VStack>
               )
             ) : (

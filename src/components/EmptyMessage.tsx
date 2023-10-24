@@ -7,7 +7,7 @@ interface Props {
 
 export default function EmptyMessage({ message }: Props) {
   return (
-    <VStack mt={50} space={4}>
+    <VStack space={4}>
       <Text color="gray.500" textAlign="center" fontSize="lg">
         {message}
       </Text>
