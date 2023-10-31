@@ -58,6 +58,12 @@ export default function Configurations() {
               left={<Ionicons name="mail-open" size={26} color="white" />}
               onPress={() => navigate('Email', user)}
             />
+            <MenuItems.ListItem
+              title="Excluir conta"
+              subTitle="Excluir conta e seus dados do aplicativo"
+              left={<Ionicons name="trash" size={26} color="white" />}
+              onPress={() => navigate('RequestAccountDeletion')}
+            />
           </MenuItems.GroupItems>
           <MenuItems.GroupItems name="Segurança">
             <MenuItems.ListItem
@@ -126,7 +132,7 @@ export default function Configurations() {
           <MenuItems.GroupItems name="Aplicativo">
             <MenuItems.ListItem
               title="Introdução"
-              subTitle="Uma breve introdução ao app."
+              subTitle="Uma breve introdução ao aplicativo"
               left={
                 <Ionicons name="information-circle" size={24} color="white" />
               }

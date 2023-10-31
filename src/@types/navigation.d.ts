@@ -37,6 +37,8 @@ export declare global {
       Configurations: undefined
       Logout: undefined
       Profile: undefined
+      RequestAccountDeletion: undefined
+      DeleteAccount: undefined
     }
   }
 }

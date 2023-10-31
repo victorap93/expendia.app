@@ -24,6 +24,8 @@ import Configurations from '../screens/Configurations'
 import Logout from '../screens/Logout'
 import Group from '../screens/Group'
 import Profile from '../screens/Profile'
+import RequestAccountDeletion from '../screens/RequestAccountDeletion'
+import DeleteAccount from '../screens/DeleteAccount'
 
 export default function Routes() {
   const { Navigator, Screen } = createNativeStackNavigator()
@@ -64,6 +66,11 @@ export default function Routes() {
         <Screen name="Configurations" component={Configurations} />
         <Screen name="Logout" component={Logout} />
         <Screen name="Profile" component={Profile} />
+        <Screen
+          name="RequestAccountDeletion"
+          component={RequestAccountDeletion}
+        />
+        <Screen name="DeleteAccount" component={DeleteAccount} />
       </Navigator>
     </NavigationContainer>
   )

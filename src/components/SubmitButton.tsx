@@ -23,11 +23,13 @@ export default function SubmitButton({
       disabled={disabled}
       isLoading={isSubmitting}
       onPress={() => handleSubmit()}
-      bg={disabled ? 'trueGray.900' : 'violet.600'}
+      bg={disabled ? 'trueGray.900' : buttonProps?.bg || 'violet.600'}
       opacity={disabled ? 60 : undefined}
-      _pressed={{
-        bg: 'violet.700'
-      }}
+      _pressed={
+        buttonProps?._pressed || {
+          bg: 'violet.700'
+        }
+      }
       height="12"
     >
       <Text fontSize="lg" color="white">
