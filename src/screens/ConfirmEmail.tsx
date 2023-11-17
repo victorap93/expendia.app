@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Alert } from 'react-native'
-import { Box, Center, Pressable, Text, VStack } from 'native-base'
+import { Box, Center, Pressable, Text, VStack, useToast } from 'native-base'
 import BackButton from '../components/BackButton'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
@@ -8,28 +8,34 @@ import TextField from '../components/TextField'
 import { api } from '../lib/axios'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import SubmitButton from '../components/SubmitButton'
+import { useAuth } from '../hooks/useAuth'
 
-interface FormDeleteAccount {
+interface FormConfirmEmail {
   code: string
 }
 
-export default function DeleteAccount() {
+export default function ConfirmEmail() {
   const { navigate } = useNavigation()
+  const toast = useToast()
+  const { user, setUser } = useAuth()
   const [timeToResendCode, setTimeToResendCode] = useState(60)
+  const [isLoading, setIsLoading] = useState(false)
 
-  async function submit(
-    values: FormDeleteAccount,
+  async function confirmEmail(
+    values: FormConfirmEmail,
     setSubmitting: (isSubmitting: boolean) => void
   ) {
     try {
       setSubmitting(true)
-      const response = await api.post('/delete-account', values)
+      const response = await api.post('/confirm-email', values)
       if (response.data.status) {
-        Alert.alert(
-          'Conta excluída com sucesso!',
-          'Sua conta foi excluída com sucesso e sua sessão será interrompida. Esperamos te ver novamente em breve. Caso precise de algum suporte entre em contato conosco.'
-        )
-        navigate('Logout')
+        toast.show({
+          title: 'E-mail confirmado com sucesso!'
+        })
+        setUser({
+          ...user,
+          confirmedEmail: true
+        })
       } else if (
         response.data.hasOwnProperty('error') &&
         response.data.error === 'INVALID_CODE'
@@ -46,6 +52,24 @@ export default function DeleteAccount() {
     }
   }
 
+  async function resendCode() {
+    try {
+      setIsLoading(true)
+      setTimeToResendCode(60)
+      const response = await api.post('/resend-email-confirmation')
+      if (response.data.status)
+        toast.show({
+          title: 'Novo código enviado ao seu e-mail!'
+        })
+      else Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
+    } catch (error) {
+      console.log(error)
+      Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   useEffect(() => {
     setInterval(
       () => setTimeToResendCode(time => (time > 0 ? time - 1 : 0)),
@@ -58,12 +82,14 @@ export default function DeleteAccount() {
       initialValues={
         {
           code: ''
-        } as FormDeleteAccount
+        } as FormConfirmEmail
       }
       validationSchema={Yup.object({
         code: Yup.string().required('Digite o código.')
       })}
-      onSubmit={(values, { setSubmitting }) => submit(values, setSubmitting)}
+      onSubmit={(values, { setSubmitting }) =>
+        confirmEmail(values, setSubmitting)
+      }
     >
       {({
         handleChange,
@@ -79,9 +105,14 @@ export default function DeleteAccount() {
               <BackButton />
             </Box>
             <Text my={4} fontSize={28} color="white">
-              Confirme o código que recebeu
+              Confirme seu e-mail com o código que enviamos para ele
             </Text>
             <VStack space={8}>
+              <Text color="white" fontSize="md">
+                Precisamos conferir se o e-mail que cadastrou está correto, por
+                isso enviamos um código numérico para você nos confirmar no
+                campo abaixo.
+              </Text>
               <TextField
                 error={errors.code}
                 onChangeText={handleChange('code')}
@@ -91,33 +122,31 @@ export default function DeleteAccount() {
                 keyboardType="numeric"
               />
               <Center>
-                <Pressable
-                  onPress={() =>
-                    timeToResendCode === 0 && navigate('RequestAccountDeletion')
-                  }
-                >
-                  <Text
-                    color={timeToResendCode > 0 ? 'gray.300' : 'white'}
-                    underline={timeToResendCode === 0}
-                    fontSize="md"
-                  >
-                    Reenviar outro código
-                    {timeToResendCode > 0 && ` em ${timeToResendCode}s`}
+                {isLoading ? (
+                  <Text color="white" fontSize="md">
+                    Enviando novo código...
                   </Text>
-                </Pressable>
+                ) : (
+                  <Pressable
+                    onPress={() => timeToResendCode === 0 && resendCode()}
+                  >
+                    <Text
+                      color={timeToResendCode > 0 ? 'gray.300' : 'white'}
+                      underline={timeToResendCode === 0}
+                      fontSize="md"
+                    >
+                      Reenviar outro código
+                      {timeToResendCode > 0 && ` em ${timeToResendCode}s`}
+                    </Text>
+                  </Pressable>
+                )}
               </Center>
             </VStack>
           </VStack>
           <SubmitButton
-            title="CONFIRMAR EXCLUSÃO DA CONTA"
-            isSubmitting={isSubmitting}
+            title="Confirmar email"
+            isSubmitting={isSubmitting || isLoading}
             handleSubmit={handleSubmit}
-            buttonProps={{
-              bg: 'red.500',
-              _pressed: {
-                bg: 'red.700'
-              }
-            }}
           />
         </VStack>
       )}

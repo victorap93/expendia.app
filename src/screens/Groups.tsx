@@ -10,6 +10,8 @@ import { IconButton } from '@react-native-material/core'
 import Icon from '@expo/vector-icons/MaterialCommunityIcons'
 import PlusFab from '../components/PlusFab'
 import EmptyMessage from '../components/EmptyMessage'
+import { useAuth } from '../hooks/useAuth'
+import ConfirmEmail from './ConfirmEmail'
 
 export type GroupMemberType = {
   createdAt: string
@@ -25,6 +27,7 @@ export interface GroupProps {
 
 export default function Groups() {
   const { navigate } = useNavigation()
+  const { user } = useAuth()
   const [groups, setGroups] = useState<GroupProps[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
@@ -58,7 +61,9 @@ export default function Groups() {
     }, [])
   )
 
-  return (
+  return !user.confirmedEmail ? (
+    <ConfirmEmail />
+  ) : (
     <>
       <AppBar
         title="Meus grupos"
@@ -97,15 +102,12 @@ export default function Groups() {
                   <Text color="white" textAlign="center" fontSize="3xl">
                     Bem vindo ao
                   </Text>
-                  {/* <VStack alignItems=""> */}
                   <Image
                     source={require('../assets/logo.png')}
                     alt="Expendia Logo"
                     width="3/4"
                     height={50}
                   />
-                  {/* </VStack> */}
-
                   <EmptyMessage message="Crie um novo grupo ou peça para adicionarem seu e-mail em um grupo existente." />
                 </VStack>
               )

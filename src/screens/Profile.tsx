@@ -26,7 +26,6 @@ export default function Profile() {
       setSubmitting(true)
       const response = await api.patch('/profile', values)
       if (response.data.status) {
-        await AsyncStorage.setItem('user', JSON.stringify(values))
         setUser(values)
         toast.show({
           title: 'Perfil alterado com sucesso!'

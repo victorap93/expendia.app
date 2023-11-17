@@ -55,7 +55,6 @@ export default function Register() {
       const response = await api.post('/sign-up', values)
       if (response.data.status && response.data.token) {
         await AsyncStorage.setItem('accessToken', response.data.token)
-        await AsyncStorage.setItem('user', JSON.stringify(response.data.user))
         setUser(response.data.user)
         toast.show({
           title: 'Conta criada com sucesso!'

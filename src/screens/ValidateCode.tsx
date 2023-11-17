@@ -30,7 +30,6 @@ export default function ValidateCode() {
       const response = await api.post('/validate-code', values)
       if (response.data.status && response.data.token) {
         await AsyncStorage.setItem('accessToken', response.data.token)
-        await AsyncStorage.setItem('user', JSON.stringify(response.data.user))
         navigate('Password', {
           isRecovery: true,
           user: response.data.user
@@ -56,7 +55,7 @@ export default function ValidateCode() {
       () => setTimeToResendCode(time => (time > 0 ? time - 1 : 0)),
       1000
     )
-  }, [timeToResendCode])
+  }, [])
 
   return (
     <Formik

@@ -43,7 +43,6 @@ export default function SignIn() {
       if (response.data.status && response.data.token) {
         if (!isConfirmPassword) {
           await AsyncStorage.setItem('accessToken', response.data.token)
-          await AsyncStorage.setItem('user', JSON.stringify(response.data.user))
           setUser({
             ...response.data.user,
             noRedirect: true

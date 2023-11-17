@@ -12,6 +12,7 @@ export interface UserProps {
   avatarUri?: string
   noRedirect?: boolean
   hasPassword?: boolean
+  confirmedEmail?: boolean | null
 }
 
 export interface AuthContextDataProps {
@@ -72,7 +73,6 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
       const response = await api.post('/google-auth', { accessToken })
       if (response.data.status && response.data.token) {
         await AsyncStorage.setItem('accessToken', response.data.token)
-        await AsyncStorage.setItem('user', JSON.stringify(response.data.user))
         setUser(response.data.user)
       }
     } catch (error) {
@@ -92,6 +92,14 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     getUser()
   }, [])
+
+  const storeUser = async () => {
+    await AsyncStorage.setItem('user', JSON.stringify(user))
+  }
+
+  useEffect(() => {
+    storeUser()
+  }, [user])
 
   return (
     <AuthContext.Provider
