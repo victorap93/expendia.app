@@ -2,10 +2,10 @@ import { NativeBaseProvider } from 'native-base'
 import { StatusBar } from 'react-native'
 import {
   useFonts,
-  Outfit_400Regular,
-  Outfit_500Medium,
-  Outfit_700Bold
-} from '@expo-google-fonts/outfit'
+  OpenSans_400Regular,
+  OpenSans_500Medium,
+  OpenSans_700Bold
+} from '@expo-google-fonts/open-sans'
 import { THEME } from './src/styles/theme'
 import Loading from './src/components/Loading'
 import Routes from './src/routes'
@@ -14,9 +14,9 @@ import { IntroContextProvider } from './src/context/IntroContext'
 
 export default function App() {
   const [fonstLoaded] = useFonts({
-    Outfit_400Regular,
-    Outfit_500Medium,
-    Outfit_700Bold
+    OpenSans_400Regular,
+    OpenSans_500Medium,
+    OpenSans_700Bold
   })
 
   return !fonstLoaded ? (
