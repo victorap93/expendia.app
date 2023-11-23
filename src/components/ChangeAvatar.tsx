@@ -17,7 +17,6 @@ import { MemberAvatar } from '../components/MemberAvatar'
 import SubmitButton from '../components/SubmitButton'
 import { Trash } from 'phosphor-react-native'
 import { api } from '../lib/axios'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { getAvatarUrl } from '../helpers/memberHelper'
 
 interface Props {
@@ -90,13 +89,6 @@ export default function ChangeAvatar({ isOpen, onClose }: Props) {
       })
 
       if (response.data.status) {
-        await AsyncStorage.setItem(
-          'user',
-          JSON.stringify({
-            ...user,
-            avatarUri: response.data.avatarUri || null
-          })
-        )
         setUser({
           ...user,
           avatarUri: response.data.avatarUri || null

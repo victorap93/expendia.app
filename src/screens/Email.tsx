@@ -8,7 +8,6 @@ import TextField from '../components/TextField'
 import { api } from '../lib/axios'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import SubmitButton from '../components/SubmitButton'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useAuth } from '../hooks/useAuth'
 
 export interface FormEmail {
@@ -17,7 +16,7 @@ export interface FormEmail {
 
 export default function Email() {
   const { setUser, user } = useAuth()
-  const { navigate, goBack } = useNavigation()
+  const { navigate } = useNavigation()
   const route = useRoute()
   const toast = useToast()
 
@@ -60,21 +59,15 @@ export default function Email() {
             break
         }
       } else if (response.data.status && route.params) {
-        await AsyncStorage.setItem(
-          'user',
-          JSON.stringify({
-            ...user,
-            email: values.email
-          })
-        )
         setUser({
           ...user,
-          email: values.email
+          email: values.email,
+          confirmedEmail: false
         })
         toast.show({
           title: 'E-mail alterado com sucesso!'
         })
-        goBack()
+        navigate('Groups')
       }
     } catch (error) {
       Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
