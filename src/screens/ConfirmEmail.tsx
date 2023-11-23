@@ -102,7 +102,7 @@ export default function ConfirmEmail() {
         <VStack flex={1} space={2} px={4} py={8} justifyContent="space-between">
           <VStack>
             <Box my={3}>
-              <BackButton />
+              <BackButton onPress={() => navigate('Configurations')} />
             </Box>
             <Text my={4} fontSize={28} color="white">
               Confirme seu e-mail com o código que enviamos para ele
