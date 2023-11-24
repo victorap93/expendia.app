@@ -66,8 +66,8 @@ export default function Expenses() {
   const [editGroupTitle, setEditGroupTitle] = useState(false)
 
   const getExpenses = async (loading = true) => {
-    setIsLoading(loading)
     try {
+      setIsLoading(loading)
       const query = `month=${expensesDate.month + 1}&year=${expensesDate.year}`
       const response = await api.get(`/groups/${group.id}/expenses?${query}`)
       setExpenses(response.data.expenses || [])
@@ -300,9 +300,9 @@ export default function Expenses() {
           }
           members={payers}
           isOpen={true}
-          onClose={() => {
+          onClose={paid => {
             setOpenMarkAsPaid(false)
-            getExpenses(false)
+            if (paid) setTimeout(() => getExpenses(false), 2000)
             setSelecteds([])
           }}
           expenses={selecteds.map(selectedId => {

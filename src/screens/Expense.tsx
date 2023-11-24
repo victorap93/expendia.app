@@ -61,8 +61,8 @@ export default function Expense() {
   const [editExpenseTitle, setEditExpenseTitle] = useState(false)
 
   const getExpense = async (loading = true) => {
-    setIsLoading(loading)
     try {
+      setIsLoading(loading)
       const response = await api.get(`/expenses/${expense?.id}`)
       setExpense(response.data.expense)
     } catch (error) {
@@ -218,9 +218,9 @@ export default function Expense() {
         member={selectedMember}
         members={expense.Paying.map(({ paying }) => paying)}
         isOpen={openMarkAsPaid}
-        onClose={() => {
+        onClose={paid => {
           setOpenMarkAsPaid(false)
-          getExpense(false)
+          if (paid) setTimeout(() => getExpense(false), 500)
         }}
         expenses={[expense]}
       />
