@@ -22,9 +22,15 @@ import { Pressable } from '@react-native-material/core'
 import { ArrowsLeftRight } from 'phosphor-react-native'
 import { ExpenseProps } from '../screens/Expenses'
 
+export type PaymentType = {
+  paid: boolean
+  paidAt?: string | null
+  paying: UserProps
+}
+
 interface Props {
   isOpen?: boolean
-  onClose?: (paid?: boolean) => void
+  onClose?: (payment?: PaymentType) => void
   expenses: ExpenseProps[]
   member: UserProps
   members: UserProps[]
@@ -53,16 +59,18 @@ export default function MarkAsPaid({
     setSubmitting: (isSubmitting: boolean) => void
   ) {
     try {
+      const payload = {
+        ...values,
+        paid: !isUnmark,
+        paidAt:
+          values.paidAt && !isUnmark ? dayjs(values.paidAt).format() : null
+      }
       setSubmitting(true)
       const promises = expenses.map(expense => {
         if (
           expense.Paying.find(({ paying }) => paying.email === values.email)
         ) {
-          api.patch(`/expenses/${expense.id}`, {
-            ...values,
-            paid: !isUnmark,
-            paidAt: values.paidAt ? dayjs(values.paidAt).format() : undefined
-          })
+          api.patch(`/expenses/${expense.id}`, payload)
         }
       })
       Promise.all(promises)
@@ -70,16 +78,21 @@ export default function MarkAsPaid({
           toast.show({
             title: isUnmark ? 'Pagamento desmarcado!' : 'Pago com sucesso!'
           })
-          if (onClose) onClose(true)
+          const paying = members.find(({ email }) => email === values.email)!
+          if (onClose)
+            onClose({
+              ...payload,
+              paying
+            })
         })
         .catch(error => {
           Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
           console.error('Error:', error.message)
-          if (onClose) onClose(false)
+          if (onClose) onClose()
         })
     } catch (error) {
       Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
-      if (onClose) onClose(false)
+      if (onClose) onClose()
       console.log(error)
     }
   }

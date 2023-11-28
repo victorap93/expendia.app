@@ -218,9 +218,22 @@ export default function Expense() {
         member={selectedMember}
         members={expense.Paying.map(({ paying }) => paying)}
         isOpen={openMarkAsPaid}
-        onClose={paid => {
+        onClose={payment => {
           setOpenMarkAsPaid(false)
-          if (paid) setTimeout(() => getExpense(false), 500)
+          if (payment) {
+            setExpense(prevState => {
+              const payerIndex = prevState.Paying.findIndex(
+                ({ paying }) => paying.email === payment.paying.email
+              )
+              const paying = prevState.Paying[payerIndex]
+              prevState.Paying[payerIndex] = {
+                ...paying,
+                ...payment
+              }
+              return { ...prevState }
+            })
+            setTimeout(() => getExpense(false), 2000)
+          }
         }}
         expenses={[expense]}
       />

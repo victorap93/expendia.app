@@ -43,7 +43,7 @@ export interface PayingProps {
   user_id: string
   cost: number
   paid: boolean
-  paidAt?: string
+  paidAt?: string | null
   createdAt: string
   updatedAt: string
   paying: UserProps
@@ -300,9 +300,28 @@ export default function Expenses() {
           }
           members={payers}
           isOpen={true}
-          onClose={paid => {
+          onClose={payment => {
             setOpenMarkAsPaid(false)
-            if (paid) setTimeout(() => getExpenses(false), 2000)
+            if (payment) {
+              setExpenses(prevState => {
+                prevState.map((expense, expenseIndex) => {
+                  if (selecteds.includes(expense.id)) {
+                    const payerIndex = expense.Paying.findIndex(
+                      ({ paying }) => paying.email === payment.paying.email
+                    )
+                    if (payerIndex > -1) {
+                      prevState[expenseIndex].Paying[payerIndex].paid =
+                        payment.paid
+                      prevState[expenseIndex].Paying[payerIndex].paidAt =
+                        payment.paidAt
+                    }
+                  }
+                })
+
+                return [...prevState]
+              })
+              setTimeout(() => getExpenses(false), 2000)
+            }
             setSelecteds([])
           }}
           expenses={selecteds.map(selectedId => {
