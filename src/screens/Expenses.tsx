@@ -43,7 +43,7 @@ export interface PayingProps {
   user_id: string
   cost: number
   paid: boolean
-  paidAt?: string
+  paidAt?: string | null
   createdAt: string
   updatedAt: string
   paying: UserProps
@@ -66,8 +66,8 @@ export default function Expenses() {
   const [editGroupTitle, setEditGroupTitle] = useState(false)
 
   const getExpenses = async (loading = true) => {
-    setIsLoading(loading)
     try {
+      setIsLoading(loading)
       const query = `month=${expensesDate.month + 1}&year=${expensesDate.year}`
       const response = await api.get(`/groups/${group.id}/expenses?${query}`)
       setExpenses(response.data.expenses || [])
@@ -300,9 +300,28 @@ export default function Expenses() {
           }
           members={payers}
           isOpen={true}
-          onClose={() => {
+          onClose={payment => {
             setOpenMarkAsPaid(false)
-            getExpenses(false)
+            if (payment) {
+              setExpenses(prevState => {
+                prevState.map((expense, expenseIndex) => {
+                  if (selecteds.includes(expense.id)) {
+                    const payerIndex = expense.Paying.findIndex(
+                      ({ paying }) => paying.email === payment.paying.email
+                    )
+                    if (payerIndex > -1) {
+                      prevState[expenseIndex].Paying[payerIndex].paid =
+                        payment.paid
+                      prevState[expenseIndex].Paying[payerIndex].paidAt =
+                        payment.paidAt
+                    }
+                  }
+                })
+
+                return [...prevState]
+              })
+              setTimeout(() => getExpenses(false), 2000)
+            }
             setSelecteds([])
           }}
           expenses={selecteds.map(selectedId => {
