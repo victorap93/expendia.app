@@ -35,9 +35,14 @@ const Home = () => {
         />
       </Box>
       <Box mt={2} mb={6} px={4}>
-        <Text color="gray.200" fontSize={20} fontFamily="body">
-          Descomplique o <Text color="violet.600">controle de despesas</Text> em
-          grupos, casais e famílias.
+        <Text
+          color="gray.200"
+          fontSize={20}
+          fontFamily="body"
+          fontWeight="medium"
+        >
+          Pronto para <Text color="palette.purple">simplificar</Text> suas
+          finanças e nunca mais brigar por contas?
         </Text>
       </Box>
       <Box my={1.5} px={4}>
