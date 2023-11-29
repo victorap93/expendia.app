@@ -14,7 +14,7 @@ export default function IntroSteps({ onDone }: IntroStepsProps) {
       description:
         'Uma maneira descomplicada de dividir suas despesas em grupos, famílias e amigos.',
       imageSource: require('../assets/intro1.png'),
-      bgColor: 'violet.500'
+      bgColor: 'palette.purple'
     },
     {
       index: 2,

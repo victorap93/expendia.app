@@ -6,10 +6,10 @@ export default function PlusFab({ ...rest }: IFabProps) {
   return (
     <Fab
       {...rest}
-      bgColor={rest.bgColor || 'violet.600'}
+      bgColor={rest.bgColor || 'palette.purple'}
       _pressed={
         rest._pressed || {
-          bgColor: 'violet.700'
+          bgColor: 'palette.purpleDark'
         }
       }
       renderInPortal={rest.renderInPortal || false}

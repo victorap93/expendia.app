@@ -47,7 +47,7 @@ const Home = () => {
       </Box>
       <Box my={1.5} px={4}>
         <Button
-          borderColor="violet.600"
+          borderColor="palette.purple"
           variant="outline"
           onPress={() => navigate('Email')}
         >

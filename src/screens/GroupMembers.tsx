@@ -170,10 +170,12 @@ export default function GroupMembers() {
                         : addMember(values, setFieldValue)
                     }
                     bg={
-                      isDisabled(errors, values) ? 'trueGray.900' : 'violet.600'
+                      isDisabled(errors, values)
+                        ? 'trueGray.900'
+                        : 'palette.purple'
                     }
                     _pressed={{
-                      bg: 'violet.700'
+                      bg: 'palette.purpleDark'
                     }}
                     height={'100%'}
                     width="1/5"
