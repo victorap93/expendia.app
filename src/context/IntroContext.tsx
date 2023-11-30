@@ -13,7 +13,7 @@ interface IntroProviderProps {
 export const IntroContext = createContext({} as IntroContextDataProps)
 
 export function IntroContextProvider({ children }: IntroProviderProps) {
-  const [introduced, setIntroduced] = useState(false)
+  const [introduced, setIntroduced] = useState<boolean>()
 
   async function getIntroduced() {
     try {
@@ -33,7 +33,7 @@ export function IntroContextProvider({ children }: IntroProviderProps) {
   }
 
   useEffect(() => {
-    storeIntroduced()
+    if (introduced !== undefined) storeIntroduced()
   }, [introduced])
 
   useEffect(() => {

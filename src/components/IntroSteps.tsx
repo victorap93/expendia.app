@@ -10,27 +10,24 @@ export default function IntroSteps({ onDone }: IntroStepsProps) {
   const data: IntroProps[] = [
     {
       index: 1,
-      title: 'Divida suas despesas',
-      description:
-        'Uma maneira descomplicada de dividir suas despesas em grupos, famílias e amigos.',
-      imageSource: require('../assets/intro1.png'),
-      bgColor: 'palette.purple'
+      title: 'Divida, Registre, Simplifique.',
+      description: '',
+      imageSource: require('../assets/partners.png'),
+      bgColor: 'palette.blue'
     },
     {
       index: 2,
-      title: 'Todos no controle',
-      description:
-        'Todos controlam e organizam os gastos e contas do grupo, cientes de cada valor gasto individualmente e em grupo.',
-      imageSource: require('../assets/intro2.png'),
-      bgColor: 'blueGray.500'
+      title: 'Multiplique momentos, divida as despesas.',
+      description: '',
+      imageSource: require('../assets/share_moments.png'),
+      bgColor: 'palette.orange'
     },
     {
       index: 3,
-      title: 'Tudo em dia',
-      description:
-        'Ninguém precisa cobrar e nem lembrar ninguém! O app mostra e alerta todas as contas e a parte de cada um de maneira simplificada.',
-      imageSource: require('../assets/intro3.png'),
-      bgColor: 'blueGray.800'
+      title: 'Momentos a gente multiplica. O barzinho a gente divide.',
+      description: '',
+      imageSource: require('../assets/friends.png'),
+      bgColor: 'palette.purple'
     }
   ]
 

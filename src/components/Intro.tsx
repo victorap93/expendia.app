@@ -1,6 +1,6 @@
 import React from 'react'
 import { ImageSourcePropType } from 'react-native'
-import { HStack, Text, VStack, Image } from 'native-base'
+import { HStack, Text, VStack, Image, Box, Container } from 'native-base'
 import { ColorType } from 'native-base/lib/typescript/components/types'
 import { IconButton } from '@react-native-material/core'
 import Icon from '@expo/vector-icons/MaterialCommunityIcons'
@@ -22,9 +22,9 @@ export default function Intro({
   onSkip
 }: IntroProps) {
   return (
-    <VStack space={2} h="full" bgColor={bgColor} py={12} px={4}>
+    <VStack space={1} h="full" bgColor={bgColor} py={12}>
       {onSkip && (
-        <HStack w="full" justifyContent="flex-end">
+        <HStack p={4} w="full" justifyContent="flex-end">
           <IconButton
             style={{
               backgroundColor: '#AAA',
@@ -36,13 +36,22 @@ export default function Intro({
         </HStack>
       )}
       <VStack alignItems="center">
-        <Text color="white" fontSize="4xl" fontFamily="heading">
-          {title}
-        </Text>
-        <Image source={imageSource} alt="Banner of intro" size={400} />
-        <Text color="white" fontSize="lg" fontFamily="body">
-          {description}
-        </Text>
+        <Container>
+          <Text color="white" fontSize="3xl" fontFamily="heading">
+            {title}
+          </Text>
+        </Container>
+        <Image
+          source={imageSource}
+          alt="Banner of intro"
+          width="100%"
+          height="70%"
+        />
+        <Container>
+          <Text color="white" fontSize="lg" fontFamily="body">
+            {description}
+          </Text>
+        </Container>
       </VStack>
     </VStack>
   )
