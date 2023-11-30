@@ -6,7 +6,8 @@ import {
   Text,
   Box,
   useToast,
-  HStack
+  HStack,
+  useTheme
 } from 'native-base'
 import { Alert } from 'react-native'
 import { api } from '../lib/axios'
@@ -16,6 +17,7 @@ import { Pressable } from '@react-native-material/core'
 import { Calendar, CalendarPlus, Pencil } from 'phosphor-react-native'
 import { useNavigation } from '@react-navigation/native'
 import Loading from './Loading'
+import { THEME } from '../styles/theme'
 
 interface Props {
   isOpen?: boolean
@@ -30,6 +32,7 @@ export interface MarkAsPaidForm {
 }
 
 export default function DuplicateExpense({ isOpen, onClose, expenses }: Props) {
+  const theme = useTheme()
   const { navigate } = useNavigation()
   const toast = useToast()
   const [isSubmitting, setSubmitting] = useState(false)
@@ -96,7 +99,7 @@ export default function DuplicateExpense({ isOpen, onClose, expenses }: Props) {
                 onPress={customDuplicate}
               >
                 <HStack space={2} alignItems="center">
-                  <Pencil color="blueviolet" size={28} />
+                  <Pencil color={THEME.colors.palette.purple} size={28} />
                   <Text color="white" fontSize="lg">
                     Personalizar
                   </Text>
@@ -110,7 +113,7 @@ export default function DuplicateExpense({ isOpen, onClose, expenses }: Props) {
                 onPress={() => duplicateToDate('month')}
               >
                 <HStack space={2} alignItems="center">
-                  <Calendar color="blueviolet" size={28} />
+                  <Calendar color={THEME.colors.palette.purple} size={28} />
                   <Text color="white" fontSize="lg">
                     Duplicar para o próximo mês
                   </Text>
@@ -124,7 +127,7 @@ export default function DuplicateExpense({ isOpen, onClose, expenses }: Props) {
                 onPress={() => duplicateToDate('year')}
               >
                 <HStack space={2} alignItems="center">
-                  <CalendarPlus color="blueviolet" size={28} />
+                  <CalendarPlus color={THEME.colors.palette.purple} size={28} />
                   <Text color="white" fontSize="lg">
                     Duplicar para o próximo ano
                   </Text>

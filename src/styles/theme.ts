@@ -2,6 +2,15 @@ import { extendTheme } from 'native-base'
 
 export const THEME = extendTheme({
   colors: {
+    palette: {
+      purple: '#A34FD8',
+      purpleDark: '#7F31B0',
+      blue: '#071673',
+      lightBlue: '#AC9AFE',
+      yellow: '#FBF65F',
+      melonIce: '#F5D9C9',
+      orange: '#ED893E'
+    },
     gray: {
       950: '#09090A',
       900: '#121214',
