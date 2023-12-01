@@ -100,7 +100,11 @@ export default function Email() {
         <VStack flex={1} space={2} px={4} py={8} justifyContent="space-between">
           <VStack>
             <Box my={3}>
-              <BackButton />
+              <BackButton
+                onPress={() =>
+                  navigate(route.params ? 'Configurations' : 'Home')
+                }
+              />
             </Box>
             <Text my={4} fontSize={28} color="white">
               {route.params
