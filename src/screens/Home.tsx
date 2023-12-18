@@ -8,7 +8,7 @@ import { useIntro } from '../hooks/useIntro'
 
 const Home = () => {
   const { navigate } = useNavigation()
-  const { continueWithGoogle, isOAuthLoading, user } = useAuth()
+  const { continueWithGoogle, isOAuthLoading, user, disabledOAuth } = useAuth()
   const { introduced, setIntroduced } = useIntro()
 
   useEffect(() => {
@@ -61,30 +61,32 @@ const Home = () => {
             </HStack>
           </Button>
         </Box>
-        <Box my={1.5} px={4}>
-          <Button
-            onPress={continueWithGoogle}
-            isLoading={isOAuthLoading}
-            _pressed={{
-              bg: 'amber.100'
-            }}
-            bg="white"
-            borderColor="red.600"
-            borderWidth={1}
-            height="12"
-          >
-            <HStack space={4} alignItems="center">
-              <Image
-                size={28}
-                source={require('../assets/google.png')}
-                alt="Continuar com Google"
-              />
-              <Text fontSize="lg" color="black" fontWeight="bold">
-                Continuar com Google
-              </Text>
-            </HStack>
-          </Button>
-        </Box>
+        {!disabledOAuth && (
+          <Box my={1.5} px={4}>
+            <Button
+              onPress={continueWithGoogle}
+              isLoading={isOAuthLoading}
+              _pressed={{
+                bg: 'amber.100'
+              }}
+              bg="white"
+              borderColor="red.600"
+              borderWidth={1}
+              height="12"
+            >
+              <HStack space={4} alignItems="center">
+                <Image
+                  size={28}
+                  source={require('../assets/google.png')}
+                  alt="Continuar com Google"
+                />
+                <Text fontSize="lg" color="black" fontWeight="bold">
+                  Continuar com Google
+                </Text>
+              </HStack>
+            </Button>
+          </Box>
+        )}
       </VStack>
     </VStack>
   )

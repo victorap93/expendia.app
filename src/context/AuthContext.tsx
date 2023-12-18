@@ -22,6 +22,7 @@ export interface AuthContextDataProps {
   getUser: () => Promise<void>
   continueWithGoogle: () => Promise<void>
   isOAuthLoading: boolean
+  disabledOAuth: boolean
 }
 
 interface AuthProviderProps {
@@ -34,16 +35,19 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<UserProps>({} as UserProps)
   const [isUserLoading, setIsUserLoading] = useState(true)
   const [isOAuthLoading, setIsOAuthLoading] = useState(false)
+  const disabledOAuth = !Boolean(CLIENT_ID)
 
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    clientId: CLIENT_ID,
-    scopes: ['profile', 'email']
-  })
+  const [_, response, promptAsync] = disabledOAuth
+    ? [null, null, null]
+    : Google.useAuthRequest({
+        clientId: CLIENT_ID || undefined,
+        scopes: ['profile', 'email']
+      })
 
   async function continueWithGoogle() {
     try {
       setIsOAuthLoading(true)
-      await promptAsync()
+      if (promptAsync) await promptAsync()
     } catch (error) {
       console.log(error)
       throw error
@@ -84,7 +88,11 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
   }
 
   useEffect(() => {
-    if (response?.type === 'success' && response.authentication?.accessToken) {
+    if (
+      response &&
+      response.type === 'success' &&
+      response.authentication?.accessToken
+    ) {
       signInWithGoogle(response.authentication.accessToken)
     }
   }, [response])
@@ -109,7 +117,8 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
         setUser,
         getUser,
         continueWithGoogle,
-        isOAuthLoading
+        isOAuthLoading,
+        disabledOAuth
       }}
     >
       {children}
