@@ -23,7 +23,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#A34FD8"
       },
-      "package": "com.devluigiraynel.expendia"
+      "package": "com.devluigiraynel.expendia",
+      "versionCode": 2
     },
     "extra": {
       "eas": {
