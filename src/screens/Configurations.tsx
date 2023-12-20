@@ -34,7 +34,7 @@ export default function Configurations() {
       <VStack flex={1} space={2} px={4} py={8} justifyContent="space-between">
         <VStack space={4}>
           <Box my={3}>
-            <BackButton />
+            <BackButton onPress={() => navigate('Groups')} />
           </Box>
           <Me onPressOnAvatar={() => setOpenChangeAvatar(true)} />
           <MenuItems.GroupItems name="Conta">
