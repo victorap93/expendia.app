@@ -41,7 +41,7 @@ export default function IntroSteps({ onDone }: IntroStepsProps) {
         <Intro
           {...item}
           index={index}
-          onSkip={() => onDone(index === data.length - 1)}
+          onSkip={index < data.length - 1 ? () => onDone(false) : undefined}
         />
       )}
       data={data}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { ImageSourcePropType } from 'react-native'
+import { ImageSourcePropType, TouchableOpacity } from 'react-native'
 import { HStack, Text, VStack, Image, Box, Container } from 'native-base'
 import { ColorType } from 'native-base/lib/typescript/components/types'
 import { IconButton } from '@react-native-material/core'
@@ -25,17 +25,14 @@ export default function Intro({
     <VStack space={1} h="full" bgColor={bgColor} py={12}>
       {onSkip && (
         <HStack p={4} w="full" justifyContent="flex-end">
-          <IconButton
-            style={{
-              backgroundColor: '#AAA',
-              opacity: 0.6
-            }}
-            onPress={onSkip}
-            icon={({ size }) => <Icon name="close" color="#ddd" size={size} />}
-          />
+          <TouchableOpacity onPress={onSkip}>
+            <Text color="white" fontSize="lg" fontFamily="body">
+              Pular
+            </Text>
+          </TouchableOpacity>
         </HStack>
       )}
-      <VStack alignItems="center">
+      <VStack alignItems="center" mt={!onSkip ? 16 : undefined}>
         <Container>
           <Text color="white" fontSize="3xl" fontFamily="heading">
             {title}
