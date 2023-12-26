@@ -24,7 +24,7 @@ export default function IntroSteps({ onDone }: IntroStepsProps) {
     },
     {
       index: 3,
-      title: 'Momentos a gente multiplica. O barzinho a gente divide.',
+      title: 'Pronto para dividir as despesas?',
       description: '',
       imageSource: require('../assets/friends.png'),
       bgColor: 'palette.purple'

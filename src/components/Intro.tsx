@@ -2,8 +2,6 @@ import React from 'react'
 import { ImageSourcePropType, TouchableOpacity } from 'react-native'
 import { HStack, Text, VStack, Image, Box, Container } from 'native-base'
 import { ColorType } from 'native-base/lib/typescript/components/types'
-import { IconButton } from '@react-native-material/core'
-import Icon from '@expo/vector-icons/MaterialCommunityIcons'
 
 export interface IntroProps {
   index?: number
