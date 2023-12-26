@@ -35,6 +35,8 @@ export default function IntroSteps({ onDone }: IntroStepsProps) {
     <AppIntroSlider
       doneLabel="Pronto"
       nextLabel="Próximo"
+      prevLabel="Anterior"
+      showPrevButton
       renderItem={({ item, index }) => (
         <Intro
           {...item}
