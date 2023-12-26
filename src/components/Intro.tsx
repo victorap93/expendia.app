@@ -1,13 +1,12 @@
 import React from 'react'
-import { ImageSourcePropType, TouchableOpacity } from 'react-native'
-import { HStack, Text, VStack, Image, Box, Container } from 'native-base'
+import { TouchableOpacity } from 'react-native'
+import { HStack, Text, VStack, Box, Container } from 'native-base'
 import { ColorType } from 'native-base/lib/typescript/components/types'
 
 export interface IntroProps {
-  index?: number
   title: string
   description: string
-  imageSource: ImageSourcePropType
+  image: React.ReactNode
   bgColor: ColorType
   onSkip?: () => void
 }
@@ -15,7 +14,7 @@ export interface IntroProps {
 export default function Intro({
   title,
   description,
-  imageSource,
+  image,
   bgColor,
   onSkip
 }: IntroProps) {
@@ -36,12 +35,7 @@ export default function Intro({
             {title}
           </Text>
         </Container>
-        <Image
-          source={imageSource}
-          alt="Banner of intro"
-          width="100%"
-          height="70%"
-        />
+        {image}
         <Container>
           <Text color="white" fontSize="lg" fontFamily="body">
             {description}

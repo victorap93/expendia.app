@@ -1,6 +1,7 @@
 import React from 'react'
 import AppIntroSlider from 'react-native-app-intro-slider'
 import Intro, { IntroProps } from './Intro'
+import { Image } from 'native-base'
 
 export interface IntroStepsProps {
   onDone: (finished: boolean) => void
@@ -9,24 +10,42 @@ export interface IntroStepsProps {
 export default function IntroSteps({ onDone }: IntroStepsProps) {
   const data: IntroProps[] = [
     {
-      index: 1,
       title: 'Divida, Registre, Simplifique.',
       description: '',
-      imageSource: require('../assets/partners.png'),
+      image: (
+        <Image
+          source={require('../assets/partners.png')}
+          alt="Divida, Registre, Simplifique."
+          width="full"
+          height="66.6%"
+        />
+      ),
       bgColor: 'palette.blue'
     },
     {
-      index: 2,
       title: 'Multiplique momentos, divida as despesas.',
       description: '',
-      imageSource: require('../assets/share_moments.png'),
+      image: (
+        <Image
+          source={require('../assets/share_moments.png')}
+          alt="Multiplique momentos, divida as despesas."
+          width="full"
+          height="60%"
+        />
+      ),
       bgColor: 'palette.orange'
     },
     {
-      index: 3,
       title: 'Pronto para dividir as despesas?',
       description: '',
-      imageSource: require('../assets/friends.png'),
+      image: (
+        <Image
+          source={require('../assets/friends.png')}
+          alt="Pronto para dividir as despesas?"
+          width="full"
+          height="69.5%"
+        />
+      ),
       bgColor: 'palette.purple'
     }
   ]
@@ -40,7 +59,7 @@ export default function IntroSteps({ onDone }: IntroStepsProps) {
       renderItem={({ item, index }) => (
         <Intro
           {...item}
-          index={index}
+          key={index}
           onSkip={index < data.length - 1 ? () => onDone(false) : undefined}
         />
       )}
