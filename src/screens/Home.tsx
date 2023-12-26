@@ -18,7 +18,13 @@ const Home = () => {
   return !introduced ? (
     <IntroSteps onDone={() => setIntroduced(true)} />
   ) : (
-    <VStack flex={1} justifyContent="space-between" space={2} p={4}>
+    <VStack
+      flex={1}
+      justifyContent="space-between"
+      space={2}
+      p={4}
+      alignItems="center"
+    >
       <Center mt={12}>
         <Image
           source={require('../assets/shopping.png')}
