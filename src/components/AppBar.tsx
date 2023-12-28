@@ -10,8 +10,9 @@ interface BoxAppBarProps {
 }
 
 interface AppBarProps {
-  title: string | ReactNode
+  title?: string | ReactNode
   onPress?: () => void
+  center?: ReactNode
   left?: 'menu' | 'back'
   right?: ReactNode
   bottom?: ReactNode
@@ -28,6 +29,7 @@ export function BoxAppBar({ children }: BoxAppBarProps) {
 export default function AppBar({
   title,
   onPress,
+  center,
   left,
   right,
   bottom
@@ -50,11 +52,13 @@ export default function AppBar({
                 ''
               )}
             </Box>
-            <HStack width="1/2" textAlign="center" justifyContent="center">
-              <Text fontSize="lg" color="white">
-                {title}
-              </Text>
-            </HStack>
+            {center || (
+              <HStack width="1/2" textAlign="center" justifyContent="center">
+                <Text fontSize="lg" color="white">
+                  {title}
+                </Text>
+              </HStack>
+            )}
             <HStack width="1/4" justifyContent="flex-end">
               {right}
             </HStack>
