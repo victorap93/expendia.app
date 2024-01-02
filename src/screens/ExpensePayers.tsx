@@ -18,7 +18,7 @@ import SubmitButton from '../components/SubmitButton'
 import { ExpenseForm, PayerForm } from './ExpenseName'
 import TotalValue from '../components/TotalValue'
 import PlusFab from '../components/PlusFab'
-import { UserPlus } from 'phosphor-react-native'
+import { UserGear } from 'phosphor-react-native'
 import MembersList from '../components/MembersList'
 import {
   convertFloatToMoney,
@@ -210,7 +210,7 @@ export default function ExpensePayers() {
           {selectedMember === undefined && (
             <PlusFab
               bottom={150}
-              icon={<UserPlus color="white" size={24} />}
+              icon={<UserGear color="white" size={24} />}
               onPress={() =>
                 navigate('PayingMembers', {
                   id: values.group_id,
