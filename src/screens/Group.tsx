@@ -76,11 +76,16 @@ export default function Group() {
         />
       ) : (
         <AppBar
-          title={
-            <TouchableOpacity onPress={() => setEditGroupTitle(true)}>
-              <Text fontSize="lg" color="white">
-                {group.title}
-              </Text>
+          center={
+            <TouchableOpacity
+              onPress={() => setEditGroupTitle(true)}
+              style={{ width: '50%' }}
+            >
+              <HStack textAlign="center" justifyContent="center">
+                <Text fontSize="lg" color="white">
+                  {group.title}
+                </Text>
+              </HStack>
             </TouchableOpacity>
           }
           left="back"
