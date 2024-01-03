@@ -207,28 +207,27 @@ export default function ExpensePayers() {
               </VStack>
             </VStack>
           </ScrollView>
-          {selectedMember === undefined && (
-            <PlusFab
-              bottom={150}
-              icon={<UserGear color="white" size={24} />}
-              onPress={() =>
-                navigate('PayingMembers', {
-                  id: values.group_id,
-                  payers: values.payers.map(({ email }) => email),
-                  setPayers: emails =>
-                    setFieldValue(
-                      'payers',
-                      emails.map(email => {
-                        return {
-                          email,
-                          cost: 0
-                        }
-                      })
-                    )
-                })
-              }
-            />
-          )}
+
+          <PlusFab
+            bottom={150}
+            icon={<UserGear color="white" size={24} />}
+            onPress={() =>
+              navigate('PayingMembers', {
+                id: values.group_id,
+                payers: values.payers.map(({ email }) => email),
+                setPayers: emails =>
+                  setFieldValue(
+                    'payers',
+                    emails.map(email => {
+                      return {
+                        email,
+                        cost: 0
+                      }
+                    })
+                  )
+              })
+            }
+          />
           <VStack px={4} py={8} space={4}>
             <PayerSplitProgress expense={values} />
             <SubmitButton
