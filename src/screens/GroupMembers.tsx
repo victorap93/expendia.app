@@ -159,6 +159,11 @@ export default function GroupMembers() {
                       onBlur={handleBlur('email')}
                       placeholder="E-mail do membro"
                       value={values.email || ''}
+                      onEndEditing={() =>
+                        isDisabled(errors, values)
+                          ? {}
+                          : addMember(values, setFieldValue)
+                      }
                     />
                   </Box>
                   <Button

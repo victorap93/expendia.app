@@ -118,6 +118,7 @@ export default function Email() {
                 onBlur={handleBlur('email')}
                 value={values.email || ''}
                 placeholder="Digite seu email favorito..."
+                onEndEditing={() => handleSubmit()}
               />
             </VStack>
           </VStack>

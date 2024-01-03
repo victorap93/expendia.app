@@ -69,6 +69,7 @@ export default function GroupName() {
                 onBlur={handleBlur('title')}
                 value={values.title || ''}
                 placeholder="Qual o nome do seu grupo?"
+                onEndEditing={() => handleSubmit()}
               />
             </VStack>
           </VStack>
