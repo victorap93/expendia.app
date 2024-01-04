@@ -202,13 +202,7 @@ export default function ExpensePayers() {
                         }
                       })}
                       renderCard={(member, component) => (
-                        <HStack
-                          key={member.email}
-                          // w="full"
-                          // space={1}
-                          // justifyContent="space-between"
-                          alignItems="center"
-                        >
+                        <HStack key={member.email} alignItems="center">
                           <Box w="14%">
                             <IconButton
                               onPress={() =>
