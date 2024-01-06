@@ -20,20 +20,17 @@ const Home = () => {
   ) : (
     <VStack
       flex={1}
-      justifyContent="space-between"
-      space={2}
       p={4}
-      alignItems="center"
     >
-      <Center mt={12}>
+      <Center flex={1}>
         <Image
           source={require('../assets/shopping.png')}
           alt="Payers"
           size={400}
         />
       </Center>
-      <VStack flex={1} justifyContent="flex-end">
-        <Box px={4}>
+      <VStack>
+        <Box>
           <Image
             source={require('../assets/logo.png')}
             alt="Expendia Logo"
@@ -41,22 +38,24 @@ const Home = () => {
             height={30}
           />
         </Box>
-        <Box mt={2} mb={6} px={4}>
+        <Box mt={2} mb={6}>
           <Text
             color="gray.200"
             fontSize={20}
             fontFamily="body"
-            fontWeight="medium"
           >
             Pronto para{' '}
-            <Text color="palette.purple">dividir e simplificar</Text> suas
-            finanças e da galera e nunca mais brigarem por contas?
+            <Text color="palette.purple" fontWeight="extrabold">dividir e simplificar</Text>{' '}
+            suas finanças e da galera e nunca mais brigarem por contas?
           </Text>
         </Box>
-        <Box my={1.5} px={4}>
+        <Box my={1.5}>
           <Button
-            borderColor="palette.purple"
-            variant="outline"
+            backgroundColor="palette.purple"
+            _pressed={{
+              bg: 'palette.purpleDark'
+            }}
+            variant="solid"
             onPress={() => navigate('Email')}
           >
             <HStack space={4} alignItems="center">
@@ -68,7 +67,7 @@ const Home = () => {
           </Button>
         </Box>
         {!disabledOAuth && (
-          <Box my={1.5} px={4}>
+          <Box my={1.5}>
             <Button
               onPress={continueWithGoogle}
               isLoading={isOAuthLoading}
@@ -76,7 +75,7 @@ const Home = () => {
                 bg: 'amber.100'
               }}
               bg="white"
-              borderColor="red.600"
+              borderColor="white"
               borderWidth={1}
               height="12"
             >
