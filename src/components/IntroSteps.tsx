@@ -1,70 +1,74 @@
 import React from 'react'
-import AppIntroSlider from 'react-native-app-intro-slider'
-import Intro, { IntroProps } from './Intro'
-import { Image } from 'native-base'
+import { Box, Center, Container, Image, Text, VStack } from 'native-base'
+import { InterfaceVStackProps } from 'native-base/lib/typescript/components/primitives/Stack/VStack'
+import Intro from './Intro'
 
 export interface IntroStepsProps {
   onDone: (finished: boolean) => void
 }
 
 export default function IntroSteps({ onDone }: IntroStepsProps) {
-  const data: IntroProps[] = [
+  const data: InterfaceVStackProps[] = [
     {
-      title: 'Divida, Registre, Simplifique.',
-      description: '',
-      image: (
-        <Image
-          source={require('../assets/partners.png')}
-          alt="Divida, Registre, Simplifique."
-          width="full"
-          height="66.6%"
-        />
-      ),
-      bgColor: 'palette.blue'
+      bgColor: 'palette.blue',
+      children: <Box height="full">
+        <Center flex={1}>
+          <VStack alignItems="center" space={2}>
+            <Container>
+              <Text color="white" fontSize="3xl" fontFamily="heading">
+                Divida, Registre, Simplifique.
+              </Text>
+            </Container>
+            <Image
+              source={require('../assets/partners.png')}
+              alt="Divida, Registre, Simplifique."
+              width={400}
+              height={330}
+            />
+          </VStack>
+        </Center>
+      </Box>
     },
     {
-      title: 'Multiplique momentos, divida as despesas.',
-      description: '',
-      image: (
+      bgColor: 'palette.orange',
+      children: <VStack alignItems="center" height="full" space={0} >
+        <Center width="full" flex={1}>
+          <Container>
+            <Text color="white" fontSize="3xl" fontFamily="heading" pt={150}>
+              Multiplique momentos, divida as despesas.
+            </Text>
+          </Container>
+        </Center>
         <Image
           source={require('../assets/share_moments.png')}
           alt="Multiplique momentos, divida as despesas."
-          width="full"
-          height="60%"
+          width={480}
+          height={480}
         />
-      ),
-      bgColor: 'palette.orange'
+      </VStack>
     },
     {
-      title: 'Pronto para dividir as despesas?',
-      description: '',
-      image: (
+      bgColor: 'palette.purple',
+      children: <VStack alignItems="center" height="full" space={0} >
+        <Center width="full" flex={1}>
+          <Container>
+            <Text color="white" fontSize="3xl" fontFamily="heading" pt={150}>
+              Pronto para dividir as despesas?
+            </Text>
+          </Container>
+        </Center>
         <Image
           source={require('../assets/friends.png')}
           alt="Pronto para dividir as despesas?"
-          width="full"
-          height="69.5%"
+          width={480}
+          height={480}
         />
-      ),
-      bgColor: 'palette.purple'
+      </VStack>
     }
   ]
 
-  return (
-    <AppIntroSlider
-      doneLabel="Pronto"
-      nextLabel="Próximo"
-      prevLabel="Anterior"
-      showPrevButton
-      renderItem={({ item, index }) => (
-        <Intro
-          {...item}
-          key={index}
-          onSkip={index < data.length - 1 ? () => onDone(false) : undefined}
-        />
-      )}
-      data={data}
-      onDone={() => onDone(true)}
-    />
-  )
+  return <Intro
+    data={data}
+    onDone={() => onDone(true)}
+  />
 }
