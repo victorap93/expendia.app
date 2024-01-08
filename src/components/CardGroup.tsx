@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { HStack, Skeleton, Text, VStack } from 'native-base'
 import { AvatarGroup } from './MemberAvatar'
 import { GroupProps } from '../screens/Groups'
@@ -30,13 +30,7 @@ export function CardGroup({ group, handlePress }: CardGroupProps) {
       const date = present
       const query = `month=${date.month + 1}&year=${date.year}`
       const response = await api.get(`/groups/${group.id}/expenses?${query}`)
-      const monthlyExpenses: ExpenseProps[] = response.data.expenses || []
-      const myExpenses = monthlyExpenses.filter(({ Paying }) => {
-        return Paying.find(
-          member => member.paid === false && member.paying.email === user.email
-        )
-      })
-      setExpenses(myExpenses)
+      setExpenses(response.data.expenses || [])
     } catch (error) {
       Alert.alert(
         'Ops!',
@@ -47,6 +41,16 @@ export function CardGroup({ group, handlePress }: CardGroupProps) {
       setIsLoading(false)
     }
   }
+
+  const unpaidExpenses = useMemo(
+    () =>
+      expenses.filter(({ Paying }) => {
+        return Paying.find(
+          member => member.paid === false && member.paying.email === user.email
+        )
+      }),
+    [expenses]
+  )
 
   return (
     <CardBox key={group.id}>
@@ -64,13 +68,17 @@ export function CardGroup({ group, handlePress }: CardGroupProps) {
             {isLoading ? (
               <Skeleton h={4} w={'3/5'} />
             ) : expenses.length > 0 ? (
-              <Text color="red.500">
-                {!isLoading && expenses.length} despesa
-                {expenses.length > 1 && 's'} não paga
-                {expenses.length > 1 && 's'}
-              </Text>
+              unpaidExpenses.length > 0 ? (
+                <Text color="red.500">
+                  {!isLoading && expenses.length} despesa
+                  {expenses.length > 1 && 's'} não paga
+                  {expenses.length > 1 && 's'}
+                </Text>
+              ) : (
+                <Text color="green.400">Sua parte está em dia :)</Text>
+              )
             ) : (
-              <Text color="green.400">Sua parte está em dia! :)</Text>
+              <Text color="gray.500">Nenhuma despesa criada</Text>
             )}
           </HStack>
           <AvatarGroup members={group.Member.map(({ member }) => member)} />
