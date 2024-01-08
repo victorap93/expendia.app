@@ -18,7 +18,7 @@ import SubmitButton from '../components/SubmitButton'
 import { ExpenseForm, PayerForm } from './ExpenseName'
 import TotalValue from '../components/TotalValue'
 import PlusFab from '../components/PlusFab'
-import { UserPlus } from 'phosphor-react-native'
+import { Trash, UserGear } from 'phosphor-react-native'
 import MembersList from '../components/MembersList'
 import {
   convertFloatToMoney,
@@ -32,6 +32,7 @@ import { UserProps } from '../context/AuthContext'
 import MoneyField from '../components/MoneyField'
 import { api } from '../lib/axios'
 import { useAuth } from '../hooks/useAuth'
+import { IconButton } from '@react-native-material/core'
 
 export default function ExpensePayers() {
   const { user } = useAuth()
@@ -200,6 +201,26 @@ export default function ExpensePayers() {
                             )
                         }
                       })}
+                      renderCard={(member, component) => (
+                        <HStack key={member.email} alignItems="center">
+                          <Box w="14%">
+                            <IconButton
+                              onPress={() =>
+                                setFieldValue(
+                                  'payers',
+                                  values.payers.filter(
+                                    ({ email }) => email !== member.email
+                                  )
+                                )
+                              }
+                              icon={({ size }) => (
+                                <Trash color="white" size={size} />
+                              )}
+                            />
+                          </Box>
+                          <Box w="86%">{component}</Box>
+                        </HStack>
+                      )}
                       fetchUser
                     />
                   </VStack>
@@ -207,28 +228,27 @@ export default function ExpensePayers() {
               </VStack>
             </VStack>
           </ScrollView>
-          {selectedMember === undefined && (
-            <PlusFab
-              bottom={150}
-              icon={<UserPlus color="white" size={24} />}
-              onPress={() =>
-                navigate('PayingMembers', {
-                  id: values.group_id,
-                  payers: values.payers.map(({ email }) => email),
-                  setPayers: emails =>
-                    setFieldValue(
-                      'payers',
-                      emails.map(email => {
-                        return {
-                          email,
-                          cost: 0
-                        }
-                      })
-                    )
-                })
-              }
-            />
-          )}
+
+          <PlusFab
+            bottom={150}
+            icon={<UserGear color="white" size={24} />}
+            onPress={() =>
+              navigate('PayingMembers', {
+                id: values.group_id,
+                payers: values.payers.map(({ email }) => email),
+                setPayers: emails =>
+                  setFieldValue(
+                    'payers',
+                    emails.map(email => {
+                      return {
+                        email,
+                        cost: 0
+                      }
+                    })
+                  )
+              })
+            }
+          />
           <VStack px={4} py={8} space={4}>
             <PayerSplitProgress expense={values} />
             <SubmitButton

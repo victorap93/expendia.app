@@ -10,8 +10,9 @@ interface BoxAppBarProps {
 }
 
 interface AppBarProps {
-  title: string | ReactNode
+  title?: string | ReactNode
   onPress?: () => void
+  center?: ReactNode
   left?: 'menu' | 'back'
   right?: ReactNode
   bottom?: ReactNode
@@ -28,11 +29,11 @@ export function BoxAppBar({ children }: BoxAppBarProps) {
 export default function AppBar({
   title,
   onPress,
+  center,
   left,
   right,
   bottom
 }: AppBarProps) {
-
   const [openBottom, setOpenBottom] = useState(bottom ? true : false)
 
   return (
@@ -40,7 +41,7 @@ export default function AppBar({
       <BoxAppBar>
         <VStack justifyContent="space-between" space={2}>
           <HStack justifyContent="space-between" alignItems="center" px={4}>
-            <Box>
+            <Box width="1/4">
               {left ? (
                 left === 'back' ? (
                   <BackButton onPress={onPress} />
@@ -51,19 +52,22 @@ export default function AppBar({
                 ''
               )}
             </Box>
-            <Text fontSize="lg" color="white">
-              {title}
-            </Text>
-            <Box>{right}</Box>
+            {center || (
+              <HStack width="1/2" textAlign="center" justifyContent="center">
+                <Text fontSize="lg" color="white">
+                  {title}
+                </Text>
+              </HStack>
+            )}
+            <HStack width="1/4" justifyContent="flex-end">
+              {right}
+            </HStack>
           </HStack>
           {openBottom && bottom}
         </VStack>
       </BoxAppBar>
-      {
-        bottom && <HStack
-          justifyContent="center"
-          marginTop={"-12.5px"}
-        >
+      {bottom && (
+        <HStack justifyContent="center" marginTop={'-12.5px'}>
           <TouchableOpacity onPress={() => setOpenBottom(!openBottom)}>
             {openBottom ? (
               <CaretCircleUp weight="fill" color="white" />
@@ -72,7 +76,7 @@ export default function AppBar({
             )}
           </TouchableOpacity>
         </HStack>
-      }
+      )}
     </>
   )
 }

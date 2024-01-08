@@ -177,14 +177,19 @@ export default function Expenses() {
         />
       ) : (
         <AppBar
-          title={
+          center={
             selecteds.length > 0 ? (
               ''
             ) : (
-              <TouchableOpacity onPress={() => setEditGroupTitle(true)}>
-                <Text fontSize="lg" color="white">
-                  {group.title}
-                </Text>
+              <TouchableOpacity
+                onPress={() => setEditGroupTitle(true)}
+                style={{ width: '50%' }}
+              >
+                <HStack textAlign="center" justifyContent="center">
+                  <Text fontSize="lg" color="white">
+                    {group.title}
+                  </Text>
+                </HStack>
               </TouchableOpacity>
             )
           }

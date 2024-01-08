@@ -125,6 +125,7 @@ export default function SignIn() {
                     {show ? <EyeClosed color="white" /> : <Eye color="white" />}
                   </Pressable>
                 }
+                onEndEditing={() => handleSubmit()}
               />
               {!isConfirmPassword && (
                 <Center>

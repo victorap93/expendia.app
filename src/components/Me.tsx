@@ -31,7 +31,12 @@ export default function Me({ onPressOnAvatar }: Props) {
       <VStack>
         {user.firstname && user.firstname && (
           <TouchableOpacity onPress={() => navigate('Profile')}>
-            <Text color="white" fontSize="3xl">
+            <Text
+              color="white"
+              fontSize="3xl"
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
               {user.firstname + ' ' + user.lastname}
             </Text>
           </TouchableOpacity>

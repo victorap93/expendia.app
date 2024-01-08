@@ -97,6 +97,7 @@ export default function ValidateCode() {
                 value={values.code || ''}
                 placeholder="Digite o código..."
                 keyboardType="numeric"
+                onEndEditing={() => handleSubmit()}
               />
               <Center>
                 <Pressable

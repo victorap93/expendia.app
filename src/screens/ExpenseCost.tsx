@@ -62,6 +62,7 @@ export default function ExpenseCost() {
                   }
                   value={convertFloatToMoney(values.cost)}
                   fontSize={40}
+                  onEndEditing={() => handleSubmit()}
                 />
               </Box>
             </VStack>

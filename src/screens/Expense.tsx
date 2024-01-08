@@ -118,11 +118,16 @@ export default function Expense() {
         />
       ) : (
         <AppBar
-          title={
-            <TouchableOpacity onPress={() => setEditExpenseTitle(true)}>
-              <Text fontSize="lg" color="white">
-                {expense.title}
-              </Text>
+          center={
+            <TouchableOpacity
+              onPress={() => setEditExpenseTitle(true)}
+              style={{ width: '50%' }}
+            >
+              <HStack textAlign="center" justifyContent="center">
+                <Text fontSize="lg" color="white">
+                  {expense.title}
+                </Text>
+              </HStack>
             </TouchableOpacity>
           }
           left="back"

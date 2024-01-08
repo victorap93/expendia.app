@@ -105,40 +105,34 @@ export default function GroupMembers() {
   }
 
   return (
-    <ScrollView>
-      <Formik
-        initialValues={{
-          id,
-          title,
-          members,
-          email: ''
-        }}
-        validationSchema={Yup.object({
-          members: Yup.array(
-            Yup.string().email('Digite apenas e-mails válidos')
-          ).required('Erro: Array not defined.'),
-          email: Yup.string().email('E-mail inválido.')
-        })}
-        onSubmit={(values, { setSubmitting }) => submit(values, setSubmitting)}
-      >
-        {({
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          values,
-          errors,
-          touched,
-          isSubmitting,
-          setFieldValue
-        }) => (
-          <VStack
-            flex={1}
-            space={2}
-            px={4}
-            py={8}
-            justifyContent="space-between"
-          >
-            <VStack space={8}>
+    <Formik
+      initialValues={{
+        id,
+        title,
+        members,
+        email: ''
+      }}
+      validationSchema={Yup.object({
+        members: Yup.array(
+          Yup.string().email('Digite apenas e-mails válidos')
+        ).required('Erro: Array not defined.'),
+        email: Yup.string().email('E-mail inválido.')
+      })}
+      onSubmit={(values, { setSubmitting }) => submit(values, setSubmitting)}
+    >
+      {({
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        values,
+        errors,
+        touched,
+        isSubmitting,
+        setFieldValue
+      }) => (
+        <VStack flex={1} space={2} px={4} py={8} justifyContent="space-between">
+          <ScrollView>
+            <VStack flex={1} space={8}>
               <VStack>
                 <Box my={3}>
                   <BackButton />
@@ -159,6 +153,11 @@ export default function GroupMembers() {
                       onBlur={handleBlur('email')}
                       placeholder="E-mail do membro"
                       value={values.email || ''}
+                      onEndEditing={() =>
+                        isDisabled(errors, values)
+                          ? {}
+                          : addMember(values, setFieldValue)
+                      }
                     />
                   </Box>
                   <Button
@@ -242,16 +241,14 @@ export default function GroupMembers() {
                 />
               </VStack>
             </VStack>
-            <Box mt={12}>
-              <SubmitButton
-                title={values.id ? 'Salvar membros' : 'Criar grupo'}
-                isSubmitting={isSubmitting}
-                handleSubmit={handleSubmit}
-              />
-            </Box>
-          </VStack>
-        )}
-      </Formik>
-    </ScrollView>
+          </ScrollView>
+          <SubmitButton
+            title={values.id ? 'Salvar membros' : 'Criar o grupo'}
+            isSubmitting={isSubmitting}
+            handleSubmit={handleSubmit}
+          />
+        </VStack>
+      )}
+    </Formik>
   )
 }

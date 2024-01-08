@@ -120,6 +120,7 @@ export default function ConfirmEmail() {
                 value={values.code || ''}
                 placeholder="Digite o código..."
                 keyboardType="numeric"
+                onEndEditing={() => handleSubmit()}
               />
               <Center>
                 {isLoading ? (

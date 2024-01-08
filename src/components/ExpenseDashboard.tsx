@@ -86,6 +86,7 @@ export default function ExpenseDashboard({ expenses }: Props) {
           bgColor="dark.300"
           px={4}
           py={2}
+          mr={4}
           alignItems="flex-end"
           rounded="lg"
         >

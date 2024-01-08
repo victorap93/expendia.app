@@ -66,11 +66,11 @@ export function CardExpense({
         }
       >
         <VStack space={1}>
-          <HStack justifyContent="space-between" alignItems="center">
-            <Text color="white" fontSize="lg">
+          <HStack alignItems="center" w="full">
+            <Text color="white" fontSize="lg" w="2/3">
               {expense.title}
             </Text>
-            <Text color="white" fontSize="sm">
+            <Text color="white" fontSize="sm" w="1/3" textAlign="right">
               {dayjs(expense.dueDate).format('DD/MM/YYYY')}
             </Text>
           </HStack>
@@ -114,11 +114,9 @@ export function CardSkeleton() {
           <Skeleton h={4} w={'2/5'} />
           <Skeleton h={4} w={'2/5'} />
         </HStack>
-        <HStack justifyContent="space-between" alignItems="center">
+        <HStack justifyContent="space-between" alignItems="center" space={1}>
           <Skeleton h={4} w={'2/5'} />
           <HStack alignItems="center" space={1}>
-            <Skeleton rounded="full" h={10} w={10} />
-            <Skeleton rounded="full" h={10} w={10} />
             <Skeleton rounded="full" h={10} w={10} />
           </HStack>
         </HStack>

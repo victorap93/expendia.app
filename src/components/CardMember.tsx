@@ -58,9 +58,9 @@ export function CardMember({
         }}
       >
         <HStack alignItems="center" justifyContent="space-between">
-          <HStack alignItems="center" space={3}>
+          <HStack alignItems="center" space={3} w="2/3">
             <MemberAvatar member={user} size="sm" />
-            <VStack>
+            <VStack w="full">
               <Text color="white" fontSize="md">
                 {user.firstname
                   ? `${user.firstname} ${user.lastname || ''}`

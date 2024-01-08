@@ -85,11 +85,9 @@ export function CardSkeleton() {
     <CardBox p={4}>
       <VStack space={4}>
         <Skeleton h={4} w={'2/5'} />
-        <HStack justifyContent="space-between" alignItems="center">
+        <HStack justifyContent="space-between" alignItems="center" space={1}>
           <Skeleton h={4} w={'3/5'} />
           <HStack alignItems="center" space={1}>
-            <Skeleton rounded="full" h={10} w={10} />
-            <Skeleton rounded="full" h={10} w={10} />
             <Skeleton rounded="full" h={10} w={10} />
           </HStack>
         </HStack>

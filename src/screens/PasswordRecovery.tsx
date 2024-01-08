@@ -68,6 +68,7 @@ export default function PasswordRecovery() {
                 onBlur={handleBlur('email')}
                 value={values.email || ''}
                 placeholder="Confirme seu e-mail..."
+                onEndEditing={() => handleSubmit()}
               />
             </VStack>
             <Center>

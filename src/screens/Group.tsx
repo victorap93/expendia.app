@@ -14,7 +14,7 @@ import { useAuth } from '../hooks/useAuth'
 import { api } from '../lib/axios'
 import MembersList from '../components/MembersList'
 import PlusFab from '../components/PlusFab'
-import { SignOut, Trash, UserPlus } from 'phosphor-react-native'
+import { SignOut, Trash, UserGear } from 'phosphor-react-native'
 import UserLabels from '../components/UserLabels'
 import MenuActionSheet from '../components/MenuActionSheet'
 import { UserProps } from '../context/AuthContext'
@@ -76,11 +76,16 @@ export default function Group() {
         />
       ) : (
         <AppBar
-          title={
-            <TouchableOpacity onPress={() => setEditGroupTitle(true)}>
-              <Text fontSize="lg" color="white">
-                {group.title}
-              </Text>
+          center={
+            <TouchableOpacity
+              onPress={() => setEditGroupTitle(true)}
+              style={{ width: '50%' }}
+            >
+              <HStack textAlign="center" justifyContent="center">
+                <Text fontSize="lg" color="white">
+                  {group.title}
+                </Text>
+              </HStack>
             </TouchableOpacity>
           }
           left="back"
@@ -123,7 +128,7 @@ export default function Group() {
         </VStack>
       </ScrollView>
       <PlusFab
-        icon={<UserPlus color="white" size={24} />}
+        icon={<UserGear color="white" size={24} />}
         onPress={() =>
           navigate('GroupMembers', {
             ...group,
