@@ -1,16 +1,29 @@
 import React, { useState } from 'react'
 import CardBox from './CardBox'
 import { ExpenseProps } from '../screens/Expenses'
-import { Badge, HStack, Skeleton, Text, VStack } from 'native-base'
+import {
+  Badge,
+  Box,
+  HStack,
+  Skeleton,
+  Text,
+  VStack,
+  useTheme
+} from 'native-base'
 import { Pressable } from '@react-native-material/core'
 import { AvatarGroup } from './MemberAvatar'
 import dayjs from 'dayjs'
-import { convertFloatToMoney, getUserPart } from '../helpers/expenseHelper'
+import {
+  convertFloatToMoney,
+  getExpenseForm,
+  getSubtotalPercentage,
+  getUserPart
+} from '../helpers/expenseHelper'
 import { useAuth } from '../hooks/useAuth'
 import ExpenseStatusMessage, {
   ExpenseStatusMessageSetup
 } from './ExpenseStatusMessage'
-import { Check } from 'phosphor-react-native'
+import { Check, CheckCircle } from 'phosphor-react-native'
 
 interface CardExpenseProps {
   expense: ExpenseProps
@@ -26,6 +39,7 @@ export function CardExpense({
   selected
 }: CardExpenseProps) {
   const { user } = useAuth()
+  const { colors } = useTheme()
 
   const userPart = getUserPart(expense.Paying, user.email)
 
@@ -78,11 +92,18 @@ export function CardExpense({
             <Text color="white" fontSize="lg">
               {convertFloatToMoney(userPart)}
             </Text>
-            <ExpenseStatusMessage
-              payer={user}
-              expense={expense}
-              getStatusMessage={setStatusMessage}
-            />
+            <HStack space={1}>
+              <ExpenseStatusMessage
+                payer={user}
+                expense={expense}
+                getStatusMessage={setStatusMessage}
+              />
+              <Badge rounded="lg" alignSelf="center" px={1}>
+                {`${
+                  expense.Paying.filter(({ paid }) => paid === true).length
+                }/${expense.Paying.length}`}
+              </Badge>
+            </HStack>
           </HStack>
           <HStack justifyContent="space-between" alignItems="center">
             <Text color="white" fontSize="md">
