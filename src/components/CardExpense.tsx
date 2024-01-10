@@ -1,29 +1,16 @@
 import React, { useState } from 'react'
 import CardBox from './CardBox'
 import { ExpenseProps } from '../screens/Expenses'
-import {
-  Badge,
-  Box,
-  HStack,
-  Skeleton,
-  Text,
-  VStack,
-  useTheme
-} from 'native-base'
+import { Badge, HStack, Skeleton, Text, VStack, useTheme } from 'native-base'
 import { Pressable } from '@react-native-material/core'
 import { AvatarGroup } from './MemberAvatar'
 import dayjs from 'dayjs'
-import {
-  convertFloatToMoney,
-  getExpenseForm,
-  getSubtotalPercentage,
-  getUserPart
-} from '../helpers/expenseHelper'
+import { convertFloatToMoney, getUserPart } from '../helpers/expenseHelper'
 import { useAuth } from '../hooks/useAuth'
 import ExpenseStatusMessage, {
   ExpenseStatusMessageSetup
 } from './ExpenseStatusMessage'
-import { Check, CheckCircle } from 'phosphor-react-native'
+import { Check, User } from 'phosphor-react-native'
 
 interface CardExpenseProps {
   expense: ExpenseProps
@@ -92,26 +79,31 @@ export function CardExpense({
             <Text color="white" fontSize="lg">
               {convertFloatToMoney(userPart)}
             </Text>
-            <HStack space={1}>
-              <ExpenseStatusMessage
-                payer={user}
-                expense={expense}
-                getStatusMessage={setStatusMessage}
-              />
-              <Badge rounded="lg" alignSelf="center" px={1}>
-                {`${
-                  expense.Paying.filter(({ paid }) => paid === true).length
-                }/${expense.Paying.length}`}
-              </Badge>
-            </HStack>
+            <ExpenseStatusMessage
+              payer={user}
+              expense={expense}
+              getStatusMessage={setStatusMessage}
+            />
           </HStack>
           <HStack justifyContent="space-between" alignItems="center">
-            <Text color="white" fontSize="md">
-              Total:{' '}
-              <Text fontWeight="extrabold">
-                {convertFloatToMoney(Number(expense.cost))}
+            <HStack space={1}>
+              <Text color="white" fontSize="md">
+                Total:{' '}
+                <Text fontWeight="extrabold">
+                  {convertFloatToMoney(Number(expense.cost))}
+                </Text>
               </Text>
-            </Text>
+              <Badge rounded="lg" alignSelf="center" px={1} bg="dark.300">
+                <HStack space={0.5} alignItems="center">
+                  <User size={12} color="white" />
+                  <Text fontSize={12} color="white">
+                    {`${
+                      expense.Paying.filter(({ paid }) => paid === true).length
+                    }/${expense.Paying.length}`}
+                  </Text>
+                </HStack>
+              </Badge>
+            </HStack>
             <AvatarGroup
               size="sm"
               members={expense.Paying.map(({ paying }) => paying)}
