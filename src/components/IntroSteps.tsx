@@ -13,9 +13,9 @@ export default function IntroSteps({ onDone }: IntroStepsProps) {
       bgColor: 'palette.blue',
       children: <Box height="full">
         <Center flex={1}>
-          <VStack alignItems="center" space={2}>
+          <VStack alignItems="center" space='xl'>
             <Container>
-              <Text color="white" fontSize="3xl" fontFamily="heading">
+              <Text color="white" fontSize="4xl" fontFamily="heading">
                 Divida, Registre, Simplifique.
               </Text>
             </Container>
@@ -23,7 +23,7 @@ export default function IntroSteps({ onDone }: IntroStepsProps) {
               source={require('../assets/partners.png')}
               alt="Divida, Registre, Simplifique."
               width={400}
-              height={330}
+              height={270}
             />
           </VStack>
         </Center>
@@ -34,7 +34,7 @@ export default function IntroSteps({ onDone }: IntroStepsProps) {
       children: <VStack alignItems="center" height="full" space={0} >
         <Center width="full" flex={1}>
           <Container>
-            <Text color="white" fontSize="3xl" fontFamily="heading" pt={150}>
+            <Text color="white" fontSize="4xl" fontFamily="heading">
               Multiplique momentos, divida as despesas.
             </Text>
           </Container>
@@ -43,7 +43,7 @@ export default function IntroSteps({ onDone }: IntroStepsProps) {
           source={require('../assets/share_moments.png')}
           alt="Multiplique momentos, divida as despesas."
           width={480}
-          height={480}
+          height={460}
         />
       </VStack>
     },
@@ -52,7 +52,7 @@ export default function IntroSteps({ onDone }: IntroStepsProps) {
       children: <VStack alignItems="center" height="full" space={0} >
         <Center width="full" flex={1}>
           <Container>
-            <Text color="white" fontSize="3xl" fontFamily="heading" pt={150}>
+            <Text color="white" fontSize="4xl" fontFamily="heading">
               Pronto para dividir as despesas?
             </Text>
           </Container>
@@ -61,7 +61,7 @@ export default function IntroSteps({ onDone }: IntroStepsProps) {
           source={require('../assets/friends.png')}
           alt="Pronto para dividir as despesas?"
           width={480}
-          height={480}
+          height={460}
         />
       </VStack>
     }
