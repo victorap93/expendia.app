@@ -4,15 +4,22 @@ import { HStack, Skeleton, Text, VStack } from 'native-base'
 import { UserProps } from '../context/AuthContext'
 import { MemberAvatar } from './MemberAvatar'
 import { api } from '../lib/axios'
-import { Pressable } from '@react-native-material/core'
+import { Pressable, PressableProps } from '@react-native-material/core'
 import { InterfaceBoxProps } from 'native-base/lib/typescript/components/primitives/Box'
+import { InterfaceHStackProps } from 'native-base/lib/typescript/components/primitives/Stack/HStack'
 
+export type CardMemberSlots = {
+  cardBox?: InterfaceBoxProps
+  pressable?: PressableProps
+  boxContent?: InterfaceHStackProps
+  initialContent?: InterfaceHStackProps
+}
 interface CardMemberProps {
   member: UserProps
   fetchUser?: boolean
   endComponent?: ReactElement<any, any>
   bottomComponent?: ReactElement<any, any>
-  cardBoxProps?: InterfaceBoxProps
+  slots?: CardMemberSlots
   hideSubtitle?: boolean
   onPress?: () => void
 }
@@ -26,7 +33,7 @@ export function CardMember({
   fetchUser,
   endComponent,
   bottomComponent,
-  cardBoxProps,
+  slots,
   hideSubtitle,
   onPress
 }: CardMemberProps) {
@@ -49,16 +56,26 @@ export function CardMember({
   }, [member])
 
   return user ? (
-    <CardBox {...cardBoxProps}>
+    <CardBox {...slots?.cardBox}>
       <Pressable
         disabled={onPress === undefined}
         onPress={onPress}
         style={{
           padding: 12
         }}
+        {...slots?.pressable}
       >
-        <HStack alignItems="center" justifyContent="space-between">
-          <HStack alignItems="center" space={3} w="2/3">
+        <HStack
+          alignItems="center"
+          justifyContent="space-between"
+          {...slots?.boxContent}
+        >
+          <HStack
+            alignItems="center"
+            space={3}
+            w="2/3"
+            {...slots?.initialContent}
+          >
             <MemberAvatar member={user} size="sm" />
             <VStack w="full">
               <Text color="white" fontSize="md">

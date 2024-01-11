@@ -173,17 +173,23 @@ export default function ExpensePayers() {
                       </VStack>
                     )}
                     <MembersList
-                      onPress={setSelectedMember}
+                      // onPress={setSelectedMember}
                       members={values.payers.map(({ email, cost }, index) => {
                         return {
                           email,
-                          endComponent:
-                            selectedMember && selectedMember.email === email ? (
+                          hideSubtitle: true,
+                          slots: {
+                            initialContent: {
+                              w: 'full'
+                            }
+                          },
+                          bottomComponent: (
+                            <VStack w="5/6" mt={1}>
                               <MoneyField
                                 onEndEditing={() =>
                                   setSelectedMember(undefined)
                                 }
-                                fontSize={14}
+                                fontSize={16}
                                 onChangeText={value =>
                                   handleValue(
                                     value,
@@ -194,11 +200,8 @@ export default function ExpensePayers() {
                                 }
                                 value={convertFloatToMoney(cost)}
                               />
-                            ) : (
-                              <Text color="white">
-                                {convertFloatToMoney(cost)}
-                              </Text>
-                            )
+                            </VStack>
+                          )
                         }
                       })}
                       renderCard={(member, component) => (

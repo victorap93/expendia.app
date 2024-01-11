@@ -195,12 +195,14 @@ export default function Expense() {
                       )}
                     </HStack>
                   ),
-                  cardBoxProps: {
-                    borderLeftColor:
-                      statusMessages.find(
-                        status => status.email === paying.email
-                      )?.color || undefined,
-                    borderLeftWidth: 4
+                  slots: {
+                    cardBox: {
+                      borderLeftColor:
+                        statusMessages.find(
+                          status => status.email === paying.email
+                        )?.color || undefined,
+                      borderLeftWidth: 4
+                    }
                   }
                 }
               })}
