@@ -13,6 +13,10 @@ import {
   convertMoneyToFloat
 } from '../helpers/expenseHelper'
 
+export interface ExpenseCostFormProps {
+  cost: string
+}
+
 export default function ExpenseCost() {
   const { navigate } = useNavigation()
   const route = useRoute()
@@ -21,12 +25,15 @@ export default function ExpenseCost() {
   const currency = 'R$ '
 
   async function submit(
-    values: ExpenseForm,
+    values: ExpenseCostFormProps,
     setSubmitting: (isSubmitting: boolean) => void
   ) {
     try {
       setSubmitting(true)
-      navigate('ExpensePayers', values)
+      navigate('ExpensePayers', {
+        ...expense,
+        cost: convertMoneyToFloat(values.cost)
+      })
     } catch (error) {
       Alert.alert('Ops!', 'Algo deu errado. Tente novamente mais tarde!')
     } finally {
@@ -36,10 +43,16 @@ export default function ExpenseCost() {
 
   return (
     <Formik
-      initialValues={expense}
+      initialValues={{
+        cost: expense.cost ? convertFloatToMoney(expense.cost) : '0,00'
+      }}
       validationSchema={Yup.object({
-        cost: Yup.number()
-          .min(0.01, `O valor precisa ser maior que ${currency}0,00.`)
+        cost: Yup.string()
+          .test(
+            'min',
+            `O valor precisa ser maior que ${currency}0,00.`,
+            cost => convertMoneyToFloat(cost || '0') > 0.0
+          )
           .required('Informe o valor total da despesa.')
       })}
       onSubmit={(values, { setSubmitting }) => submit(values, setSubmitting)}
@@ -57,10 +70,8 @@ export default function ExpenseCost() {
                 </Text>
                 <MoneyField
                   error={errors.cost}
-                  onChangeText={value =>
-                    setFieldValue('cost', convertMoneyToFloat(value))
-                  }
-                  value={convertFloatToMoney(values.cost)}
+                  onChangeText={value => setFieldValue('cost', value)}
+                  value={values.cost}
                   fontSize={40}
                   onEndEditing={() => handleSubmit()}
                 />
