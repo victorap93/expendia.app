@@ -38,6 +38,7 @@ export function CardMember({
   onPress
 }: CardMemberProps) {
   const [user, setUser] = useState<UserProps | undefined>()
+  const [fetched, setFetched] = useState(false)
 
   async function getUser() {
     try {
@@ -45,15 +46,15 @@ export function CardMember({
       if (response.status !== 404) setUser(response.data.user || member)
     } catch (error) {
       console.error(error)
+    } finally {
+      setFetched(true)
     }
   }
 
   useEffect(() => {
     setUser({ ...member })
-    if (fetchUser) getUser()
-
-    return () => setUser(undefined)
-  }, [member])
+    if (fetchUser && !fetched) getUser()
+  }, [])
 
   return user ? (
     <CardBox {...slots?.cardBox}>

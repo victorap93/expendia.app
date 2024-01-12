@@ -33,6 +33,7 @@ import MoneyField from '../components/MoneyField'
 import { api } from '../lib/axios'
 import { useAuth } from '../hooks/useAuth'
 import { IconButton } from '@react-native-material/core'
+import PayerPart from '../components/PayerPart'
 
 export default function ExpensePayers() {
   const { user } = useAuth()
@@ -101,13 +102,13 @@ export default function ExpensePayers() {
   }
 
   const handleValue = (
-    value: string,
+    value: number,
     payers: PayerForm[],
     index: number,
     setFieldValue: setFieldValueType
   ) => {
-    payers[index].cost = convertMoneyToFloat(value)
-    setFieldValue('payers', payers)
+    payers[index].cost = value
+    setFieldValue('payers', [...payers])
   }
 
   return (
@@ -173,7 +174,6 @@ export default function ExpensePayers() {
                       </VStack>
                     )}
                     <MembersList
-                      // onPress={setSelectedMember}
                       members={values.payers.map(({ email, cost }, index) => {
                         return {
                           email,
@@ -184,23 +184,18 @@ export default function ExpensePayers() {
                             }
                           },
                           bottomComponent: (
-                            <VStack w="5/6" mt={1}>
-                              <MoneyField
-                                onEndEditing={() =>
-                                  setSelectedMember(undefined)
-                                }
-                                fontSize={16}
-                                onChangeText={value =>
-                                  handleValue(
-                                    value,
-                                    values.payers,
-                                    index,
-                                    setFieldValue
-                                  )
-                                }
-                                value={convertFloatToMoney(cost)}
-                              />
-                            </VStack>
+                            <PayerPart
+                              total={expense.cost}
+                              payerPart={cost}
+                              getPayerPart={value =>
+                                handleValue(
+                                  value,
+                                  values.payers,
+                                  index,
+                                  setFieldValue
+                                )
+                              }
+                            />
                           )
                         }
                       })}
