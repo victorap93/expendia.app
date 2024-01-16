@@ -70,9 +70,9 @@ export function CardGroup({ group, handlePress }: CardGroupProps) {
             ) : expenses.length > 0 ? (
               unpaidExpenses.length > 0 ? (
                 <Text color="red.500">
-                  {!isLoading && expenses.length} despesa
-                  {expenses.length > 1 && 's'} não paga
-                  {expenses.length > 1 && 's'}
+                  {!isLoading && unpaidExpenses.length} despesa
+                  {unpaidExpenses.length > 1 && 's'} não paga
+                  {unpaidExpenses.length > 1 && 's'}
                 </Text>
               ) : (
                 <Text color="green.400">Sua parte está em dia :)</Text>
