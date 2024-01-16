@@ -31,6 +31,7 @@ export default function ConfirmLogout({ onClose, isOpen }: Props) {
       leastDestructiveRef={cancelRef}
       isOpen={isOpen}
       onClose={onClose}
+      closeOnOverlayClick
     >
       <AlertDialog.Content>
         <AlertDialog.CloseButton />
