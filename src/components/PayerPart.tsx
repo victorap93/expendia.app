@@ -97,9 +97,9 @@ export default function PayerPart({
               color="white"
               width="1/6"
               fontSize="md"
-              mt={0}
-              borderBottomWidth={0.7}
-              borderBottomColor="gray.400"
+              // mt={0}
+              // borderBottomWidth={0.7}
+              // borderBottomColor="gray.400"
             >
               %
             </Text>
