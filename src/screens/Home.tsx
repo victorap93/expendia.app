@@ -20,13 +20,14 @@ const Home = () => {
   ) : (
     <VStack
       flex={1}
-      p={4}
+      p={8}
     >
       <Center flex={1}>
         <Image
           source={require('../assets/shopping.png')}
           alt="Payers"
-          size={400}
+          width={360}
+          height={400}
         />
       </Center>
       <VStack>
@@ -45,13 +46,13 @@ const Home = () => {
             fontFamily="body"
           >
             Pronto para{' '}
-            <Text color="palette.purple" fontWeight="extrabold">dividir e simplificar</Text>{' '}
+            <Text color="palette.light.purple" fontWeight="extrabold">dividir e simplificar</Text>{' '}
             suas finanças e da galera e nunca mais brigarem por contas?
           </Text>
         </Box>
         <Box my={1.5}>
           <Button
-            backgroundColor="palette.purple"
+            backgroundColor="palette.light.purple"
             _pressed={{
               bg: 'palette.purpleDark'
             }}

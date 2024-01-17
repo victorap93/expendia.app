@@ -6,7 +6,7 @@ export default function PlusFab({ ...rest }: IFabProps) {
   return (
     <Fab
       {...rest}
-      bgColor={rest.bgColor || 'palette.purple'}
+      bgColor={rest.bgColor || 'palette.light.purple'}
       _pressed={
         rest._pressed || {
           bgColor: 'palette.purpleDark'

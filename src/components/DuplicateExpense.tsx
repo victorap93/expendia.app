@@ -99,7 +99,7 @@ export default function DuplicateExpense({ isOpen, onClose, expenses }: Props) {
                 onPress={customDuplicate}
               >
                 <HStack space={2} alignItems="center">
-                  <Pencil color={THEME.colors.palette.purple} size={28} />
+                  <Pencil color={THEME.colors.palette.light.purple} size={28} />
                   <Text color="white" fontSize="lg">
                     Personalizar
                   </Text>
@@ -113,7 +113,7 @@ export default function DuplicateExpense({ isOpen, onClose, expenses }: Props) {
                 onPress={() => duplicateToDate('month')}
               >
                 <HStack space={2} alignItems="center">
-                  <Calendar color={THEME.colors.palette.purple} size={28} />
+                  <Calendar color={THEME.colors.palette.light.purple} size={28} />
                   <Text color="white" fontSize="lg">
                     Duplicar para o próximo mês
                   </Text>
@@ -127,7 +127,7 @@ export default function DuplicateExpense({ isOpen, onClose, expenses }: Props) {
                 onPress={() => duplicateToDate('year')}
               >
                 <HStack space={2} alignItems="center">
-                  <CalendarPlus color={THEME.colors.palette.purple} size={28} />
+                  <CalendarPlus color={THEME.colors.palette.light.purple} size={28} />
                   <Text color="white" fontSize="lg">
                     Duplicar para o próximo ano
                   </Text>

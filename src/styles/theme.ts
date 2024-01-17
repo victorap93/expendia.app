@@ -9,7 +9,11 @@ export const THEME = extendTheme({
       lightBlue: '#AC9AFE',
       yellow: '#FBF65F',
       melonIce: '#F5D9C9',
-      orange: '#ED893E'
+      orange: '#ED893E',
+      light: {
+        purple: '#AD63DC',
+        blue: '#5C72F5',
+      }
     },
     gray: {
       950: '#09090A',
