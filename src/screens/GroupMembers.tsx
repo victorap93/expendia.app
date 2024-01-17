@@ -171,7 +171,7 @@ export default function GroupMembers() {
                     bg={
                       isDisabled(errors, values)
                         ? 'trueGray.900'
-                        : 'palette.purple'
+                        : 'palette.light.purple'
                     }
                     _pressed={{
                       bg: 'palette.purpleDark'

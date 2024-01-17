@@ -23,7 +23,7 @@ export default function TextField({
         size="xl"
         borderColor="white"
         _focus={{
-          borderColor: 'palette.purple',
+          borderColor: 'palette.light.purple',
           color: 'white'
         }}
         {...rest}
