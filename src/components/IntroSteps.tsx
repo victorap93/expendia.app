@@ -1,70 +1,92 @@
 import React from 'react'
-import AppIntroSlider from 'react-native-app-intro-slider'
-import Intro, { IntroProps } from './Intro'
-import { Image } from 'native-base'
+import { Box, Center, Container, Image, Text, VStack } from 'native-base'
+import { InterfaceVStackProps } from 'native-base/lib/typescript/components/primitives/Stack/VStack'
+import Intro from './Intro'
 
 export interface IntroStepsProps {
   onDone: (finished: boolean) => void
 }
 
 export default function IntroSteps({ onDone }: IntroStepsProps) {
-  const data: IntroProps[] = [
+  const data: InterfaceVStackProps[] = [
     {
-      title: 'Divida, Registre, Simplifique.',
-      description: '',
-      image: (
+      bgColor: 'palette.lightBlue',
+      children: <VStack alignItems="center" height="full">
+        <Center width="full" flex={1}>
+          <Container>
+            <Text color="white" fontSize="4xl" fontFamily="heading">
+              Sua organização financeira começa aqui
+            </Text>
+          </Container>
+        </Center>
         <Image
-          source={require('../assets/partners.png')}
-          alt="Divida, Registre, Simplifique."
-          width="full"
-          height="66.6%"
+          source={require('../assets/shopping.png')}
+          alt="Sua organização financeira começa aqui"
+          width={480}
+          height={570}
         />
-      ),
-      bgColor: 'palette.blue'
+      </VStack>
     },
     {
-      title: 'Multiplique momentos, divida as despesas.',
-      description: '',
-      image: (
+      bgColor: 'palette.blue',
+      children: <Box height="full">
+        <Center flex={1}>
+          <VStack alignItems="center" space={12}>
+            <Container>
+              <Text color="white" fontSize="4xl" fontFamily="heading">
+                Divida, Registre, Simplifique
+              </Text>
+            </Container>
+            <Image
+              source={require('../assets/partners.png')}
+              alt="Divida, Registre, Simplifique"
+              width={420}
+              height={290}
+            />
+          </VStack>
+        </Center>
+      </Box>
+    },
+    {
+      bgColor: 'palette.orange',
+      children: <VStack alignItems="center" height="full">
+        <Center width="full" flex={1}>
+          <Container>
+            <Text color="white" fontSize="4xl" fontFamily="heading">
+              Multiplique momentos, divida as despesas
+            </Text>
+          </Container>
+        </Center>
         <Image
           source={require('../assets/share_moments.png')}
-          alt="Multiplique momentos, divida as despesas."
-          width="full"
-          height="60%"
+          alt="Multiplique momentos, divida as despesas"
+          width={480}
+          height={540}
         />
-      ),
-      bgColor: 'palette.orange'
+      </VStack>
     },
     {
-      title: 'Pronto para dividir as despesas?',
-      description: '',
-      image: (
+      bgColor: 'palette.purple',
+      children: <VStack alignItems="center" height="full">
+        <Center width="full" flex={1}>
+          <Container>
+            <Text color="white" fontSize="4xl" fontFamily="heading">
+              Bem-vindo ao jeito expendia de dividir despesas
+            </Text>
+          </Container>
+        </Center>
         <Image
-          source={require('../assets/friends.png')}
-          alt="Pronto para dividir as despesas?"
-          width="full"
-          height="69.5%"
+          source={require('../assets/on_computer.png')}
+          alt="Bem-vindo ao jeito expendia de dividir despesas"
+          width={480}
+          height={520}
         />
-      ),
-      bgColor: 'palette.purple'
+      </VStack>
     }
   ]
 
-  return (
-    <AppIntroSlider
-      doneLabel="Pronto"
-      nextLabel="Próximo"
-      prevLabel="Anterior"
-      showPrevButton
-      renderItem={({ item, index }) => (
-        <Intro
-          {...item}
-          key={index}
-          onSkip={index < data.length - 1 ? () => onDone(false) : undefined}
-        />
-      )}
-      data={data}
-      onDone={() => onDone(true)}
-    />
-  )
+  return <Intro
+    data={data}
+    onDone={() => onDone(true)}
+  />
 }
