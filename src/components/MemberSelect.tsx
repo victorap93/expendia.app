@@ -65,6 +65,7 @@ export function MemberSelect({
         leastDestructiveRef={cancelRef}
         isOpen={isOpen}
         onClose={onClose}
+        closeOnOverlayClick
       >
         <AlertDialog.Content bgColor="gray.900">
           <VStack>

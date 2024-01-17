@@ -4,8 +4,9 @@ import { UserProps } from '../context/AuthContext'
 import { ThemeComponentSizeType } from 'native-base/lib/typescript/components/types'
 import { getAvatarUrl } from '../helpers/memberHelper'
 import { IAvatarBadgeProps } from 'native-base/lib/typescript/components/composites/Avatar'
+import { IAvatarGroupProps } from 'native-base/lib/typescript/components/composites/Avatar/types'
 
-interface AvatarGroupProps {
+interface AvatarGroupProps extends IAvatarGroupProps {
   members: UserProps[]
   size?: ThemeComponentSizeType<'Avatar'>
 }

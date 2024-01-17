@@ -33,6 +33,7 @@ import MoneyField from '../components/MoneyField'
 import { api } from '../lib/axios'
 import { useAuth } from '../hooks/useAuth'
 import { IconButton } from '@react-native-material/core'
+import PayerPart from '../components/PayerPart'
 
 export default function ExpensePayers() {
   const { user } = useAuth()
@@ -101,13 +102,13 @@ export default function ExpensePayers() {
   }
 
   const handleValue = (
-    value: string,
+    value: number,
     payers: PayerForm[],
     index: number,
     setFieldValue: setFieldValueType
   ) => {
-    payers[index].cost = convertMoneyToFloat(value)
-    setFieldValue('payers', payers)
+    payers[index].cost = value
+    setFieldValue('payers', [...payers])
   }
 
   return (
@@ -173,32 +174,29 @@ export default function ExpensePayers() {
                       </VStack>
                     )}
                     <MembersList
-                      onPress={setSelectedMember}
                       members={values.payers.map(({ email, cost }, index) => {
                         return {
                           email,
-                          endComponent:
-                            selectedMember && selectedMember.email === email ? (
-                              <MoneyField
-                                onEndEditing={() =>
-                                  setSelectedMember(undefined)
-                                }
-                                fontSize={14}
-                                onChangeText={value =>
-                                  handleValue(
-                                    value,
-                                    values.payers,
-                                    index,
-                                    setFieldValue
-                                  )
-                                }
-                                value={convertFloatToMoney(cost)}
-                              />
-                            ) : (
-                              <Text color="white">
-                                {convertFloatToMoney(cost)}
-                              </Text>
-                            )
+                          hideSubtitle: true,
+                          slots: {
+                            initialContent: {
+                              w: 'full'
+                            }
+                          },
+                          bottomComponent: (
+                            <PayerPart
+                              total={expense.cost}
+                              payerPart={cost}
+                              getPayerPart={value =>
+                                handleValue(
+                                  value,
+                                  values.payers,
+                                  index,
+                                  setFieldValue
+                                )
+                              }
+                            />
+                          )
                         }
                       })}
                       renderCard={(member, component) => (

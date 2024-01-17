@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import CardBox from './CardBox'
 import { ExpenseProps } from '../screens/Expenses'
-import { Badge, HStack, Skeleton, Text, VStack } from 'native-base'
+import { Badge, HStack, Skeleton, Text, VStack, useTheme } from 'native-base'
 import { Pressable } from '@react-native-material/core'
 import { AvatarGroup } from './MemberAvatar'
 import dayjs from 'dayjs'
@@ -10,7 +10,7 @@ import { useAuth } from '../hooks/useAuth'
 import ExpenseStatusMessage, {
   ExpenseStatusMessageSetup
 } from './ExpenseStatusMessage'
-import { Check } from 'phosphor-react-native'
+import { Check, User } from 'phosphor-react-native'
 
 interface CardExpenseProps {
   expense: ExpenseProps
@@ -26,6 +26,7 @@ export function CardExpense({
   selected
 }: CardExpenseProps) {
   const { user } = useAuth()
+  const { colors } = useTheme()
 
   const userPart = getUserPart(expense.Paying, user.email)
 
@@ -85,12 +86,24 @@ export function CardExpense({
             />
           </HStack>
           <HStack justifyContent="space-between" alignItems="center">
-            <Text color="white" fontSize="md">
-              Total:{' '}
-              <Text fontWeight="extrabold">
-                {convertFloatToMoney(Number(expense.cost))}
+            <HStack space={1}>
+              <Text color="white" fontSize="md">
+                Total:{' '}
+                <Text fontWeight="extrabold">
+                  {convertFloatToMoney(Number(expense.cost))}
+                </Text>
               </Text>
-            </Text>
+              <Badge rounded="lg" alignSelf="center" px={1} bg="dark.300">
+                <HStack space={0.5} alignItems="center">
+                  <User size={12} color="white" />
+                  <Text fontSize={12} color="white">
+                    {`${
+                      expense.Paying.filter(({ paid }) => paid === true).length
+                    }/${expense.Paying.length}`}
+                  </Text>
+                </HStack>
+              </Badge>
+            </HStack>
             <AvatarGroup
               size="sm"
               members={expense.Paying.map(({ paying }) => paying)}

@@ -2,13 +2,13 @@ import React, { ReactElement } from 'react'
 import { UserProps } from '../context/AuthContext'
 import { VStack } from 'native-base'
 import { useAuth } from '../hooks/useAuth'
-import { CardMember } from './CardMember'
+import { CardMember, CardMemberSlots } from './CardMember'
 import { InterfaceBoxProps } from 'native-base/lib/typescript/components/primitives/Box'
 
 interface CardMemberProps extends UserProps {
   endComponent?: ReactElement<any, any>
   bottomComponent?: ReactElement<any, any>
-  cardBoxProps?: InterfaceBoxProps
+  slots?: CardMemberSlots
   hideSubtitle?: boolean
 }
 
@@ -44,7 +44,7 @@ export default function MembersList({
             endComponent={member.endComponent}
             bottomComponent={member.bottomComponent}
             hideSubtitle={member.hideSubtitle}
-            cardBoxProps={member.cardBoxProps}
+            slots={member.slots}
             onPress={onPress ? () => onPress(member) : undefined}
           />
         )

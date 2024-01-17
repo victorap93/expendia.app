@@ -148,7 +148,7 @@ export default function Configurations() {
             />
             <MenuItems.ListItem
               title="Termos de uso"
-              subTitle="Como usar nosso app"
+              subTitle="Como usar nosso aplicativo"
               left={<Ionicons name="document-text" size={24} color="white" />}
               onPress={() => setOpenTermsOfUse(true)}
             />
