@@ -14,7 +14,7 @@ export default function Me({ onPressOnAvatar }: Props) {
   const { navigate } = useNavigation()
   const { user } = useAuth()
   return (
-    <HStack alignItems={'center'} space={3} ml={2}>
+    <HStack alignItems={'center'} space={3} mx={2}>
       <TouchableOpacity onPress={onPressOnAvatar}>
         <MemberAvatar
           member={user}
@@ -28,23 +28,24 @@ export default function Me({ onPressOnAvatar }: Props) {
           }}
         />
       </TouchableOpacity>
-      <VStack>
+      <VStack width="90%">
         {user.firstname && user.firstname && (
           <TouchableOpacity onPress={() => navigate('Profile')}>
-            <Text
-              color="white"
-              fontSize="3xl"
-              numberOfLines={1}
-              ellipsizeMode="tail"
-            >
-              {user.firstname + ' ' + user.lastname}
-            </Text>
+            <HStack>
+              <Text color="white" fontSize="3xl">
+                {user.firstname + ' ' + user.lastname}
+              </Text>
+            </HStack>
           </TouchableOpacity>
         )}
         <TouchableOpacity onPress={() => navigate('Email', user)}>
-          <Text color="gray.200" fontSize="sm">
-            {user.email}
-          </Text>
+          <HStack>
+            <Text color="gray.200" fontSize="sm" numberOfLines={1}>
+              {user.email.length > 35
+                ? user.email.substring(0, 35) + '...'
+                : user.email}
+            </Text>
+          </HStack>
         </TouchableOpacity>
       </VStack>
     </HStack>

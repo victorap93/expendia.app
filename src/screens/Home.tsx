@@ -53,6 +53,7 @@ const Home = () => {
         <Box my={1.5}>
           <Button
             backgroundColor="palette.light.purple"
+            backgroundColor="palette.purple"
             _pressed={{
               bg: 'palette.purpleDark'
             }}
