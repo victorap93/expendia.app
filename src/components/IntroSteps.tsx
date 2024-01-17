@@ -40,8 +40,8 @@ export default function IntroSteps({ onDone }: IntroStepsProps) {
             <Image
               source={require('../assets/partners.png')}
               alt="Divida, Registre, Simplifique"
-              width={440}
-              height={300}
+              width={420}
+              height={290}
             />
           </VStack>
         </Center>
@@ -61,7 +61,7 @@ export default function IntroSteps({ onDone }: IntroStepsProps) {
           source={require('../assets/share_moments.png')}
           alt="Multiplique momentos, divida as despesas"
           width={480}
-          height={570}
+          height={540}
         />
       </VStack>
     },
@@ -79,7 +79,7 @@ export default function IntroSteps({ onDone }: IntroStepsProps) {
           source={require('../assets/on_computer.png')}
           alt="Bem-vindo ao jeito expendia de dividir despesas"
           width={480}
-          height={570}
+          height={520}
         />
       </VStack>
     }
