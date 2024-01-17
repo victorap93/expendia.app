@@ -93,14 +93,7 @@ export default function PayerPart({
               onEndEditing={() => handleSubmit()}
               onBlur={() => handleSubmit()}
             />
-            <Text
-              color="white"
-              width="1/6"
-              fontSize="md"
-              // mt={0}
-              // borderBottomWidth={0.7}
-              // borderBottomColor="gray.400"
-            >
+            <Text color="white" width="1/6" fontSize="md">
               %
             </Text>
           </HStack>

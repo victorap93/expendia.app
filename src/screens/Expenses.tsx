@@ -248,7 +248,7 @@ export default function Expenses() {
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
       >
-        <VStack px={4} pb={4} space={5}>
+        <VStack px={4} pb={4} pt={3} space={5}>
           <VStack space={3}>
             {!isLoading ? (
               expenses.length > 0 ? (
