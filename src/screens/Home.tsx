@@ -18,10 +18,7 @@ const Home = () => {
   return !introduced ? (
     <IntroSteps onDone={() => setIntroduced(true)} />
   ) : (
-    <VStack
-      flex={1}
-      p={8}
-    >
+    <VStack flex={1} p={8}>
       <Center flex={1}>
         <Image
           source={require('../assets/shopping.png')}
@@ -40,20 +37,17 @@ const Home = () => {
           />
         </Box>
         <Box mt={2} mb={6}>
-          <Text
-            color="gray.200"
-            fontSize={20}
-            fontFamily="body"
-          >
+          <Text color="gray.200" fontSize={20} fontFamily="body">
             Pronto para{' '}
-            <Text color="palette.light.purple" fontWeight="extrabold">dividir e simplificar</Text>{' '}
+            <Text color="palette.light.purple" fontWeight="extrabold">
+              dividir e simplificar
+            </Text>{' '}
             suas finanças e da galera e nunca mais brigarem por contas?
           </Text>
         </Box>
         <Box my={1.5}>
           <Button
             backgroundColor="palette.light.purple"
-            backgroundColor="palette.purple"
             _pressed={{
               bg: 'palette.purpleDark'
             }}
