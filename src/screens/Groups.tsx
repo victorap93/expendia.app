@@ -59,6 +59,12 @@ export default function Groups() {
     }, [])
   )
 
+  useFocusEffect(
+    useCallback(() => {
+      if (!user.email) navigate('Home')
+    }, [user])
+  )
+
   return !user.confirmedEmail ? (
     <ConfirmEmail />
   ) : (
