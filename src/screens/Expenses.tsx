@@ -16,7 +16,6 @@ import DateController, {
   MonthlyProps,
   present
 } from '../components/DateController'
-import { UserProps } from '../context/AuthContext'
 import { CardExpense, CardSkeleton } from '../components/CardExpense'
 import MarkAsPaid from '../components/MarkAsPaid'
 import { useAuth } from '../hooks/useAuth'
@@ -27,6 +26,7 @@ import DeleteExpense from '../components/DeleteExpense'
 import DuplicateExpense from '../components/DuplicateExpense'
 import { getExpenseForm } from '../helpers/expenseHelper'
 import EditGroupTitle from '../components/EditGroupTitle'
+import { MemberProps } from '../components/MembersList'
 
 export interface ExpenseProps {
   id: string
@@ -46,7 +46,7 @@ export interface PayingProps {
   paidAt?: string | null
   createdAt: string
   updatedAt: string
-  paying: UserProps
+  paying: MemberProps
 }
 
 export default function Expenses() {
@@ -58,7 +58,7 @@ export default function Expenses() {
   const [group, setGroup] = useState<GroupProps>(route.params as GroupProps)
   const [expenses, setExpenses] = useState<ExpenseProps[]>([])
   const [selecteds, setSelecteds] = useState<string[]>([])
-  const [payers, setPayers] = useState<UserProps[]>([])
+  const [payers, setPayers] = useState<MemberProps[]>([])
   const [expensesDate, setExpensesDate] = useState<MonthlyProps>(present)
   const [openMarkAsPaid, setOpenMarkAsPaid] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
@@ -149,7 +149,7 @@ export default function Expenses() {
   }
 
   const getPayers = () => {
-    const expensePayers: UserProps[] = []
+    const expensePayers: MemberProps[] = []
     selecteds.map(selected => {
       const selectedExpense = expenses.find(({ id }) => id === selected)
       if (selectedExpense) {

@@ -12,12 +12,11 @@ import Icon from '@expo/vector-icons/MaterialCommunityIcons'
 import { GroupProps } from './Groups'
 import { useAuth } from '../hooks/useAuth'
 import { api } from '../lib/axios'
-import MembersList from '../components/MembersList'
+import MembersList, { MemberProps } from '../components/MembersList'
 import PlusFab from '../components/PlusFab'
 import { SignOut, Trash, UserGear } from 'phosphor-react-native'
 import UserLabels from '../components/UserLabels'
 import MenuActionSheet from '../components/MenuActionSheet'
-import { UserProps } from '../context/AuthContext'
 import DeleteMember from '../components/DeleteMember'
 import DeleteGroup from '../components/DeleteGroup'
 import EditGroupTitle from '../components/EditGroupTitle'
@@ -32,7 +31,7 @@ export default function Group() {
   const [openGroupMenu, setOpenGroupMenu] = useState(false)
   const [openDeleteGroup, setOpenDeleteGroup] = useState(false)
   const [openDeleteMember, setOpenDeleteMember] = useState(false)
-  const [selectedMember, setSelectedMember] = useState<UserProps | undefined>(
+  const [selectedMember, setSelectedMember] = useState<MemberProps | undefined>(
     undefined
   )
   const [editGroupTitle, setEditGroupTitle] = useState(false)
@@ -114,12 +113,15 @@ export default function Group() {
           </HStack>
           <MembersList
             onPress={setSelectedMember}
-            members={group.Member.map(({ member }) => {
+            members={group.Member.map(({ member, isAdmin }) => {
               return {
                 ...member,
                 bottomComponent: (
                   <Box mt={2}>
-                    <UserLabels isCreator={member.id === group.user_id} />
+                    <UserLabels
+                      isCreator={member.id === group.user_id}
+                      isAdmin={isAdmin || false}
+                    />
                   </Box>
                 )
               }

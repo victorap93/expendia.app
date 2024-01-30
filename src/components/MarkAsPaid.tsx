@@ -15,25 +15,25 @@ import SubmitButton from './SubmitButton'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { api } from '../lib/axios'
-import { UserProps } from '../context/AuthContext'
 import dayjs from 'dayjs'
 import { MemberSelect } from './MemberSelect'
 import { Pressable } from '@react-native-material/core'
 import { ArrowsLeftRight } from 'phosphor-react-native'
 import { ExpenseProps } from '../screens/Expenses'
+import { MemberProps } from './MembersList'
 
 export type PaymentType = {
   paid: boolean
   paidAt?: string | null
-  paying: UserProps
+  paying: MemberProps
 }
 
 interface Props {
   isOpen?: boolean
   onClose?: (payment?: PaymentType) => void
   expenses: ExpenseProps[]
-  member: UserProps
-  members: UserProps[]
+  member: MemberProps
+  members: MemberProps[]
   unmark?: boolean
 }
 

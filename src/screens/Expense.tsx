@@ -13,14 +13,13 @@ import { ExpenseProps } from './Expenses'
 import MenuActionSheet from '../components/MenuActionSheet'
 import TotalValue from '../components/TotalValue'
 import dayjs from 'dayjs'
-import MembersList from '../components/MembersList'
+import MembersList, { MemberProps } from '../components/MembersList'
 import { convertFloatToMoney, getExpenseForm } from '../helpers/expenseHelper'
 import ExpenseStatusMessage, {
   ExpenseStatusMessageSetup
 } from '../components/ExpenseStatusMessage'
 import PayerSplitProgress from '../components/PayerSplitProgress'
 import MarkAsPaidFab from '../components/MarkAsPaidFab'
-import { UserProps } from '../context/AuthContext'
 import DeleteExpense from '../components/DeleteExpense'
 import DuplicateExpense from '../components/DuplicateExpense'
 import EditExpenseTitle from '../components/EditExpenseTitle'
@@ -50,7 +49,7 @@ export default function Expense() {
     ExpenseStatusMessageSetupPayer[]
   >([])
   const [openDuplicate, setOpenDuplicate] = useState(false)
-  const [selectedMember, setSelectedMember] = useState<UserProps>(
+  const [selectedMember, setSelectedMember] = useState<MemberProps>(
     expense.Paying.find(({ paying }) => paying.email === user.email)
       ? user
       : expense.Paying[0].paying

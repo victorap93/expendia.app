@@ -5,13 +5,12 @@ import {
   useNavigation,
   useRoute
 } from '@react-navigation/native'
-import { UserProps } from '../context/AuthContext'
 import { api } from '../lib/axios'
 import { Alert, RefreshControl } from 'react-native'
 import AppBar from '../components/AppBar'
 import { IconButton } from '@react-native-material/core'
 import Icon from '@expo/vector-icons/MaterialCommunityIcons'
-import MembersList from '../components/MembersList'
+import MembersList, { MemberProps } from '../components/MembersList'
 import { CheckCircle, Circle } from 'phosphor-react-native'
 import { CardSkeleton } from '../components/CardMember'
 import EmptyMessage from '../components/EmptyMessage'
@@ -24,7 +23,7 @@ export interface HandleMembersProps {
 export default function RecentMembers() {
   const { goBack } = useNavigation()
   const { colors } = useTheme()
-  const [recentMembers, setRecentMembers] = useState<UserProps[]>([])
+  const [recentMembers, setRecentMembers] = useState<MemberProps[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [selectedMembers, setSelectedMembers] = useState<string[]>([])
@@ -71,7 +70,7 @@ export default function RecentMembers() {
     }, [])
   )
 
-  const handlePress = (member: UserProps) => {
+  const handlePress = (member: MemberProps) => {
     setSelectedMembers(prevState => {
       return selectedMembers.includes(member.email)
         ? prevState.filter(email => email !== member.email)

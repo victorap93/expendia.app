@@ -3,9 +3,9 @@ import { UserProps } from '../context/AuthContext'
 import { VStack } from 'native-base'
 import { useAuth } from '../hooks/useAuth'
 import { CardMember, CardMemberSlots } from './CardMember'
-import { InterfaceBoxProps } from 'native-base/lib/typescript/components/primitives/Box'
 
-interface CardMemberProps extends UserProps {
+export interface MemberProps extends UserProps {}
+interface CardMemberProps extends MemberProps {
   endComponent?: ReactElement<any, any>
   bottomComponent?: ReactElement<any, any>
   slots?: CardMemberSlots
@@ -16,9 +16,9 @@ interface MembersListProps {
   members: CardMemberProps[]
   autoInclude?: boolean
   fetchUser?: boolean
-  onPress?: (member: UserProps) => void
+  onPress?: (member: MemberProps) => void
   renderCard?: (
-    member: UserProps,
+    member: MemberProps,
     component: React.ReactNode
   ) => React.ReactNode
 }

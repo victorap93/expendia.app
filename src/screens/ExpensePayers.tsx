@@ -22,14 +22,11 @@ import { Trash, UserGear } from 'phosphor-react-native'
 import MembersList from '../components/MembersList'
 import {
   convertFloatToMoney,
-  convertMoneyToFloat,
   getSubtotal,
   settleUp
 } from '../helpers/expenseHelper'
 import { setFieldValueType } from '../lib/formik'
 import PayerSplitProgress from '../components/PayerSplitProgress'
-import { UserProps } from '../context/AuthContext'
-import MoneyField from '../components/MoneyField'
 import { api } from '../lib/axios'
 import { useAuth } from '../hooks/useAuth'
 import { IconButton } from '@react-native-material/core'
@@ -41,7 +38,6 @@ export default function ExpensePayers() {
   const { navigate } = useNavigation()
   const route = useRoute()
   const expense = route.params as ExpenseForm
-  const [selectedMember, setSelectedMember] = useState<UserProps>()
 
   const currency = 'R$ '
 

@@ -1,21 +1,21 @@
 import React, { useRef, useState } from 'react'
 import { AlertDialog, HStack, Text, VStack } from 'native-base'
 import { MemberAvatar } from './MemberAvatar'
-import { UserProps } from '../context/AuthContext'
 import { CaretDown } from 'phosphor-react-native'
 import { Pressable } from '@react-native-material/core'
+import { MemberProps } from './MembersList'
 
 interface MemberOptionProps {
-  member: UserProps
+  member: MemberProps
   onPress?: () => void
   selector?: boolean
   padding?: number
 }
 
 interface MemberSelectProps {
-  memberSelected: UserProps
-  members: UserProps[]
-  onChange: (member: UserProps) => void
+  memberSelected: MemberProps
+  members: MemberProps[]
+  onChange: (member: MemberProps) => void
 }
 
 export function MemberOption({

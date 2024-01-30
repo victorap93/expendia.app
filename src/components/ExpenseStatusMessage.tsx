@@ -3,8 +3,7 @@ import { HStack, Text, useTheme } from 'native-base'
 import { Circle } from 'phosphor-react-native'
 import { getUserPart, isExpired, isPaid } from '../helpers/expenseHelper'
 import { ExpenseProps } from '../screens/Expenses'
-import { UserProps } from '../context/AuthContext'
-
+import { MemberProps } from './MembersList'
 export interface ExpenseStatusMessageSetup {
   status: string | null
   color: string
@@ -13,7 +12,7 @@ export interface ExpenseStatusMessageSetup {
 
 interface ExpenseStatusMessageProps {
   expense: ExpenseProps
-  payer: UserProps
+  payer: MemberProps
   getStatusMessage?: (statusMessage: ExpenseStatusMessageSetup) => void
 }
 
