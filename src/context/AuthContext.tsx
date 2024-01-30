@@ -3,6 +3,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Google from 'expo-auth-session/providers/google'
 import { CLIENT_ID } from '@env'
 import { api } from '../lib/axios'
+import { AxiosError } from 'axios'
+import { useToast } from 'native-base'
 
 export interface UserProps {
   id?: string
@@ -32,6 +34,7 @@ interface AuthProviderProps {
 export const AuthContext = createContext({} as AuthContextDataProps)
 
 export function AuthContextProvider({ children }: AuthProviderProps) {
+  const toast = useToast()
   const [user, setUser] = useState<UserProps>({} as UserProps)
   const [isUserLoading, setIsUserLoading] = useState(true)
   const [isOAuthLoading, setIsOAuthLoading] = useState(false)
@@ -49,10 +52,28 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
       setIsOAuthLoading(true)
       if (promptAsync) await promptAsync()
     } catch (error) {
-      console.log(error)
+      console.error(error)
       throw error
     } finally {
       setIsOAuthLoading(false)
+    }
+  }
+
+  async function getMe() {
+    try {
+      const response = await api.get('/me')
+      if (response.data.users ?? false) {
+        setUser(response.data.users)
+      }
+    } catch (error) {
+      if (error instanceof AxiosError && error.response?.status === 401) {
+        toast.show({
+          title: 'Sessão expirada! Logue-se novamente!'
+        })
+        setUser({} as UserProps)
+        await AsyncStorage.removeItem('accessToken')
+        await AsyncStorage.removeItem('user')
+      } else console.error(error)
     }
   }
 
@@ -65,7 +86,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
         setUser(userData)
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
     } finally {
       setIsUserLoading(false)
     }
@@ -80,7 +101,7 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
         setUser(response.data.user)
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
       throw error
     } finally {
       setIsOAuthLoading(false)
@@ -107,6 +128,8 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     storeUser()
+
+    if (user.id) getMe()
   }, [user])
 
   return (
