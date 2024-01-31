@@ -26,7 +26,6 @@ export function CardExpense({
   selected
 }: CardExpenseProps) {
   const { user } = useAuth()
-  const { colors } = useTheme()
 
   const userPart = getUserPart(expense.Paying, user.email)
 
@@ -67,16 +66,16 @@ export function CardExpense({
         }
       >
         <VStack space={1}>
-          <HStack alignItems="center" w="full">
-            <Text color="white" fontSize="lg" w="2/3">
+          <HStack justifyContent="space-between" alignItems="flex-start" w="full" space={4}>
+            <Text color="white" fontSize="lg" flex={1}>
               {expense.title}
             </Text>
-            <Text color="white" fontSize="sm" w="1/3" textAlign="right">
+            <Text color="white" fontSize="sm">
               {dayjs(expense.dueDate).format('DD/MM/YYYY')}
             </Text>
           </HStack>
-          <HStack justifyContent="space-between" alignItems="center">
-            <Text color="white" fontSize="lg">
+          <HStack justifyContent="space-between" alignItems="flex-start" space={4}>
+            <Text color="white" fontSize="lg" flex={1}>
               {convertFloatToMoney(userPart)}
             </Text>
             <ExpenseStatusMessage
@@ -85,15 +84,15 @@ export function CardExpense({
               getStatusMessage={setStatusMessage}
             />
           </HStack>
-          <HStack justifyContent="space-between" alignItems="center">
-            <HStack space={1}>
+          <HStack justifyContent="space-between" alignItems="flex-end" space={4}>
+            <HStack space={1} flex={1}>
               <Text color="white" fontSize="md">
                 Total:{' '}
                 <Text fontWeight="extrabold">
                   {convertFloatToMoney(Number(expense.cost))}
                 </Text>
               </Text>
-              <Badge rounded="lg" alignSelf="center" px={1} bg="dark.300">
+              <Badge rounded="md" alignSelf="center" px={1} bg="dark.300">
                 <HStack space={0.5} alignItems="center">
                   <User size={12} color="white" />
                   <Text fontSize={12} color="white">
@@ -117,23 +116,33 @@ export function CardExpense({
 
 export function CardSkeleton() {
   return (
-    <CardBox p={4}>
-      <VStack space={4}>
-        <HStack justifyContent="space-between" alignItems="center">
-          <Skeleton h={4} w={'3/5'} />
-          <Skeleton h={4} w={'1/5'} />
-        </HStack>
-        <HStack justifyContent="space-between" alignItems="center">
-          <Skeleton h={4} w={'2/5'} />
-          <Skeleton h={4} w={'2/5'} />
-        </HStack>
-        <HStack justifyContent="space-between" alignItems="center" space={1}>
-          <Skeleton h={4} w={'2/5'} />
-          <HStack alignItems="center" space={1}>
-            <Skeleton rounded="full" h={10} w={10} />
+    <CardBox
+      borderLeftColor={"coolGray.400"}
+      borderLeftWidth={4}
+      position="relative"
+    >
+      <Pressable style={{ padding: 16 }} disabled>
+        <VStack space={1}>
+          <HStack justifyContent="space-between" alignItems="flex-start" w="full" space={4}>
+            <Skeleton rounded="md" h={5} w={48} startColor="#fff" opacity={0.5} my={1} />
+            <Skeleton rounded="md" h={3} w={24} startColor="#fff" opacity={0.5} my={1} />
           </HStack>
-        </HStack>
-      </VStack>
+          <HStack justifyContent="space-between" alignItems="flex-start" space={4}>
+            <Skeleton rounded="md" h={5} w={24} startColor="#fff" opacity={0.5} my={1} />
+            <HStack alignItems="center" space={1}>
+              <Skeleton rounded="full" size={4} startColor="#fff" opacity={0.5} my={1} />
+              <Skeleton rounded="md" h={3} w={12} startColor="#fff" opacity={0.5} my={1} />
+            </HStack>
+          </HStack>
+          <HStack justifyContent="space-between" alignItems="flex-end" space={4}>
+            <HStack space={2}>
+              <Skeleton rounded="md" h={4} w={32} startColor="#fff" opacity={0.5} my={1} />
+              <Skeleton rounded="md" h={4} w={10} startColor="#fff" opacity={0.5} my={1} />
+            </HStack>
+            <Skeleton rounded="full" size={8} startColor="#fff" opacity={0.5} my={1} />
+          </HStack>
+        </VStack>
+      </Pressable>
     </CardBox>
   )
 }
