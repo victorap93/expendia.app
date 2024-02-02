@@ -1,17 +1,19 @@
 import React from 'react'
 import { ActivityIndicator, View } from 'react-native'
+import { THEME } from '../styles/theme'
 
 export default function Loading() {
+  const { colors } = THEME
   return (
     <View
       style={{
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#09090A'
+        backgroundColor: colors.gray[950]
       }}
     >
-      <ActivityIndicator color="#7C3AED" />
+      <ActivityIndicator color={colors.palette.purple} size="large" />
     </View>
   )
 }

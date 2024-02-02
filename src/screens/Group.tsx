@@ -28,6 +28,7 @@ import MenuActionSheet from '../components/MenuActionSheet'
 import DeleteMember from '../components/DeleteMember'
 import DeleteGroup from '../components/DeleteGroup'
 import EditGroupTitle from '../components/EditGroupTitle'
+import OverLoader from '../components/OverLoader'
 
 export default function Group() {
   const { user } = useAuth()
@@ -44,6 +45,7 @@ export default function Group() {
     undefined
   )
   const [editGroupTitle, setEditGroupTitle] = useState(false)
+  const [isSubmitting, setSubmitting] = useState(false)
   const me = useMemo(
     () => group.Member.find(groupMember => groupMember.member.id === user.id),
     [group]
@@ -68,13 +70,19 @@ export default function Group() {
 
   async function toggleAdmin() {
     try {
+      setSubmitting(true)
+      const selectedId = selectedMember?.id
+      setSelectedMember(undefined)
       const response = await api.patch(
-        `/groups/${id}/members/${selectedMember?.id}/admin`
+        `/groups/${id}/members/${selectedId}/admin`,
+        {
+          member_id: null
+        }
       )
       if (response.data.status) {
         setGroup(prevState => {
           const index = prevState.Member.findIndex(
-            ({ member }) => selectedMember?.id === member.id
+            ({ member }) => selectedId === member.id
           )
 
           prevState.Member[index].isAdmin = !Boolean(
@@ -87,14 +95,17 @@ export default function Group() {
         toast.show({ title: 'Função alterada com sucesso!' })
       } else
         Alert.alert(
-          'Ops!',
+          'Ops! 1',
           'Não foi possível alterar a função deste membro. Tente novamente mais tarde!'
         )
     } catch (error) {
+      console.error(error)
       Alert.alert(
-        'Ops!',
+        'Ops! 2',
         'Não foi possível alterar a função deste membro. Tente novamente mais tarde!'
       )
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -143,6 +154,7 @@ export default function Group() {
           }
         />
       )}
+      <OverLoader isLoading={isSubmitting} />
       <ScrollView
         h="full"
         refreshControl={
@@ -216,21 +228,21 @@ export default function Group() {
         onClose={() => setSelectedMember(undefined)}
         items={[
           {
+            label: group.Member.find(
+              ({ member }) => selectedMember?.email === member.email
+            )?.isAdmin
+              ? 'Remover função de admin'
+              : 'Promover para admin',
+            icon: <UserCircleGear color="white" />,
+            onPress: toggleAdmin
+          },
+          {
             label:
               selectedMember?.email === user.email
                 ? 'Sair do grupo'
                 : 'Remover do grupo',
             icon: <SignOut color="white" />,
             onPress: () => setOpenDeleteMember(true)
-          },
-          {
-            label: group.Member.find(
-              ({ member }) => selectedMember?.email === member.email
-            )?.isAdmin
-              ? 'Remover função de admin'
-              : 'Tornar admin',
-            icon: <UserCircleGear color="white" />,
-            onPress: toggleAdmin
           }
         ]}
       />
