@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useState, useEffect, useMemo } from 'react'
 import { HStack, ScrollView, Text, VStack } from 'native-base'
 import {
   useFocusEffect,
@@ -64,6 +64,10 @@ export default function Expenses() {
   const [openDelete, setOpenDelete] = useState(false)
   const [openDuplicate, setOpenDuplicate] = useState(false)
   const [editGroupTitle, setEditGroupTitle] = useState(false)
+  const me = useMemo(
+    () => group.Member.find(groupMember => groupMember.member.id === user.id),
+    [group]
+  )
 
   const getExpenses = async (loading = true) => {
     try {
@@ -177,10 +181,11 @@ export default function Expenses() {
         />
       ) : (
         <AppBar
+          title={!me?.isAdmin ? group.title : undefined}
           center={
             selecteds.length > 0 ? (
               ''
-            ) : (
+            ) : !me?.isAdmin ? undefined : (
               <TouchableOpacity
                 onPress={() => setEditGroupTitle(true)}
                 style={{ width: '50%' }}

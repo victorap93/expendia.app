@@ -131,17 +131,20 @@ export default function Group() {
         />
       ) : (
         <AppBar
+          title={!me?.isAdmin ? group.title : undefined}
           center={
-            <TouchableOpacity
-              onPress={() => setEditGroupTitle(true)}
-              style={{ width: '50%' }}
-            >
-              <HStack textAlign="center" justifyContent="center">
-                <Text fontSize="lg" color="white">
-                  {group.title}
-                </Text>
-              </HStack>
-            </TouchableOpacity>
+            !me?.isAdmin ? undefined : (
+              <TouchableOpacity
+                onPress={() => setEditGroupTitle(true)}
+                style={{ width: '50%' }}
+              >
+                <HStack textAlign="center" justifyContent="center">
+                  <Text fontSize="lg" color="white">
+                    {group.title}
+                  </Text>
+                </HStack>
+              </TouchableOpacity>
+            )
           }
           left="back"
           right={
@@ -169,7 +172,11 @@ export default function Group() {
             <Badge rounded="2xl">{group.Member.length}</Badge>
           </HStack>
           <MembersList
-            onPress={me?.isAdmin ? setSelectedMember : undefined}
+            onPress={
+              me?.isAdmin && group.Member.length > 1
+                ? setSelectedMember
+                : undefined
+            }
             members={group.Member.map(({ member, isAdmin }) => {
               return {
                 ...member,
