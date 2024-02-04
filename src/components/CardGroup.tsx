@@ -55,34 +55,35 @@ export function CardGroup({ group, handlePress }: CardGroupProps) {
   return (
     <CardBox key={group.id}>
       <Pressable
-        style={{
-          padding: 16
-        }}
+        style={{ padding: 16 }}
         onPress={handlePress ? () => handlePress(group) : undefined}
       >
-        <Text color="white" fontSize="2xl">
-          {group.title}
-        </Text>
-        <HStack justifyContent="space-between" alignItems="center">
-          <HStack alignItems="center">
+        <VStack space={1}>
+          <Text color="white" fontSize="2xl">
+            {group.title}
+          </Text>
+          <HStack justifyContent="space-between" alignItems="flex-end" space={4}>
             {isLoading ? (
-              <Skeleton h={4} w={'3/5'} />
+              <Skeleton rounded="md" h={4} w={'3/5'} startColor="#fff" opacity={0.5} />
             ) : expenses.length > 0 ? (
               unpaidExpenses.length > 0 ? (
-                <Text color="red.500">
+                <Text color="red.500" flex={1}>
                   {!isLoading && unpaidExpenses.length} despesa
                   {unpaidExpenses.length > 1 && 's'} não paga
                   {unpaidExpenses.length > 1 && 's'}
                 </Text>
               ) : (
-                <Text color="green.400">Sua parte está em dia :)</Text>
+                <Text color="green.400" flex={1}>Sua parte está em dia :)</Text>
               )
             ) : (
-              <Text color="gray.500">Nenhuma despesa criada</Text>
+              <Text color="gray.500" flex={1}>Nenhuma despesa criada</Text>
             )}
+            <AvatarGroup 
+              size="md"
+              members={group.Member.map(({ member }) => member)} 
+            />
           </HStack>
-          <AvatarGroup members={group.Member.map(({ member }) => member)} />
-        </HStack>
+        </VStack>
       </Pressable>
     </CardBox>
   )
@@ -90,16 +91,16 @@ export function CardGroup({ group, handlePress }: CardGroupProps) {
 
 export function CardSkeleton() {
   return (
-    <CardBox p={4}>
-      <VStack space={4}>
-        <Skeleton h={4} w={'2/5'} />
-        <HStack justifyContent="space-between" alignItems="center" space={1}>
-          <Skeleton h={4} w={'3/5'} />
-          <HStack alignItems="center" space={1}>
-            <Skeleton rounded="full" h={10} w={10} />
+    <CardBox>
+      <Pressable style={{ padding: 16 }} disabled>
+        <VStack space={1}>
+          <Skeleton rounded="md" h={6} w={48} startColor="#fff" opacity={0.5} my={1} />
+          <HStack justifyContent="space-between" alignItems="flex-end" space={4}>
+            <Skeleton rounded="md" h={4} w={'3/5'} startColor="#fff" opacity={0.5} />
+            <Skeleton rounded="full" size={12} startColor="#fff" opacity={0.5} my={1} />
           </HStack>
-        </HStack>
-      </VStack>
+        </VStack>
+      </Pressable>
     </CardBox>
   )
 }

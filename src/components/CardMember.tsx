@@ -61,9 +61,7 @@ export function CardMember({
       <Pressable
         disabled={onPress === undefined}
         onPress={onPress}
-        style={{
-          padding: 12
-        }}
+        style={{ padding: 16 }}
         {...slots?.pressable}
       >
         <HStack
@@ -73,8 +71,7 @@ export function CardMember({
         >
           <HStack
             alignItems="center"
-            space={3}
-            w="2/3"
+            space={4}
             {...slots?.initialContent}
           >
             <MemberAvatar member={user} size="sm" />
@@ -103,16 +100,21 @@ export function CardMember({
 
 export function CardSkeleton({ nameSkeleton }: CardSkeletonProps) {
   return (
-    <CardBox p={3}>
-      <HStack alignItems="center" justifyContent="space-between">
-        <HStack alignItems="center" space={3}>
-          <Skeleton rounded="full" h={8} w={8} />
-          <VStack w="full" space={1}>
-            {nameSkeleton && <Skeleton h={4} w={'2/5'} />}
-            <Skeleton h={4} w={'3/5'} />
-          </VStack>
+    <CardBox>
+      <Pressable style={{ padding: 16 }} disabled>
+        <HStack>
+          <HStack
+            alignItems="center"
+            space={4}
+          >
+            <Skeleton rounded="full" size={8} startColor="#fff" opacity={0.5} my={1} />
+            <VStack w="full" space={1}>
+              {nameSkeleton && <Skeleton rounded="md" h={4} w={'2/5'} startColor="#fff" opacity={0.5} />}
+              <Skeleton rounded="md" h={4} w={'3/5'} startColor="#fff" opacity={0.5} />
+            </VStack>
+          </HStack>
         </HStack>
-      </HStack>
+      </Pressable>
     </CardBox>
   )
 }

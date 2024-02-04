@@ -125,8 +125,8 @@ export default function PayingMembers() {
             ) : (
               <>
                 <CardSkeleton nameSkeleton />
-                <CardSkeleton />
                 <CardSkeleton nameSkeleton />
+                <CardSkeleton />
               </>
             )}
           </VStack>

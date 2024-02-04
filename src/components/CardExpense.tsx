@@ -57,9 +57,7 @@ export function CardExpense({
         </Badge>
       )}
       <Pressable
-        style={{
-          padding: 16
-        }}
+        style={{ padding: 16 }}
         onPress={handlePress ? () => handlePress(expense) : undefined}
         onLongPress={
           handleLongPress ? () => handleLongPress(expense) : undefined
