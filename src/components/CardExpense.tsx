@@ -122,22 +122,22 @@ export function CardSkeleton() {
       <Pressable style={{ padding: 16 }} disabled>
         <VStack space={1}>
           <HStack justifyContent="space-between" alignItems="flex-start" w="full" space={4}>
-            <Skeleton rounded="md" h={5} w={48} startColor="#fff" opacity={0.5} my={1} />
-            <Skeleton rounded="md" h={3} w={24} startColor="#fff" opacity={0.5} my={1} />
+            <Skeleton rounded="md" h={5} w={48} startColor="#fff" endColor="#999" opacity={0.4} my={1} />
+            <Skeleton rounded="md" h={3} w={24} startColor="#fff" endColor="#999" opacity={0.4} my={1} />
           </HStack>
           <HStack justifyContent="space-between" alignItems="flex-start" space={4}>
-            <Skeleton rounded="md" h={5} w={24} startColor="#fff" opacity={0.5} my={1} />
+            <Skeleton rounded="md" h={5} w={24} startColor="#fff" endColor="#999" opacity={0.4} my={1} />
             <HStack alignItems="center" space={1}>
-              <Skeleton rounded="full" size={4} startColor="#fff" opacity={0.5} my={1} />
-              <Skeleton rounded="md" h={3} w={12} startColor="#fff" opacity={0.5} my={1} />
+              <Skeleton rounded="full" size={4} startColor="#fff" endColor="#999" opacity={0.4} my={1} />
+              <Skeleton rounded="md" h={3} w={12} startColor="#fff" endColor="#999" opacity={0.4} my={1} />
             </HStack>
           </HStack>
           <HStack justifyContent="space-between" alignItems="flex-end" space={4}>
             <HStack space={2}>
-              <Skeleton rounded="md" h={4} w={32} startColor="#fff" opacity={0.5} my={1} />
-              <Skeleton rounded="md" h={4} w={10} startColor="#fff" opacity={0.5} my={1} />
+              <Skeleton rounded="md" h={4} w={32} startColor="#fff" endColor="#999" opacity={0.4} my={1} />
+              <Skeleton rounded="md" h={4} w={10} startColor="#fff" endColor="#999" opacity={0.4} my={1} />
             </HStack>
-            <Skeleton rounded="full" size={8} startColor="#fff" opacity={0.5} my={1} />
+            <Skeleton rounded="full" size={8} startColor="#fff" endColor="#999" opacity={0.4} my={1} />
           </HStack>
         </VStack>
       </Pressable>

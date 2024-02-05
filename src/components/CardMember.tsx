@@ -107,10 +107,10 @@ export function CardSkeleton({ nameSkeleton }: CardSkeletonProps) {
             alignItems="center"
             space={4}
           >
-            <Skeleton rounded="full" size={8} startColor="#fff" opacity={0.5} my={1} />
+            <Skeleton rounded="full" size={8} startColor="#fff" endColor="#999" opacity={0.4} my={1} />
             <VStack w="full" space={1}>
-              {nameSkeleton && <Skeleton rounded="md" h={4} w={'2/5'} startColor="#fff" opacity={0.5} />}
-              <Skeleton rounded="md" h={4} w={'3/5'} startColor="#fff" opacity={0.5} />
+              {nameSkeleton && <Skeleton rounded="md" h={4} w={'2/5'} startColor="#fff" endColor="#999" opacity={0.4} />}
+              <Skeleton rounded="md" h={4} w={'3/5'} startColor="#fff" endColor="#999" opacity={0.4} />
             </VStack>
           </HStack>
         </HStack>

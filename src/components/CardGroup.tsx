@@ -64,7 +64,7 @@ export function CardGroup({ group, handlePress }: CardGroupProps) {
           </Text>
           <HStack justifyContent="space-between" alignItems="flex-end" space={4}>
             {isLoading ? (
-              <Skeleton rounded="md" h={4} w={'3/5'} startColor="#fff" opacity={0.5} />
+              <Skeleton rounded="md" h={4} w={'3/5'} startColor="#fff" endColor="#999" opacity={0.4} />
             ) : expenses.length > 0 ? (
               unpaidExpenses.length > 0 ? (
                 <Text color="red.500" flex={1}>
@@ -94,10 +94,10 @@ export function CardSkeleton() {
     <CardBox>
       <Pressable style={{ padding: 16 }} disabled>
         <VStack space={1}>
-          <Skeleton rounded="md" h={6} w={48} startColor="#fff" opacity={0.5} my={1} />
+          <Skeleton rounded="md" h={6} w={48} startColor="#fff" endColor="#999" opacity={0.4} my={1} />
           <HStack justifyContent="space-between" alignItems="flex-end" space={4}>
-            <Skeleton rounded="md" h={4} w={'3/5'} startColor="#fff" opacity={0.5} />
-            <Skeleton rounded="full" size={12} startColor="#fff" opacity={0.5} my={1} />
+            <Skeleton rounded="md" h={4} w={'3/5'} startColor="#fff" endColor="#999" opacity={0.4} />
+            <Skeleton rounded="full" size={12} startColor="#fff" endColor="#999" opacity={0.4} my={1} />
           </HStack>
         </VStack>
       </Pressable>
