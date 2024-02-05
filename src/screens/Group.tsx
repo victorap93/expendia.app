@@ -275,8 +275,8 @@ export default function Group() {
               onPress: () => setOpenDeleteGroup(true)
             })
 
-          return actions
-        }, [me])}
+          return [...actions]
+        }, [me, group])}
       />
     </>
   )
