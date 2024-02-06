@@ -4,7 +4,7 @@ import { Actionsheet, Box, HStack, ITextProps, Text, VStack } from 'native-base'
 
 interface MenuItems {
   label: string
-  icon: JSX.Element
+  icon?: JSX.Element
   onPress?: () => void
   textProps?: ITextProps
 }

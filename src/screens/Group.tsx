@@ -40,6 +40,7 @@ export default function Group() {
   const { id } = route.params as GroupProps
   const [group, setGroup] = useState<GroupProps>(route.params as GroupProps)
   const [openGroupMenu, setOpenGroupMenu] = useState(false)
+  const [openTransferAdmin, setOpenTransferAdmin] = useState(false)
   const [openDeleteGroup, setOpenDeleteGroup] = useState(false)
   const [openDeleteMember, setOpenDeleteMember] = useState(false)
   const [selectedMember, setSelectedMember] = useState<MemberProps | undefined>(
@@ -70,22 +71,32 @@ export default function Group() {
     }
   }
 
-  async function toggleAdmin() {
+  async function toggleAdmin(member_id: string | null = null) {
     try {
       setSubmitting(true)
-      const selectedId = selectedMember?.id
+      const selectedId = selectedMember?.id || ''
       setSelectedMember(undefined)
       const response = await api.patch(
         `/groups/${id}/members/${selectedId}/admin`,
-        {
-          member_id: null
-        }
+        { member_id }
       )
       if (response.data.status) {
         setGroup(prevState => {
           const index = prevState.Member.findIndex(
             ({ member }) => selectedId === member.id
           )
+
+          if (selectedId === user.id) {
+            if (member_id) {
+              const memberIndex = prevState.Member.findIndex(
+                ({ member }) => member_id === member.id
+              )
+              prevState.Member[memberIndex].isAdmin = true
+            } else
+              prevState.Member.map((_, memberIndex) => {
+                prevState.Member[memberIndex].isAdmin = true
+              })
+          }
 
           prevState.Member[index].isAdmin = !Boolean(
             prevState.Member[index].isAdmin
@@ -243,10 +254,13 @@ export default function Group() {
               ? 'Remover função de admin'
               : 'Promover para admin',
             icon: <UserCircleGear color="white" />,
-            onPress: () =>
-              selectedMember?.id === user.id
-                ? setConfirmToggleAdmin(true)
-                : toggleAdmin()
+            onPress: () => {
+              if (selectedMember?.id === user.id) {
+                if (group.Member.filter(({ isAdmin }) => isAdmin).length === 1)
+                  setOpenTransferAdmin(true)
+                else setConfirmToggleAdmin(true)
+              } else toggleAdmin()
+            }
           },
           {
             label:
@@ -282,6 +296,33 @@ export default function Group() {
 
           return [...actions]
         }, [me, group])}
+      />
+      <MenuActionSheet
+        isOpen={openTransferAdmin}
+        onClose={() => setOpenTransferAdmin(false)}
+        items={[
+          {
+            label: 'Continuar como admin',
+            onPress: () => {
+              setOpenTransferAdmin(false)
+              setSelectedMember(undefined)
+            }
+          },
+          {
+            label: 'Transferir para um membro',
+            onPress: () => {
+              setOpenTransferAdmin(false)
+              setSelectedMember(undefined)
+            }
+          },
+          {
+            label: 'Transferir para os outros membros',
+            onPress: () => {
+              toggleAdmin()
+              setOpenTransferAdmin(false)
+            }
+          }
+        ]}
       />
       <ConfirmToggleAdmin
         isOpen={confirmToggleAdmin}
