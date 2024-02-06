@@ -29,6 +29,7 @@ import DeleteMember from '../components/DeleteMember'
 import DeleteGroup from '../components/DeleteGroup'
 import EditGroupTitle from '../components/EditGroupTitle'
 import OverLoader from '../components/OverLoader'
+import ConfirmToggleAdmin from '../components/ConfirmToggleAdmin'
 
 export default function Group() {
   const { user } = useAuth()
@@ -46,6 +47,7 @@ export default function Group() {
   )
   const [editGroupTitle, setEditGroupTitle] = useState(false)
   const [isSubmitting, setSubmitting] = useState(false)
+  const [confirmToggleAdmin, setConfirmToggleAdmin] = useState(false)
   const me = useMemo(
     () => group.Member.find(groupMember => groupMember.member.id === user.id),
     [group]
@@ -241,7 +243,10 @@ export default function Group() {
               ? 'Remover função de admin'
               : 'Promover para admin',
             icon: <UserCircleGear color="white" />,
-            onPress: toggleAdmin
+            onPress: () =>
+              selectedMember?.id === user.id
+                ? setConfirmToggleAdmin(true)
+                : toggleAdmin()
           },
           {
             label:
@@ -277,6 +282,11 @@ export default function Group() {
 
           return [...actions]
         }, [me, group])}
+      />
+      <ConfirmToggleAdmin
+        isOpen={confirmToggleAdmin}
+        onClose={() => setConfirmToggleAdmin(false)}
+        onConfirm={toggleAdmin}
       />
     </>
   )
