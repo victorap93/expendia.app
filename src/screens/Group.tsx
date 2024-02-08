@@ -30,6 +30,7 @@ import DeleteGroup from '../components/DeleteGroup'
 import EditGroupTitle from '../components/EditGroupTitle'
 import OverLoader from '../components/OverLoader'
 import ConfirmToggleAdmin from '../components/ConfirmToggleAdmin'
+import { MemberOptions } from '../components/MemberSelect'
 
 export default function Group() {
   const { user } = useAuth()
@@ -41,6 +42,7 @@ export default function Group() {
   const [group, setGroup] = useState<GroupProps>(route.params as GroupProps)
   const [openGroupMenu, setOpenGroupMenu] = useState(false)
   const [openTransferAdmin, setOpenTransferAdmin] = useState(false)
+  const [openSelectAdmin, setOpenSelectAdmin] = useState(false)
   const [openDeleteGroup, setOpenDeleteGroup] = useState(false)
   const [openDeleteMember, setOpenDeleteMember] = useState(false)
   const [selectedMember, setSelectedMember] = useState<MemberProps | undefined>(
@@ -86,7 +88,11 @@ export default function Group() {
             ({ member }) => selectedId === member.id
           )
 
-          if (selectedId === user.id) {
+          if (
+            selectedId === user.id &&
+            me?.isAdmin &&
+            group.Member.filter(({ isAdmin }) => isAdmin).length === 1
+          ) {
             if (member_id) {
               const memberIndex = prevState.Member.findIndex(
                 ({ member }) => member_id === member.id
@@ -300,9 +306,13 @@ export default function Group() {
       <MenuActionSheet
         isOpen={openTransferAdmin}
         onClose={() => setOpenTransferAdmin(false)}
+        title="O grupo precisa de um administrador:"
         items={[
           {
-            label: 'Continuar como admin',
+            label: 'Continuar como administrador',
+            textProps: {
+              fontSize: 'md'
+            },
             onPress: () => {
               setOpenTransferAdmin(false)
               setSelectedMember(undefined)
@@ -310,13 +320,19 @@ export default function Group() {
           },
           {
             label: 'Transferir para um membro',
+            textProps: {
+              fontSize: 'md'
+            },
             onPress: () => {
               setOpenTransferAdmin(false)
-              setSelectedMember(undefined)
+              setOpenSelectAdmin(true)
             }
           },
           {
             label: 'Transferir para os outros membros',
+            textProps: {
+              fontSize: 'md'
+            },
             onPress: () => {
               toggleAdmin()
               setOpenTransferAdmin(false)
@@ -328,6 +344,17 @@ export default function Group() {
         isOpen={confirmToggleAdmin}
         onClose={() => setConfirmToggleAdmin(false)}
         onConfirm={toggleAdmin}
+      />
+      <MemberOptions
+        members={group.Member.filter(({ member }) => member.id !== user.id).map(
+          ({ member }) => member
+        )}
+        onChange={member => {
+          toggleAdmin(member.id)
+          setOpenSelectAdmin(false)
+        }}
+        isOpen={openSelectAdmin}
+        onClose={() => setOpenSelectAdmin(false)}
       />
     </>
   )

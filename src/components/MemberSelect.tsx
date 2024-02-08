@@ -6,16 +6,20 @@ import { Pressable } from '@react-native-material/core'
 import { MemberProps } from './MembersList'
 
 interface MemberOptionProps {
-  member: MemberProps
+  member?: MemberProps
   onPress?: () => void
   selector?: boolean
   padding?: number
 }
 
-interface MemberSelectProps {
-  memberSelected: MemberProps
+export interface MemberSelectProps {
+  memberSelected?: MemberProps
   members: MemberProps[]
   onChange: (member: MemberProps) => void
+}
+export interface MemberOptionsProps extends MemberSelectProps {
+  isOpen?: boolean
+  onClose: () => void
 }
 
 export function MemberOption({
@@ -33,26 +37,29 @@ export function MemberOption({
       onPress={onPress}
     >
       <HStack alignItems="center" space={2} w="full">
-        <MemberAvatar member={member} size="sm" />
-        <Text color="white" fontSize="md">
-          {member.firstname
-            ? `${member.firstname} ${member.lastname || ''}`
-            : member.email}
-        </Text>
+        {member ? (
+          <>
+            <MemberAvatar member={member} size="sm" />
+            <Text color="white" fontSize="md">
+              {member.firstname
+                ? `${member.firstname} ${member.lastname || ''}`
+                : member.email}
+            </Text>
+          </>
+        ) : (
+          <Text color="white" fontSize="md">
+            Selecione
+          </Text>
+        )}
         {selector && <CaretDown color="white" size={24} />}
       </HStack>
     </Pressable>
   )
 }
 
-export function MemberSelect({
-  memberSelected,
-  members,
-  onChange
-}: MemberSelectProps) {
+export function MemberSelect(props: MemberSelectProps) {
+  const { memberSelected } = props
   const [isOpen, setIsOpen] = useState(false)
-  const onClose = () => setIsOpen(false)
-  const cancelRef = useRef(null)
 
   return (
     <>
@@ -61,28 +68,44 @@ export function MemberSelect({
         onPress={() => setIsOpen(true)}
         selector
       />
-      <AlertDialog
-        leastDestructiveRef={cancelRef}
+      <MemberOptions
+        {...props}
         isOpen={isOpen}
-        onClose={onClose}
-        closeOnOverlayClick
-      >
-        <AlertDialog.Content bgColor="gray.900">
-          <VStack>
-            {members.map(member => (
-              <MemberOption
-                key={member.email}
-                padding={12}
-                member={member}
-                onPress={() => {
-                  onChange(member)
-                  onClose()
-                }}
-              />
-            ))}
-          </VStack>
-        </AlertDialog.Content>
-      </AlertDialog>
+        onClose={() => setIsOpen(false)}
+      />
     </>
+  )
+}
+
+export const MemberOptions: React.FC<MemberOptionsProps> = ({
+  members,
+  isOpen,
+  onClose,
+  onChange
+}) => {
+  const cancelRef = useRef(null)
+  return (
+    <AlertDialog
+      leastDestructiveRef={cancelRef}
+      isOpen={isOpen}
+      onClose={onClose}
+      closeOnOverlayClick
+    >
+      <AlertDialog.Content bgColor="gray.900">
+        <VStack>
+          {members.map(member => (
+            <MemberOption
+              key={member.email}
+              padding={12}
+              member={member}
+              onPress={() => {
+                onChange(member)
+                onClose()
+              }}
+            />
+          ))}
+        </VStack>
+      </AlertDialog.Content>
+    </AlertDialog>
   )
 }
