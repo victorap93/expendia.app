@@ -228,16 +228,21 @@ export default function Group() {
       {selectedMember && (
         <DeleteMember
           isOpen={openDeleteMember}
-          onClose={() => {
-            getGroup()
+          onClose={async deleted => {
             setOpenDeleteMember(false)
             setSelectedMember(undefined)
-            if (selectedMember.email === user.email) {
-              navigate('Groups')
+            if (deleted) {
+              if (selectedMember.email === user.email) navigate('Groups')
+              else await getGroup()
             }
           }}
           group={group}
           member={selectedMember}
+          isOnlyAdmin={Boolean(
+            selectedMember.id === user.id &&
+              me?.isAdmin &&
+              group.Member.filter(({ isAdmin }) => isAdmin).length === 1
+          )}
         />
       )}
       <DeleteGroup
