@@ -32,6 +32,7 @@ interface Props {
   isOpen?: boolean
   onClose?: (payment?: PaymentType) => void
   expenses: ExpenseProps[]
+  isAdmin?: boolean
   member: MemberProps
   members: MemberProps[]
   unmark?: boolean
@@ -49,7 +50,8 @@ export default function MarkAsPaid({
   expenses,
   member,
   members,
-  unmark
+  unmark,
+  isAdmin
 }: Props) {
   const toast = useToast()
   const [isUnmark, setIsUnmark] = useState<boolean | undefined>(unmark)
@@ -156,6 +158,7 @@ export default function MarkAsPaid({
                   }
                   members={members}
                   onChange={member => setFieldValue('email', member.email)}
+                  disabled={!isAdmin}
                 />
                 {!isUnmark && (
                   <VStack space={3} w="full">

@@ -16,6 +16,7 @@ export interface MemberSelectProps {
   memberSelected?: MemberProps
   members: MemberProps[]
   onChange: (member: MemberProps) => void
+  disabled?: boolean
 }
 export interface MemberOptionsProps extends MemberSelectProps {
   isOpen?: boolean
@@ -35,6 +36,7 @@ export function MemberOption({
         width: '100%'
       }}
       onPress={onPress}
+      disabled={!selector}
     >
       <HStack alignItems="center" space={2} w="full">
         {member ? (
@@ -58,7 +60,7 @@ export function MemberOption({
 }
 
 export function MemberSelect(props: MemberSelectProps) {
-  const { memberSelected } = props
+  const { memberSelected, disabled } = props
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -66,7 +68,7 @@ export function MemberSelect(props: MemberSelectProps) {
       <MemberOption
         member={memberSelected}
         onPress={() => setIsOpen(true)}
-        selector
+        selector={!disabled}
       />
       <MemberOptions
         {...props}

@@ -228,12 +228,12 @@ export default function Group() {
       {selectedMember && (
         <DeleteMember
           isOpen={openDeleteMember}
-          onClose={async deleted => {
+          onClose={deleted => {
             setOpenDeleteMember(false)
             setSelectedMember(undefined)
             if (deleted) {
               if (selectedMember.email === user.email) navigate('Groups')
-              else await getGroup()
+              else getGroup()
             }
           }}
           group={group}
