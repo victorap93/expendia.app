@@ -167,7 +167,7 @@ export default function Expense() {
             <PayerSplitProgress expense={expenseForm} checkIsPaid />
             <HStack space={2} alignItems="center">
               <Text color="white" fontSize="xl">
-                Pagantes: {me?.isAdmin ? 'Admin' : 'User '}
+                Pagantes:
               </Text>
               <Badge rounded="2xl">{expense.Paying.length}</Badge>
             </HStack>

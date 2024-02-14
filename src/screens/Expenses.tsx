@@ -305,6 +305,7 @@ export default function Expenses() {
       />
       {openMarkAsPaid ? (
         <MarkAsPaid
+          isAdmin={me?.isAdmin || false}
           member={
             payers.find(({ email }) => email === user.email) ? user : payers[0]
           }

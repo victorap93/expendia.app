@@ -10,6 +10,7 @@ interface MemberOptionProps {
   onPress?: () => void
   selector?: boolean
   padding?: number
+  disabled?: boolean
 }
 
 export interface MemberSelectProps {
@@ -27,7 +28,8 @@ export function MemberOption({
   member,
   onPress,
   selector,
-  padding
+  padding,
+  disabled
 }: MemberOptionProps) {
   return (
     <Pressable
@@ -36,7 +38,7 @@ export function MemberOption({
         width: '100%'
       }}
       onPress={onPress}
-      disabled={!selector}
+      disabled={disabled}
     >
       <HStack alignItems="center" space={2} w="full">
         {member ? (
@@ -69,6 +71,7 @@ export function MemberSelect(props: MemberSelectProps) {
         member={memberSelected}
         onPress={() => setIsOpen(true)}
         selector={!disabled}
+        disabled={disabled}
       />
       <MemberOptions
         {...props}
@@ -83,7 +86,8 @@ export const MemberOptions: React.FC<MemberOptionsProps> = ({
   members,
   isOpen,
   onClose,
-  onChange
+  onChange,
+  disabled
 }) => {
   const cancelRef = useRef(null)
   return (
@@ -104,6 +108,7 @@ export const MemberOptions: React.FC<MemberOptionsProps> = ({
                 onChange(member)
                 onClose()
               }}
+              disabled={disabled}
             />
           ))}
         </VStack>
