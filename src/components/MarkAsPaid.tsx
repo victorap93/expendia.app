@@ -7,10 +7,11 @@ import {
   useToast,
   HStack,
   IconButton,
-  CloseIcon
+  CloseIcon,
+  Switch
 } from 'native-base'
 import React, { useState } from 'react'
-import { Alert } from 'react-native'
+import { Alert, TouchableOpacity } from 'react-native'
 import DateField from './DateField'
 import SubmitButton from './SubmitButton'
 import { Formik } from 'formik'
@@ -167,26 +168,6 @@ export default function MarkAsPaid({
                 </VStack>
               ) : (
                 <VStack space={6} w="full" p={4} alignItems="center">
-                  <Pressable
-                    style={{
-                      padding: 4,
-                      width: '100%'
-                    }}
-                    onPress={() => setIsUnmark(!isUnmark)}
-                  >
-                    <HStack
-                      alignItems="center"
-                      justifyContent="center"
-                      textAlign="center"
-                      space={2}
-                      w="full"
-                    >
-                      <Text color="white" fontSize="2xl">
-                        {!isUnmark ? 'Marcar como pago' : 'Desmarcar pagamento'}
-                      </Text>
-                      <ArrowsLeftRight color="white" />
-                    </HStack>
-                  </Pressable>
                   <MemberSelect
                     memberSelected={
                       members.find(({ email }) => email === values.email) || {
@@ -197,6 +178,24 @@ export default function MarkAsPaid({
                     onChange={member => setFieldValue('email', member.email)}
                     disabled={!isAdmin}
                   />
+                  <HStack
+                    space={2}
+                    alignItems="center"
+                    justifyContent="flex-start"
+                    width="full"
+                  >
+                    <Switch
+                      isChecked={!isUnmark}
+                      onChange={() => setIsUnmark(!isUnmark)}
+                      colorScheme="success"
+                      size="lg"
+                    />
+                    <TouchableOpacity onPress={() => setIsUnmark(!isUnmark)}>
+                      <Text color="white" fontSize="lg">
+                        Marcar como pago
+                      </Text>
+                    </TouchableOpacity>
+                  </HStack>
                   {!isUnmark && (
                     <VStack space={3} w="full">
                       <Text color="gray.400" fontSize="md">
