@@ -181,7 +181,9 @@ export default function Expenses() {
         />
       ) : (
         <AppBar
-          title={!me?.isAdmin ? group.title : undefined}
+          title={
+            !me?.isAdmin && selecteds.length === 0 ? group.title : undefined
+          }
           center={
             selecteds.length > 0 ? (
               ''
