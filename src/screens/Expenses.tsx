@@ -130,7 +130,7 @@ export default function Expenses() {
   const expensesNavigation = (expense: ExpenseProps) => {
     navigate('Expense', {
       expense,
-      group: route.params as GroupProps
+      group
     })
   }
 

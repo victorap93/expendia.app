@@ -59,11 +59,7 @@ export default function Expense() {
   )
   const [editExpenseTitle, setEditExpenseTitle] = useState(false)
   const me = useMemo(() => {
-    const teste = group.Member.find(
-      groupMember => groupMember.member.id === user.id
-    )
-    console.log(teste)
-    return teste
+    return group.Member.find(groupMember => groupMember.member.id === user.id)
   }, [group])
 
   const getExpense = async (loading = true) => {
