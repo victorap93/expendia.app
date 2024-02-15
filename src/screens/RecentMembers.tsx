@@ -119,8 +119,8 @@ export default function RecentMembers() {
             ) : (
               <>
                 <CardSkeleton nameSkeleton />
-                <CardSkeleton />
                 <CardSkeleton nameSkeleton />
+                <CardSkeleton />
               </>
             )}
           </VStack>
