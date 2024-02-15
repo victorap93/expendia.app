@@ -10,7 +10,7 @@ import {
   CloseIcon,
   Switch
 } from 'native-base'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Alert, TouchableOpacity } from 'react-native'
 import DateField from './DateField'
 import SubmitButton from './SubmitButton'
@@ -102,6 +102,10 @@ export default function MarkAsPaid({
       console.log(error)
     }
   }
+
+  useEffect(() => {
+    setIsUnmark(unmark)
+  }, [unmark])
 
   return (
     <Formik

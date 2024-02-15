@@ -274,14 +274,22 @@ export default function Expense() {
                     ),
                     label: 'Desmarcar pagamento',
                     onPress: () => {
+                      setSelectedMember(user)
                       setUnmark(true)
                       setOpenMarkAsPaid(true)
                     }
                   }
                 : {
-                    icon: <Icon color="white" name="check-outline" size={20} />,
+                    icon: (
+                      <Icon
+                        color="white"
+                        name="check-circle-outline"
+                        size={20}
+                      />
+                    ),
                     label: 'Marcar como pago',
                     onPress: () => {
+                      setSelectedMember(user)
                       setUnmark(false)
                       setOpenMarkAsPaid(true)
                     }
