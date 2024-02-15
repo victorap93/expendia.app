@@ -1,18 +1,18 @@
 import React, { ReactNode } from 'react'
-import { Avatar, Badge, IAvatarProps } from 'native-base'
-import { UserProps } from '../context/AuthContext'
+import { Avatar, IAvatarProps } from 'native-base'
 import { ThemeComponentSizeType } from 'native-base/lib/typescript/components/types'
 import { getAvatarUrl } from '../helpers/memberHelper'
 import { IAvatarBadgeProps } from 'native-base/lib/typescript/components/composites/Avatar'
 import { IAvatarGroupProps } from 'native-base/lib/typescript/components/composites/Avatar/types'
+import { MemberProps } from './MembersList'
 
 interface AvatarGroupProps extends IAvatarGroupProps {
-  members: UserProps[]
+  members: MemberProps[]
   size?: ThemeComponentSizeType<'Avatar'>
 }
 
 interface MemberAvatarProps extends IAvatarProps {
-  member: UserProps
+  member: MemberProps
   noGetAvatarUrl?: boolean
   badge?: ReactNode
   badgeProps?: IAvatarBadgeProps

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { Badge, HStack, ScrollView, Text, VStack } from 'native-base'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { api } from '../lib/axios'
@@ -13,14 +13,13 @@ import { ExpenseProps } from './Expenses'
 import MenuActionSheet from '../components/MenuActionSheet'
 import TotalValue from '../components/TotalValue'
 import dayjs from 'dayjs'
-import MembersList from '../components/MembersList'
+import MembersList, { MemberProps } from '../components/MembersList'
 import { convertFloatToMoney, getExpenseForm } from '../helpers/expenseHelper'
 import ExpenseStatusMessage, {
   ExpenseStatusMessageSetup
 } from '../components/ExpenseStatusMessage'
 import PayerSplitProgress from '../components/PayerSplitProgress'
 import MarkAsPaidFab from '../components/MarkAsPaidFab'
-import { UserProps } from '../context/AuthContext'
 import DeleteExpense from '../components/DeleteExpense'
 import DuplicateExpense from '../components/DuplicateExpense'
 import EditExpenseTitle from '../components/EditExpenseTitle'
@@ -37,7 +36,7 @@ interface ExpenseStatusMessageSetupPayer extends ExpenseStatusMessageSetup {
 export default function Expense() {
   const { user } = useAuth()
   const { navigate, goBack } = useNavigation()
-  const [isLoading, setIsLoading] = useState(true)
+  const [_, setIsLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const route = useRoute()
   const { group, expense: expenseParam } = route.params as ExpenseDetails
@@ -50,7 +49,7 @@ export default function Expense() {
     ExpenseStatusMessageSetupPayer[]
   >([])
   const [openDuplicate, setOpenDuplicate] = useState(false)
-  const [selectedMember, setSelectedMember] = useState<UserProps>(
+  const [selectedMember, setSelectedMember] = useState<MemberProps>(
     expense.Paying.find(({ paying }) => paying.email === user.email)
       ? user
       : expense.Paying[0].paying
@@ -59,6 +58,9 @@ export default function Expense() {
     ({ paying }) => paying.email === user.email
   )
   const [editExpenseTitle, setEditExpenseTitle] = useState(false)
+  const me = useMemo(() => {
+    return group.Member.find(groupMember => groupMember.member.id === user.id)
+  }, [group])
 
   const getExpense = async (loading = true) => {
     try {
@@ -167,8 +169,10 @@ export default function Expense() {
             </HStack>
             <MembersList
               onPress={member => {
-                setSelectedMember(member)
-                setOpenMarkAsPaid(true)
+                if (me?.isAdmin || member.id === user.id) {
+                  setSelectedMember(member)
+                  setOpenMarkAsPaid(true)
+                }
               }}
               members={expense.Paying.map(({ cost, paying, paid, paidAt }) => {
                 return {
@@ -224,6 +228,7 @@ export default function Expense() {
       <MarkAsPaid
         member={selectedMember}
         members={expense.Paying.map(({ paying }) => paying)}
+        isAdmin={me?.isAdmin || undefined}
         isOpen={openMarkAsPaid}
         onClose={payment => {
           setOpenMarkAsPaid(false)

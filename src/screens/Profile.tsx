@@ -7,8 +7,6 @@ import * as Yup from 'yup'
 import TextField from '../components/TextField'
 import { api } from '../lib/axios'
 import { useNavigation } from '@react-navigation/native'
-
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useAuth } from '../hooks/useAuth'
 import SubmitButton from '../components/SubmitButton'
 import { UserProps } from '../context/AuthContext'

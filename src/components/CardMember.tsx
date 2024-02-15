@@ -1,12 +1,12 @@
 import React, { ReactElement, useEffect, useState } from 'react'
 import CardBox from './CardBox'
 import { HStack, Skeleton, Text, VStack } from 'native-base'
-import { UserProps } from '../context/AuthContext'
 import { MemberAvatar } from './MemberAvatar'
 import { api } from '../lib/axios'
 import { Pressable, PressableProps } from '@react-native-material/core'
 import { InterfaceBoxProps } from 'native-base/lib/typescript/components/primitives/Box'
 import { InterfaceHStackProps } from 'native-base/lib/typescript/components/primitives/Stack/HStack'
+import { MemberProps } from './MembersList'
 
 export type CardMemberSlots = {
   cardBox?: InterfaceBoxProps
@@ -15,7 +15,7 @@ export type CardMemberSlots = {
   initialContent?: InterfaceHStackProps
 }
 interface CardMemberProps {
-  member: UserProps
+  member: MemberProps
   fetchUser?: boolean
   endComponent?: ReactElement<any, any>
   bottomComponent?: ReactElement<any, any>
@@ -37,7 +37,7 @@ export function CardMember({
   hideSubtitle,
   onPress
 }: CardMemberProps) {
-  const [user, setUser] = useState<UserProps | undefined>()
+  const [user, setUser] = useState<MemberProps | undefined>()
   const [fetched, setFetched] = useState(false)
 
   async function getUser() {

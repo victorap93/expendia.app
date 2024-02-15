@@ -3,10 +3,11 @@ import {
   VStack,
   Center,
   Text,
-  Box,
-  Button,
+  Alert as AlertBox,
   useToast,
-  HStack
+  HStack,
+  IconButton,
+  CloseIcon
 } from 'native-base'
 import React, { useState } from 'react'
 import { Alert } from 'react-native'
@@ -15,25 +16,27 @@ import SubmitButton from './SubmitButton'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { api } from '../lib/axios'
-import { UserProps } from '../context/AuthContext'
 import dayjs from 'dayjs'
 import { MemberSelect } from './MemberSelect'
 import { Pressable } from '@react-native-material/core'
 import { ArrowsLeftRight } from 'phosphor-react-native'
 import { ExpenseProps } from '../screens/Expenses'
+import { MemberProps } from './MembersList'
+import { useAuth } from '../hooks/useAuth'
 
 export type PaymentType = {
   paid: boolean
   paidAt?: string | null
-  paying: UserProps
+  paying: MemberProps
 }
 
 interface Props {
   isOpen?: boolean
   onClose?: (payment?: PaymentType) => void
   expenses: ExpenseProps[]
-  member: UserProps
-  members: UserProps[]
+  isAdmin?: boolean
+  member: MemberProps
+  members: MemberProps[]
   unmark?: boolean
 }
 
@@ -49,10 +52,12 @@ export default function MarkAsPaid({
   expenses,
   member,
   members,
-  unmark
+  unmark,
+  isAdmin
 }: Props) {
   const toast = useToast()
   const [isUnmark, setIsUnmark] = useState<boolean | undefined>(unmark)
+  const { user } = useAuth()
 
   async function submit(
     values: MarkAsPaidForm,
@@ -127,62 +132,98 @@ export default function MarkAsPaid({
         <Center>
           <Actionsheet isOpen={isOpen} onClose={onClose} hideDragIndicator>
             <Actionsheet.Content bgColor="gray.900">
-              <VStack space={6} w="full" p={4} alignItems="center">
-                <Pressable
-                  style={{
-                    padding: 4,
-                    width: '100%'
-                  }}
-                  onPress={() => setIsUnmark(!isUnmark)}
-                >
-                  <HStack
-                    alignItems="center"
-                    justifyContent="center"
-                    textAlign="center"
-                    space={2}
-                    w="full"
+              {!isAdmin && member.id !== user.id ? (
+                <VStack space={6} w="full" p={4} alignItems="center">
+                  <Text color="white" fontSize="xl">
+                    Ops!
+                  </Text>
+                  <AlertBox w="100%" status="error">
+                    <VStack space={2} flexShrink={1} w="100%">
+                      <HStack
+                        flexShrink={1}
+                        space={2}
+                        justifyContent="space-between"
+                      >
+                        <HStack space={2} flexShrink={1}>
+                          <AlertBox.Icon mt="1" />
+                          <Text fontSize="md" color="coolGray.800">
+                            Você não pode pagar por despesas da qual não faz
+                            parte.
+                          </Text>
+                        </HStack>
+                        <IconButton
+                          variant="unstyled"
+                          _focus={{
+                            borderWidth: 0
+                          }}
+                          icon={<CloseIcon size="3" />}
+                          _icon={{
+                            color: 'coolGray.600'
+                          }}
+                        />
+                      </HStack>
+                    </VStack>
+                  </AlertBox>
+                </VStack>
+              ) : (
+                <VStack space={6} w="full" p={4} alignItems="center">
+                  <Pressable
+                    style={{
+                      padding: 4,
+                      width: '100%'
+                    }}
+                    onPress={() => setIsUnmark(!isUnmark)}
                   >
-                    <Text color="white" fontSize="2xl">
-                      {!isUnmark ? 'Marcar como pago' : 'Desmarcar pagamento'}
-                    </Text>
-                    <ArrowsLeftRight color="white" />
-                  </HStack>
-                </Pressable>
-                <MemberSelect
-                  memberSelected={
-                    members.find(({ email }) => email === values.email) || {
-                      email: values.email
+                    <HStack
+                      alignItems="center"
+                      justifyContent="center"
+                      textAlign="center"
+                      space={2}
+                      w="full"
+                    >
+                      <Text color="white" fontSize="2xl">
+                        {!isUnmark ? 'Marcar como pago' : 'Desmarcar pagamento'}
+                      </Text>
+                      <ArrowsLeftRight color="white" />
+                    </HStack>
+                  </Pressable>
+                  <MemberSelect
+                    memberSelected={
+                      members.find(({ email }) => email === values.email) || {
+                        email: values.email
+                      }
                     }
-                  }
-                  members={members}
-                  onChange={member => setFieldValue('email', member.email)}
-                />
-                {!isUnmark && (
-                  <VStack space={3} w="full">
-                    <Text color="gray.400" fontSize="md">
-                      Quando foi pago?
-                    </Text>
-                    <DateField
-                      onChangeText={handleChange('paidAt')}
-                      value={values.paidAt}
-                    />
-                  </VStack>
-                )}
-                <SubmitButton
-                  buttonProps={{
-                    width: 'full'
-                  }}
-                  title={
-                    isSubmitting
-                      ? 'Carregando...'
-                      : isUnmark
-                      ? 'Desmarcar pagamento'
-                      : 'Confirmar pagamento'
-                  }
-                  isSubmitting={isSubmitting}
-                  handleSubmit={handleSubmit}
-                />
-              </VStack>
+                    members={members}
+                    onChange={member => setFieldValue('email', member.email)}
+                    disabled={!isAdmin}
+                  />
+                  {!isUnmark && (
+                    <VStack space={3} w="full">
+                      <Text color="gray.400" fontSize="md">
+                        Quando foi pago?
+                      </Text>
+                      <DateField
+                        onChangeText={handleChange('paidAt')}
+                        value={values.paidAt}
+                      />
+                    </VStack>
+                  )}
+                  <SubmitButton
+                    buttonProps={{
+                      width: 'full'
+                    }}
+                    title={
+                      isSubmitting
+                        ? 'Carregando...'
+                        : isUnmark
+                        ? 'Desmarcar pagamento'
+                        : 'Confirmar pagamento'
+                    }
+                    isSubmitting={isSubmitting}
+                    handleSubmit={handleSubmit}
+                  />
+                </VStack>
+              )}
             </Actionsheet.Content>
           </Actionsheet>
         </Center>

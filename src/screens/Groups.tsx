@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { Image, ScrollView, Text, VStack } from 'native-base'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
-import { UserProps } from '../context/AuthContext'
 import { api } from '../lib/axios'
 import { Alert, RefreshControl } from 'react-native'
 import * as Item from '../components/CardGroup'
@@ -10,10 +9,12 @@ import PlusFab from '../components/PlusFab'
 import EmptyMessage from '../components/EmptyMessage'
 import { useAuth } from '../hooks/useAuth'
 import ConfirmEmail from './ConfirmEmail'
+import { MemberProps } from '../components/MembersList'
 
 export type GroupMemberType = {
   createdAt: string
-  member: UserProps
+  isAdmin?: boolean | null
+  member: MemberProps
 }
 
 export interface GroupProps {

@@ -9,7 +9,6 @@ import {
 import React, { useRef } from 'react'
 import { api } from '../lib/axios'
 import { Alert } from 'react-native'
-import { UserProps } from '../context/AuthContext'
 import { GroupProps } from '../screens/Groups'
 import { useAuth } from '../hooks/useAuth'
 

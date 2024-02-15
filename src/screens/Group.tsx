@@ -1,6 +1,14 @@
 import { Alert, RefreshControl, TouchableOpacity } from 'react-native'
-import React, { useCallback, useState } from 'react'
-import { Badge, Box, HStack, ScrollView, Text, VStack } from 'native-base'
+import React, { useCallback, useMemo, useState } from 'react'
+import {
+  Badge,
+  Box,
+  HStack,
+  ScrollView,
+  Text,
+  VStack,
+  useToast
+} from 'native-base'
 import {
   useFocusEffect,
   useNavigation,
@@ -12,30 +20,41 @@ import Icon from '@expo/vector-icons/MaterialCommunityIcons'
 import { GroupProps } from './Groups'
 import { useAuth } from '../hooks/useAuth'
 import { api } from '../lib/axios'
-import MembersList from '../components/MembersList'
+import MembersList, { MemberProps } from '../components/MembersList'
 import PlusFab from '../components/PlusFab'
-import { SignOut, Trash, UserGear } from 'phosphor-react-native'
+import { SignOut, Trash, UserCircleGear, UserGear } from 'phosphor-react-native'
 import UserLabels from '../components/UserLabels'
 import MenuActionSheet from '../components/MenuActionSheet'
-import { UserProps } from '../context/AuthContext'
 import DeleteMember from '../components/DeleteMember'
 import DeleteGroup from '../components/DeleteGroup'
 import EditGroupTitle from '../components/EditGroupTitle'
+import OverLoader from '../components/OverLoader'
+import ConfirmToggleAdmin from '../components/ConfirmToggleAdmin'
+import { MemberOptions } from '../components/MemberSelect'
 
 export default function Group() {
   const { user } = useAuth()
   const { navigate } = useNavigation()
+  const toast = useToast()
   const [refreshing, setRefreshing] = useState(false)
   const route = useRoute()
   const { id } = route.params as GroupProps
   const [group, setGroup] = useState<GroupProps>(route.params as GroupProps)
   const [openGroupMenu, setOpenGroupMenu] = useState(false)
+  const [openTransferAdmin, setOpenTransferAdmin] = useState(false)
+  const [openSelectAdmin, setOpenSelectAdmin] = useState(false)
   const [openDeleteGroup, setOpenDeleteGroup] = useState(false)
   const [openDeleteMember, setOpenDeleteMember] = useState(false)
-  const [selectedMember, setSelectedMember] = useState<UserProps | undefined>(
+  const [selectedMember, setSelectedMember] = useState<MemberProps | undefined>(
     undefined
   )
   const [editGroupTitle, setEditGroupTitle] = useState(false)
+  const [isSubmitting, setSubmitting] = useState(false)
+  const [confirmToggleAdmin, setConfirmToggleAdmin] = useState(false)
+  const me = useMemo(
+    () => group.Member.find(groupMember => groupMember.member.id === user.id),
+    [group]
+  )
 
   async function getGroup() {
     try {
@@ -51,6 +70,61 @@ export default function Group() {
         'Ops!',
         'Não foi possível obter as informações deste grupo. Tente novamente mais tarde!'
       )
+    }
+  }
+
+  async function toggleAdmin(member_id: string | null = null) {
+    try {
+      setSubmitting(true)
+      const selectedId = selectedMember?.id || ''
+      setSelectedMember(undefined)
+      const response = await api.patch(
+        `/groups/${id}/members/${selectedId}/admin`,
+        { member_id }
+      )
+      if (response.data.status) {
+        setGroup(prevState => {
+          const index = prevState.Member.findIndex(
+            ({ member }) => selectedId === member.id
+          )
+
+          if (
+            selectedId === user.id &&
+            me?.isAdmin &&
+            group.Member.filter(({ isAdmin }) => isAdmin).length === 1
+          ) {
+            if (member_id) {
+              const memberIndex = prevState.Member.findIndex(
+                ({ member }) => member_id === member.id
+              )
+              prevState.Member[memberIndex].isAdmin = true
+            } else
+              prevState.Member.map((_, memberIndex) => {
+                prevState.Member[memberIndex].isAdmin = true
+              })
+          }
+
+          prevState.Member[index].isAdmin = !Boolean(
+            prevState.Member[index].isAdmin
+          )
+
+          return { ...prevState }
+        })
+
+        toast.show({ title: 'Função alterada com sucesso!' })
+      } else
+        Alert.alert(
+          'Ops! 1',
+          'Não foi possível alterar a função deste membro. Tente novamente mais tarde!'
+        )
+    } catch (error) {
+      console.error(error)
+      Alert.alert(
+        'Ops! 2',
+        'Não foi possível alterar a função deste membro. Tente novamente mais tarde!'
+      )
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -76,17 +150,20 @@ export default function Group() {
         />
       ) : (
         <AppBar
+          title={!me?.isAdmin ? group.title : undefined}
           center={
-            <TouchableOpacity
-              onPress={() => setEditGroupTitle(true)}
-              style={{ width: '50%' }}
-            >
-              <HStack textAlign="center" justifyContent="center">
-                <Text fontSize="lg" color="white">
-                  {group.title}
-                </Text>
-              </HStack>
-            </TouchableOpacity>
+            !me?.isAdmin ? undefined : (
+              <TouchableOpacity
+                onPress={() => setEditGroupTitle(true)}
+                style={{ width: '50%' }}
+              >
+                <HStack textAlign="center" justifyContent="center">
+                  <Text fontSize="lg" color="white">
+                    {group.title}
+                  </Text>
+                </HStack>
+              </TouchableOpacity>
+            )
           }
           left="back"
           right={
@@ -99,6 +176,7 @@ export default function Group() {
           }
         />
       )}
+      <OverLoader isLoading={isSubmitting} />
       <ScrollView
         h="full"
         refreshControl={
@@ -113,13 +191,20 @@ export default function Group() {
             <Badge rounded="2xl">{group.Member.length}</Badge>
           </HStack>
           <MembersList
-            onPress={setSelectedMember}
-            members={group.Member.map(({ member }) => {
+            onPress={
+              me?.isAdmin && group.Member.length > 1
+                ? setSelectedMember
+                : undefined
+            }
+            members={group.Member.map(({ member, isAdmin }) => {
               return {
                 ...member,
                 bottomComponent: (
                   <Box mt={2}>
-                    <UserLabels isCreator={member.id === group.user_id} />
+                    <UserLabels
+                      isCreator={member.id === group.user_id}
+                      isAdmin={isAdmin || false}
+                    />
                   </Box>
                 )
               }
@@ -127,30 +212,37 @@ export default function Group() {
           />
         </VStack>
       </ScrollView>
-      <PlusFab
-        icon={<UserGear color="white" size={24} />}
-        onPress={() =>
-          navigate('GroupMembers', {
-            ...group,
-            members: group.Member.filter(
-              ({ member }) => member.email !== user.email
-            ).map(({ member }) => member.email)
-          })
-        }
-      />
+      {me?.isAdmin && (
+        <PlusFab
+          icon={<UserGear color="white" size={24} />}
+          onPress={() =>
+            navigate('GroupMembers', {
+              ...group,
+              members: group.Member.filter(
+                ({ member }) => member.email !== user.email
+              ).map(({ member }) => member.email)
+            })
+          }
+        />
+      )}
       {selectedMember && (
         <DeleteMember
           isOpen={openDeleteMember}
-          onClose={() => {
-            getGroup()
+          onClose={deleted => {
             setOpenDeleteMember(false)
             setSelectedMember(undefined)
-            if (selectedMember.email === user.email) {
-              navigate('Groups')
+            if (deleted) {
+              if (selectedMember.email === user.email) navigate('Groups')
+              else getGroup()
             }
           }}
           group={group}
           member={selectedMember}
+          isOnlyAdmin={Boolean(
+            selectedMember.id === user.id &&
+              me?.isAdmin &&
+              group.Member.filter(({ isAdmin }) => isAdmin).length === 1
+          )}
         />
       )}
       <DeleteGroup
@@ -167,6 +259,21 @@ export default function Group() {
         onClose={() => setSelectedMember(undefined)}
         items={[
           {
+            label: group.Member.find(
+              ({ member }) => selectedMember?.email === member.email
+            )?.isAdmin
+              ? 'Remover função de admin'
+              : 'Promover para admin',
+            icon: <UserCircleGear color="white" />,
+            onPress: () => {
+              if (selectedMember?.id === user.id) {
+                if (group.Member.filter(({ isAdmin }) => isAdmin).length === 1)
+                  setOpenTransferAdmin(true)
+                else setConfirmToggleAdmin(true)
+              } else toggleAdmin()
+            }
+          },
+          {
             label:
               selectedMember?.email === user.email
                 ? 'Sair do grupo'
@@ -179,21 +286,80 @@ export default function Group() {
       <MenuActionSheet
         isOpen={openGroupMenu}
         onClose={() => setOpenGroupMenu(false)}
+        items={useMemo(() => {
+          const actions = [
+            {
+              label: 'Sair do grupo',
+              icon: <SignOut color="white" />,
+              onPress: () => {
+                setSelectedMember(user)
+                setOpenDeleteMember(true)
+              }
+            }
+          ]
+
+          if (me?.isAdmin)
+            actions.push({
+              label: 'Excluir grupo',
+              icon: <Trash color="white" />,
+              onPress: () => setOpenDeleteGroup(true)
+            })
+
+          return [...actions]
+        }, [me, group])}
+      />
+      <MenuActionSheet
+        isOpen={openTransferAdmin}
+        onClose={() => setOpenTransferAdmin(false)}
+        title="O grupo precisa de um administrador:"
         items={[
           {
-            label: 'Sair do grupo',
-            icon: <SignOut color="white" />,
+            label: 'Continuar como administrador',
+            textProps: {
+              fontSize: 'md'
+            },
             onPress: () => {
-              setSelectedMember(user)
-              setOpenDeleteMember(true)
+              setOpenTransferAdmin(false)
+              setSelectedMember(undefined)
             }
           },
           {
-            label: 'Excluir grupo',
-            icon: <Trash color="white" />,
-            onPress: () => setOpenDeleteGroup(true)
+            label: 'Transferir para um membro',
+            textProps: {
+              fontSize: 'md'
+            },
+            onPress: () => {
+              setOpenTransferAdmin(false)
+              setOpenSelectAdmin(true)
+            }
+          },
+          {
+            label: 'Transferir para os outros membros',
+            textProps: {
+              fontSize: 'md'
+            },
+            onPress: () => {
+              toggleAdmin()
+              setOpenTransferAdmin(false)
+            }
           }
         ]}
+      />
+      <ConfirmToggleAdmin
+        isOpen={confirmToggleAdmin}
+        onClose={() => setConfirmToggleAdmin(false)}
+        onConfirm={toggleAdmin}
+      />
+      <MemberOptions
+        members={group.Member.filter(({ member }) => member.id !== user.id).map(
+          ({ member }) => member
+        )}
+        onChange={member => {
+          toggleAdmin(member.id)
+          setOpenSelectAdmin(false)
+        }}
+        isOpen={openSelectAdmin}
+        onClose={() => setOpenSelectAdmin(false)}
       />
     </>
   )

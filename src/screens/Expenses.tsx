@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useState, useEffect, useMemo } from 'react'
 import { HStack, ScrollView, Text, VStack } from 'native-base'
 import {
   useFocusEffect,
@@ -16,7 +16,6 @@ import DateController, {
   MonthlyProps,
   present
 } from '../components/DateController'
-import { UserProps } from '../context/AuthContext'
 import { CardExpense, CardSkeleton } from '../components/CardExpense'
 import MarkAsPaid from '../components/MarkAsPaid'
 import { useAuth } from '../hooks/useAuth'
@@ -27,6 +26,7 @@ import DeleteExpense from '../components/DeleteExpense'
 import DuplicateExpense from '../components/DuplicateExpense'
 import { getExpenseForm } from '../helpers/expenseHelper'
 import EditGroupTitle from '../components/EditGroupTitle'
+import { MemberProps } from '../components/MembersList'
 
 export interface ExpenseProps {
   id: string
@@ -46,7 +46,7 @@ export interface PayingProps {
   paidAt?: string | null
   createdAt: string
   updatedAt: string
-  paying: UserProps
+  paying: MemberProps
 }
 
 export default function Expenses() {
@@ -58,12 +58,16 @@ export default function Expenses() {
   const [group, setGroup] = useState<GroupProps>(route.params as GroupProps)
   const [expenses, setExpenses] = useState<ExpenseProps[]>([])
   const [selecteds, setSelecteds] = useState<string[]>([])
-  const [payers, setPayers] = useState<UserProps[]>([])
+  const [payers, setPayers] = useState<MemberProps[]>([])
   const [expensesDate, setExpensesDate] = useState<MonthlyProps>(present)
   const [openMarkAsPaid, setOpenMarkAsPaid] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
   const [openDuplicate, setOpenDuplicate] = useState(false)
   const [editGroupTitle, setEditGroupTitle] = useState(false)
+  const me = useMemo(
+    () => group.Member.find(groupMember => groupMember.member.id === user.id),
+    [group]
+  )
 
   const getExpenses = async (loading = true) => {
     try {
@@ -126,7 +130,7 @@ export default function Expenses() {
   const expensesNavigation = (expense: ExpenseProps) => {
     navigate('Expense', {
       expense,
-      group: route.params as GroupProps
+      group
     })
   }
 
@@ -149,7 +153,7 @@ export default function Expenses() {
   }
 
   const getPayers = () => {
-    const expensePayers: UserProps[] = []
+    const expensePayers: MemberProps[] = []
     selecteds.map(selected => {
       const selectedExpense = expenses.find(({ id }) => id === selected)
       if (selectedExpense) {
@@ -177,10 +181,13 @@ export default function Expenses() {
         />
       ) : (
         <AppBar
+          title={
+            !me?.isAdmin && selecteds.length === 0 ? group.title : undefined
+          }
           center={
             selecteds.length > 0 ? (
               ''
-            ) : (
+            ) : !me?.isAdmin ? undefined : (
               <TouchableOpacity
                 onPress={() => setEditGroupTitle(true)}
                 style={{ width: '50%' }}
@@ -300,6 +307,7 @@ export default function Expenses() {
       />
       {openMarkAsPaid ? (
         <MarkAsPaid
+          isAdmin={me?.isAdmin || false}
           member={
             payers.find(({ email }) => email === user.email) ? user : payers[0]
           }

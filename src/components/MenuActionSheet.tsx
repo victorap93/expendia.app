@@ -4,21 +4,32 @@ import { Actionsheet, Box, HStack, ITextProps, Text, VStack } from 'native-base'
 
 interface MenuItems {
   label: string
-  icon: JSX.Element
+  icon?: JSX.Element
   onPress?: () => void
   textProps?: ITextProps
 }
 
 interface Props {
+  title?: JSX.Element | string
   isOpen?: boolean
   onClose?: () => void
   items: MenuItems[]
 }
 
-export default function MenuActionSheet({ isOpen, onClose, items }: Props) {
+export default function MenuActionSheet({
+  isOpen,
+  onClose,
+  items,
+  title
+}: Props) {
   return (
     <Actionsheet isOpen={isOpen} onClose={onClose}>
       <Actionsheet.Content bgColor="gray.900">
+        {title && (
+          <Text fontSize="lg" color="white" mb={6}>
+            {title}
+          </Text>
+        )}
         <VStack w="full">
           {items.map((item, index) => (
             <Pressable
