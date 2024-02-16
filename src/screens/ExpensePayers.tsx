@@ -123,7 +123,7 @@ export default function ExpensePayers() {
       {({ handleSubmit, values, errors, isSubmitting, setFieldValue }) => (
         <>
           <ScrollView>
-            <VStack px={4} py={8}>
+            <VStack px={4} py={8} pb={16}>
               <VStack>
                 <Box my={3}>
                   <BackButton />
