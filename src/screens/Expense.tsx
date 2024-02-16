@@ -10,7 +10,7 @@ import { GroupProps } from './Groups'
 import MarkAsPaid from '../components/MarkAsPaid'
 import { useAuth } from '../hooks/useAuth'
 import { ExpenseProps } from './Expenses'
-import MenuActionSheet from '../components/MenuActionSheet'
+import MenuActionSheet, { MenuItems } from '../components/MenuActionSheet'
 import TotalValue from '../components/TotalValue'
 import dayjs from 'dayjs'
 import MembersList, { MemberProps } from '../components/MembersList'
@@ -50,17 +50,16 @@ export default function Expense() {
   >([])
   const [openDuplicate, setOpenDuplicate] = useState(false)
   const [selectedMember, setSelectedMember] = useState<MemberProps>(
-    expense.Paying.find(({ paying }) => paying.email === user.email)
+    expense.Paying.find(({ paying }) => paying.id === user.id)
       ? user
       : expense.Paying[0].paying
   )
-  const userPayer = expense.Paying.find(
-    ({ paying }) => paying.email === user.email
-  )
+  const userPayer = expense.Paying.find(({ paying }) => paying.id === user.id)
   const [editExpenseTitle, setEditExpenseTitle] = useState(false)
   const me = useMemo(() => {
     return group.Member.find(groupMember => groupMember.member.id === user.id)
   }, [group])
+  const [unmark, setUnmark] = useState(false)
 
   const getExpense = async (loading = true) => {
     try {
@@ -215,7 +214,12 @@ export default function Expense() {
         </VStack>
       </ScrollView>
       {userPayer && !userPayer.paid && (
-        <MarkAsPaidFab onPress={() => setOpenMarkAsPaid(true)} />
+        <MarkAsPaidFab
+          onPress={() => {
+            setUnmark(false)
+            setOpenMarkAsPaid(true)
+          }}
+        />
       )}
       <DeleteExpense
         expenses={[expense.id]}
@@ -248,6 +252,7 @@ export default function Expense() {
           }
         }}
         expenses={[expense]}
+        unmark={unmark}
       />
       <DuplicateExpense
         expenses={[expenseForm]}
@@ -257,26 +262,64 @@ export default function Expense() {
       <MenuActionSheet
         isOpen={openMenu}
         onClose={() => setOpenMenu(false)}
-        items={[
-          {
-            icon: <Icon color="white" name="pencil" size={20} />,
-            label: 'Editar',
-            onPress: editExpense
-          },
-          {
-            icon: <Icon color="white" name="delete" size={20} />,
-            label: 'Excluir',
-            onPress: () => setOpenDelete(true)
-          },
-          {
-            icon: <Icon color="white" name="content-copy" size={20} />,
-            label: 'Duplicar',
-            onPress: () => {
-              setOpenMenu(false)
-              setOpenDuplicate(true)
-            }
+        items={useMemo(() => {
+          const items: MenuItems[] = []
+
+          if (userPayer) {
+            items.push(
+              userPayer.paid
+                ? {
+                    icon: (
+                      <Icon color="white" name="backspace-outline" size={20} />
+                    ),
+                    label: 'Desmarcar pagamento',
+                    onPress: () => {
+                      setSelectedMember(user)
+                      setUnmark(true)
+                      setOpenMarkAsPaid(true)
+                    }
+                  }
+                : {
+                    icon: (
+                      <Icon
+                        color="white"
+                        name="check-circle-outline"
+                        size={20}
+                      />
+                    ),
+                    label: 'Marcar como pago',
+                    onPress: () => {
+                      setSelectedMember(user)
+                      setUnmark(false)
+                      setOpenMarkAsPaid(true)
+                    }
+                  }
+            )
           }
-        ]}
+
+          items.push(
+            {
+              icon: <Icon color="white" name="pencil" size={20} />,
+              label: 'Editar',
+              onPress: editExpense
+            },
+            {
+              icon: <Icon color="white" name="delete" size={20} />,
+              label: 'Excluir',
+              onPress: () => setOpenDelete(true)
+            },
+            {
+              icon: <Icon color="white" name="content-copy" size={20} />,
+              label: 'Duplicar',
+              onPress: () => {
+                setOpenMenu(false)
+                setOpenDuplicate(true)
+              }
+            }
+          )
+
+          return items
+        }, [expense])}
       />
     </>
   )

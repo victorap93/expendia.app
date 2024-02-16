@@ -12,7 +12,8 @@ export const isPaid = (paying: PayingProps[], email: string) => {
 }
 
 export const isExpired = (expense: ExpenseProps) => {
-  return dayjs(new Date()).isAfter(expense.dueDate)
+  const expiredDate = dayjs(expense.dueDate).add(1, 'day')
+  return dayjs(new Date()).isAfter(expiredDate)
 }
 
 export const convertMoneyToFloat = (value: string) => {

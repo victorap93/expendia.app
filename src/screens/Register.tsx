@@ -141,12 +141,12 @@ export default function Register() {
                   <HStack space={1} alignItems="center">
                     <Switch
                       isChecked={values.acceptPrivacyPolicy}
-                      onChange={() =>
+                      onChange={() => {
                         setFieldValue(
                           'acceptPrivacyPolicy',
                           !values.acceptPrivacyPolicy
                         )
-                      }
+                      }}
                       colorScheme="success"
                     />
                     <TouchableOpacity
@@ -163,12 +163,12 @@ export default function Register() {
                   <HStack space={1} alignItems="center">
                     <Switch
                       defaultIsChecked={values.acceptTermsOfUse}
-                      onChange={() =>
+                      onChange={() => {
                         setFieldValue(
                           'acceptTermsOfUse',
                           !values.acceptTermsOfUse
                         )
-                      }
+                      }}
                       colorScheme="success"
                     />
                     <TouchableOpacity onPress={() => setOpenTermsOfUse(true)}>

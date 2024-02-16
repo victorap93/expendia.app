@@ -2,7 +2,7 @@ import React from 'react'
 import { Pressable } from 'react-native'
 import { Actionsheet, Box, HStack, ITextProps, Text, VStack } from 'native-base'
 
-interface MenuItems {
+export interface MenuItems {
   label: string
   icon?: JSX.Element
   onPress?: () => void
