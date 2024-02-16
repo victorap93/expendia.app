@@ -41,7 +41,7 @@ export default function Me({ onPressOnAvatar }: Props) {
         <TouchableOpacity onPress={() => navigate('Email', user)}>
           <HStack>
             <Text color="gray.200" fontSize="sm" numberOfLines={1}>
-              {user.email.length > 35
+              {user.email?.length > 35
                 ? user.email.substring(0, 35) + '...'
                 : user.email}
             </Text>
