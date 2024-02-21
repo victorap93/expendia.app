@@ -109,7 +109,12 @@ export default function RecentMembers() {
                         <CheckCircle weight="fill" color="green" />
                       ) : (
                         <Circle color={colors.gray[400]} />
-                      )
+                      ),
+                      slots: {
+                        boxContent: {
+                          maxWidth: '80%'
+                        }
+                      }
                     }
                   })}
                 />

@@ -233,7 +233,12 @@ export default function GroupMembers() {
                             <Trash color="white" size={size} />
                           )}
                         />
-                      )
+                      ),
+                      slots: {
+                        boxContent: {
+                          maxWidth: '75%'
+                        }
+                      }
                     }
                   })}
                   autoInclude

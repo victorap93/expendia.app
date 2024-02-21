@@ -113,11 +113,17 @@ export default function PayingMembers() {
                 members={members.map(member => {
                   return {
                     ...member,
+                    hideSubtitle: true,
                     endComponent: selectedMembers.includes(member.email) ? (
                       <CheckCircle weight="fill" color="green" />
                     ) : (
                       <Circle color={colors.gray[400]} />
-                    )
+                    ),
+                    slots: {
+                      boxContent: {
+                        maxWidth: '80%'
+                      }
+                    }
                   }
                 })}
               />

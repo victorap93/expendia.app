@@ -177,26 +177,26 @@ export default function Expense() {
                 return {
                   ...paying,
                   hideSubtitle: true,
-                  endComponent: (
-                    <Text color="white">
-                      {convertFloatToMoney(Number(cost))}
-                    </Text>
-                  ),
                   bottomComponent: (
-                    <HStack my={1} space={1}>
-                      <ExpenseStatusMessage
-                        payer={paying}
-                        expense={expense}
-                        getStatusMessage={statusMessage =>
-                          handleStatusMessages(statusMessage, paying.email)
-                        }
-                      />
-                      {paid && paidAt && (
-                        <Text color="white">
-                          em {dayjs(paidAt).format('DD/MM/YYYY')}
-                        </Text>
-                      )}
-                    </HStack>
+                    <VStack space={0.5}>
+                      <Text color="white">
+                        {convertFloatToMoney(Number(cost))}
+                      </Text>
+                      <HStack my={1} space={1}>
+                        <ExpenseStatusMessage
+                          payer={paying}
+                          expense={expense}
+                          getStatusMessage={statusMessage =>
+                            handleStatusMessages(statusMessage, paying.email)
+                          }
+                        />
+                        {paid && paidAt && (
+                          <Text color="white">
+                            em {dayjs(paidAt).format('DD/MM/YYYY')}
+                          </Text>
+                        )}
+                      </HStack>
+                    </VStack>
                   ),
                   slots: {
                     cardBox: {
@@ -205,6 +205,9 @@ export default function Expense() {
                           status => status.email === paying.email
                         )?.color || undefined,
                       borderLeftWidth: 4
+                    },
+                    content: {
+                      space: 1
                     }
                   }
                 }

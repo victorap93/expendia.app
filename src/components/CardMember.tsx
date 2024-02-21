@@ -6,6 +6,7 @@ import { api } from '../lib/axios'
 import { Pressable, PressableProps } from '@react-native-material/core'
 import { InterfaceBoxProps } from 'native-base/lib/typescript/components/primitives/Box'
 import { InterfaceHStackProps } from 'native-base/lib/typescript/components/primitives/Stack/HStack'
+import { InterfaceVStackProps } from 'native-base/lib/typescript/components/primitives/Stack/VStack'
 import { MemberProps } from './MembersList'
 
 export type CardMemberSlots = {
@@ -13,6 +14,7 @@ export type CardMemberSlots = {
   pressable?: PressableProps
   boxContent?: InterfaceHStackProps
   initialContent?: InterfaceHStackProps
+  content?: InterfaceVStackProps
 }
 interface CardMemberProps {
   member: MemberProps
@@ -69,13 +71,9 @@ export function CardMember({
           justifyContent="space-between"
           {...slots?.boxContent}
         >
-          <HStack
-            alignItems="center"
-            space={4}
-            {...slots?.initialContent}
-          >
+          <HStack alignItems="center" space={4} {...slots?.initialContent}>
             <MemberAvatar member={user} size="sm" />
-            <VStack w="full">
+            <VStack w="full" {...slots?.content}>
               <Text color="white" fontSize="md">
                 {user.firstname
                   ? `${user.firstname} ${user.lastname || ''}`
@@ -103,14 +101,34 @@ export function CardSkeleton({ nameSkeleton }: CardSkeletonProps) {
     <CardBox>
       <Pressable style={{ padding: 16 }} disabled>
         <HStack>
-          <HStack
-            alignItems="center"
-            space={4}
-          >
-            <Skeleton rounded="full" size={8} startColor="#fff" endColor="#999" opacity={0.4} my={1} />
+          <HStack alignItems="center" space={4}>
+            <Skeleton
+              rounded="full"
+              size={8}
+              startColor="#fff"
+              endColor="#999"
+              opacity={0.4}
+              my={1}
+            />
             <VStack w="full" space={1}>
-              {nameSkeleton && <Skeleton rounded="md" h={4} w={'2/5'} startColor="#fff" endColor="#999" opacity={0.4} />}
-              <Skeleton rounded="md" h={4} w={'3/5'} startColor="#fff" endColor="#999" opacity={0.4} />
+              {nameSkeleton && (
+                <Skeleton
+                  rounded="md"
+                  h={4}
+                  w={'2/5'}
+                  startColor="#fff"
+                  endColor="#999"
+                  opacity={0.4}
+                />
+              )}
+              <Skeleton
+                rounded="md"
+                h={4}
+                w={'3/5'}
+                startColor="#fff"
+                endColor="#999"
+                opacity={0.4}
+              />
             </VStack>
           </HStack>
         </HStack>
