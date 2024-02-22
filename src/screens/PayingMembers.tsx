@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { ScrollView, VStack, useTheme } from 'native-base'
+import { Button, HStack, ScrollView, VStack, useTheme } from 'native-base'
 import {
   useFocusEffect,
   useNavigation,
@@ -14,6 +14,7 @@ import MembersList, { MemberProps } from '../components/MembersList'
 import { CheckCircle, Circle } from 'phosphor-react-native'
 import { CardSkeleton } from '../components/CardMember'
 import { GroupMemberType } from './Groups'
+import { SelectAllMembers } from '../components/SelectAllMembers'
 
 export interface HandlePayingProps {
   id: string
@@ -105,7 +106,12 @@ export default function PayingMembers() {
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
       >
-        <VStack px={4} py={8}>
+        <VStack px={4} pt={4} pb={8} space={2}>
+          <SelectAllMembers
+            members={members}
+            selectedMembers={selectedMembers}
+            setSelectedMembers={setSelectedMembers}
+          />
           <VStack space={3}>
             {!isLoading ? (
               <MembersList
@@ -113,11 +119,20 @@ export default function PayingMembers() {
                 members={members.map(member => {
                   return {
                     ...member,
+                    hideSubtitle: true,
                     endComponent: selectedMembers.includes(member.email) ? (
                       <CheckCircle weight="fill" color="green" />
                     ) : (
                       <Circle color={colors.gray[400]} />
-                    )
+                    ),
+                    slots: {
+                      boxContent: {
+                        maxWidth: '100%'
+                      },
+                      initialContent: {
+                        maxWidth: '75%'
+                      }
+                    }
                   }
                 })}
               />
