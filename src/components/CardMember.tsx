@@ -86,8 +86,8 @@ export function CardMember({
               )}
               {bottomComponent}
             </VStack>
+            {endComponent}
           </HStack>
-          {endComponent}
         </HStack>
       </Pressable>
     </CardBox>

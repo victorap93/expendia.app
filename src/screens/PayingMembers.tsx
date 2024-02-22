@@ -121,7 +121,10 @@ export default function PayingMembers() {
                     ),
                     slots: {
                       boxContent: {
-                        maxWidth: '80%'
+                        maxWidth: '100%'
+                      },
+                      initialContent: {
+                        maxWidth: '75%'
                       }
                     }
                   }

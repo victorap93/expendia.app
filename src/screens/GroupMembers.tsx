@@ -236,7 +236,10 @@ export default function GroupMembers() {
                       ),
                       slots: {
                         boxContent: {
-                          maxWidth: '75%'
+                          maxWidth: '100%'
+                        },
+                        initialContent: {
+                          maxWidth: '70%'
                         }
                       }
                     }
