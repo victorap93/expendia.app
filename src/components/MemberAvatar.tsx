@@ -18,13 +18,13 @@ interface MemberAvatarProps extends IAvatarProps {
   badgeProps?: IAvatarBadgeProps
 }
 
-export function AvatarGroup({ members = [], size }: AvatarGroupProps) {
+export function AvatarGroup({ members = [], size, max = 4 }: AvatarGroupProps) {
   return (
     <Avatar.Group
       _avatar={{
         size: size || 'md'
       }}
-      max={3}
+      max={members.length > max ? max - 1 : undefined}
     >
       {members.map(member => (
         <Avatar

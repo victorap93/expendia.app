@@ -62,9 +62,20 @@ export function CardGroup({ group, handlePress }: CardGroupProps) {
           <Text color="white" fontSize="2xl">
             {group.title}
           </Text>
-          <HStack justifyContent="space-between" alignItems="flex-end" space={4}>
+          <HStack
+            justifyContent="space-between"
+            alignItems="flex-end"
+            space={4}
+          >
             {isLoading ? (
-              <Skeleton rounded="md" h={4} w={'3/5'} startColor="#fff" endColor="#999" opacity={0.4} />
+              <Skeleton
+                rounded="md"
+                h={4}
+                w={'3/5'}
+                startColor="#fff"
+                endColor="#999"
+                opacity={0.4}
+              />
             ) : expenses.length > 0 ? (
               unpaidExpenses.length > 0 ? (
                 <Text color="red.500" flex={1}>
@@ -73,14 +84,18 @@ export function CardGroup({ group, handlePress }: CardGroupProps) {
                   {unpaidExpenses.length > 1 && 's'}
                 </Text>
               ) : (
-                <Text color="green.400" flex={1}>Sua parte está em dia :)</Text>
+                <Text color="green.400" flex={1}>
+                  Sua parte está em dia :)
+                </Text>
               )
             ) : (
-              <Text color="gray.500" flex={1}>Nenhuma despesa criada</Text>
+              <Text color="gray.500" flex={1}>
+                Nenhuma despesa criada
+              </Text>
             )}
-            <AvatarGroup 
-              size="md"
-              members={group.Member.map(({ member }) => member)} 
+            <AvatarGroup
+              size="sm"
+              members={group.Member.map(({ member }) => member)}
             />
           </HStack>
         </VStack>
@@ -94,10 +109,36 @@ export function CardSkeleton() {
     <CardBox>
       <Pressable style={{ padding: 16 }} disabled>
         <VStack space={1}>
-          <Skeleton rounded="md" h={6} w={48} startColor="#fff" endColor="#999" opacity={0.4} my={1} />
-          <HStack justifyContent="space-between" alignItems="flex-end" space={4}>
-            <Skeleton rounded="md" h={4} w={'3/5'} startColor="#fff" endColor="#999" opacity={0.4} />
-            <Skeleton rounded="full" size={12} startColor="#fff" endColor="#999" opacity={0.4} my={1} />
+          <Skeleton
+            rounded="md"
+            h={6}
+            w={48}
+            startColor="#fff"
+            endColor="#999"
+            opacity={0.4}
+            my={1}
+          />
+          <HStack
+            justifyContent="space-between"
+            alignItems="flex-end"
+            space={4}
+          >
+            <Skeleton
+              rounded="md"
+              h={4}
+              w={'3/5'}
+              startColor="#fff"
+              endColor="#999"
+              opacity={0.4}
+            />
+            <Skeleton
+              rounded="full"
+              size={8}
+              startColor="#fff"
+              endColor="#999"
+              opacity={0.4}
+              my={1}
+            />
           </HStack>
         </VStack>
       </Pressable>
