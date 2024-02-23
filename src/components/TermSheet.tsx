@@ -55,8 +55,15 @@ export default function TermSheet({ slug, isOpen, onClose }: TermSheetProps) {
           <ScrollView>
             <VStack space={6} w="full" p={4}>
               <VStack alignItems="center" w="full">
-                {true ? (
-                  <Skeleton rounded="md" h={4} w="full" startColor="#fff" endColor="#999" opacity={0.4} />
+                {isLoading ? (
+                  <Skeleton
+                    rounded="md"
+                    h={4}
+                    w="full"
+                    startColor="#fff"
+                    endColor="#999"
+                    opacity={0.4}
+                  />
                 ) : (
                   <Text color="white" fontSize="lg">
                     {term?.title || 'Termo'}
@@ -66,23 +73,88 @@ export default function TermSheet({ slug, isOpen, onClose }: TermSheetProps) {
               <HStack w="full" space={1} alignItems="center">
                 <Text color="white" fontSize="md">
                   Última atualização:{' '}
-                  {!true && dayjs(term?.updatedAt).format('DD/MM/YYYY')}
+                  {!isLoading && dayjs(term?.updatedAt).format('DD/MM/YYYY')}
                 </Text>
-                {true && <Skeleton rounded="md" h={4} w={'2/6'} startColor="#fff" endColor="#999" opacity={0.4} />}
+                {isLoading && (
+                  <Skeleton
+                    rounded="md"
+                    h={4}
+                    w={'2/6'}
+                    startColor="#fff"
+                    endColor="#999"
+                    opacity={0.4}
+                  />
+                )}
               </HStack>
-              {true ? (
+              {isLoading ? (
                 <VStack space={10}>
                   <VStack space={5}>
-                    <Skeleton rounded="md" h={4} w="full" startColor="#fff" endColor="#999" opacity={0.4} />
-                    <Skeleton rounded="md" h={4} w="3/4" startColor="#fff" endColor="#999" opacity={0.4} />
-                    <Skeleton rounded="md" h={4} w="full" startColor="#fff" endColor="#999" opacity={0.4} />
-                    <Skeleton rounded="md" h={4} w="3/4" startColor="#fff" endColor="#999" opacity={0.4} />
+                    <Skeleton
+                      rounded="md"
+                      h={4}
+                      w="full"
+                      startColor="#fff"
+                      endColor="#999"
+                      opacity={0.4}
+                    />
+                    <Skeleton
+                      rounded="md"
+                      h={4}
+                      w="3/4"
+                      startColor="#fff"
+                      endColor="#999"
+                      opacity={0.4}
+                    />
+                    <Skeleton
+                      rounded="md"
+                      h={4}
+                      w="full"
+                      startColor="#fff"
+                      endColor="#999"
+                      opacity={0.4}
+                    />
+                    <Skeleton
+                      rounded="md"
+                      h={4}
+                      w="3/4"
+                      startColor="#fff"
+                      endColor="#999"
+                      opacity={0.4}
+                    />
                   </VStack>
                   <VStack space={5}>
-                    <Skeleton rounded="md" h={4} w="full" startColor="#fff" endColor="#999" opacity={0.4} />
-                    <Skeleton rounded="md" h={4} w="3/4" startColor="#fff" endColor="#999" opacity={0.4} />
-                    <Skeleton rounded="md" h={4} w="full" startColor="#fff" endColor="#999" opacity={0.4} />
-                    <Skeleton rounded="md" h={4} w="3/4" startColor="#fff" endColor="#999" opacity={0.4} />
+                    <Skeleton
+                      rounded="md"
+                      h={4}
+                      w="full"
+                      startColor="#fff"
+                      endColor="#999"
+                      opacity={0.4}
+                    />
+                    <Skeleton
+                      rounded="md"
+                      h={4}
+                      w="3/4"
+                      startColor="#fff"
+                      endColor="#999"
+                      opacity={0.4}
+                    />
+                    <Skeleton
+                      rounded="md"
+                      h={4}
+                      w="full"
+                      startColor="#fff"
+                      endColor="#999"
+                      opacity={0.4}
+                    />
+                    <Skeleton
+                      rounded="md"
+                      h={4}
+                      w="3/4"
+                      startColor="#fff"
+                      endColor="#999"
+                      opacity={0.4}
+                    />
                   </VStack>
                 </VStack>
               ) : (

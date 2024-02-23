@@ -23,6 +23,7 @@ import MarkAsPaidFab from '../components/MarkAsPaidFab'
 import DeleteExpense from '../components/DeleteExpense'
 import DuplicateExpense from '../components/DuplicateExpense'
 import EditExpenseTitle from '../components/EditExpenseTitle'
+import { getPercentage } from '../helpers/moneyHelper'
 
 export interface ExpenseDetails {
   group: GroupProps
@@ -180,7 +181,8 @@ export default function Expense() {
                   bottomComponent: (
                     <VStack space={0.5}>
                       <Text color="white">
-                        {convertFloatToMoney(Number(cost))}
+                        {convertFloatToMoney(Number(cost))} ={' '}
+                        {getPercentage(cost, expense.cost)}%
                       </Text>
                       <HStack my={1} space={1}>
                         <ExpenseStatusMessage
