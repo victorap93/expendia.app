@@ -158,7 +158,7 @@ export default function Expense() {
               {dayjs(expense.dueDate).format('DD/MM/YYYY')}
             </Text>
           </HStack>
-          <VStack space={5}>
+          <VStack space={5} pb={20}>
             <PayerSplitProgress expense={expenseForm} checkIsPaid />
             <HStack space={2} alignItems="center">
               <Text color="white" fontSize="xl">

@@ -3,7 +3,7 @@
     "name": "Expendia",
     "slug": "expendia",
     "scheme": "expendia",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -24,7 +24,7 @@
         "backgroundColor": "#A34FD8"
       },
       "package": "com.devluigiraynel.expendia",
-      "versionCode": 3
+      "versionCode": 4
     },
     "extra": {
       "eas": {
