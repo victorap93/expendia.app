@@ -183,7 +183,7 @@ export default function Group() {
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
       >
-        <VStack space={4} px={4} py={8}>
+        <VStack space={4} px={4} py={8} pb={20}>
           <HStack space={2} alignItems="center">
             <Text color="white" fontSize="xl">
               Membros:

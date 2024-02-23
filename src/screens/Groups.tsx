@@ -77,7 +77,7 @@ export default function Groups() {
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
       >
-        <VStack px={4} py={8}>
+        <VStack px={4} py={8} pb={20}>
           <VStack space={3}>
             {!isLoading ? (
               groups.length > 0 ? (
