@@ -4,11 +4,11 @@ import { Box, Center, Pressable, Text, VStack, useToast } from 'native-base'
 import BackButton from '../components/BackButton'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
-import TextField from '../components/TextField'
 import { api } from '../lib/axios'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import SubmitButton from '../components/SubmitButton'
 import { useAuth } from '../hooks/useAuth'
+import { CodeField } from '../components/CodeField'
 
 interface FormConfirmEmail {
   code: string
@@ -113,14 +113,12 @@ export default function ConfirmEmail() {
                 isso enviamos um código numérico para você nos confirmar no
                 campo abaixo.
               </Text>
-              <TextField
+              <CodeField
                 error={errors.code}
                 onChangeText={handleChange('code')}
                 onBlur={handleBlur('code')}
                 value={values.code || ''}
-                placeholder="Digite o código..."
-                keyboardType="numeric"
-                onEndEditing={() => handleSubmit()}
+                onSubmit={() => handleSubmit()}
               />
               <Center>
                 {isLoading ? (

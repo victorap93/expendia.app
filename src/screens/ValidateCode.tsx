@@ -4,12 +4,12 @@ import { Box, Center, Pressable, Text, VStack } from 'native-base'
 import BackButton from '../components/BackButton'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
-import TextField from '../components/TextField'
 import { api } from '../lib/axios'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { FormEmail } from './Email'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import SubmitButton from '../components/SubmitButton'
+import { CodeField } from '../components/CodeField'
 
 export interface FormValidateCode extends FormEmail {
   code: string
@@ -90,14 +90,12 @@ export default function ValidateCode() {
               Confirme o código que recebeu
             </Text>
             <VStack space={8}>
-              <TextField
+              <CodeField
                 error={errors.code}
                 onChangeText={handleChange('code')}
                 onBlur={handleBlur('code')}
                 value={values.code || ''}
-                placeholder="Digite o código..."
-                keyboardType="numeric"
-                onEndEditing={() => handleSubmit()}
+                onSubmit={() => handleSubmit()}
               />
               <Center>
                 <Pressable
